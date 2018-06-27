@@ -37,16 +37,7 @@
                         </xs:sequence>
                     </xs:complexType>
                 </xs:element>
-                <xs:element name="execution">
-                    <xs:complexType>
-                        <xs:annotation>
-                            <xs:documentation><![CDATA[指令实际执行内容，可以为一个操作序列]]></xs:documentation>
-                        </xs:annotation>
-                        <xs:sequence>
-                            <xs:group ref="executionGroup" minOccurs="1"/>
-                        </xs:sequence>
-                    </xs:complexType>
-                </xs:element>
+                <xs:element ref="execution"/>
                 <xs:element name="dependencys">
                     <xs:annotation>
                         <xs:documentation><![CDATA[当前指令所依赖的其他指令，如果不填写，则无法进行内部指令调用]]></xs:documentation>
@@ -62,13 +53,7 @@
     </xs:element>
     <xs:complexType name="paramType">
         <xs:sequence minOccurs="0">
-            <xs:element name="processors">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:group ref="paramProcessorGroup"/>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
+            <xs:element name="processors" type="paramProcessorsType"></xs:element>
         </xs:sequence>
         <xs:attribute name="name" type="xs:string" use="required">
             <xs:annotation>
@@ -96,34 +81,45 @@
             </xs:annotation>
         </xs:attribute>
     </xs:complexType>
-    <xs:group name="paramProcessorGroup">
-        <xs:choice>
-            <xs:element name="ageCalc"/>
-            <xs:element name="GUIDGenerator"/>
-            <xs:element name="DateTimeGenerator"/>
-            <xs:element name="AllToString"/>
-            <xs:element name="DefaultValueGenerator"/>
-            <xs:element name="QueryTranslator"/>
-            <xs:element name="DictTranslator"/>
-            <xs:element name="NotEmpty"/>
-            <xs:element name="TextToList"/>
-            <xs:element name="ListToText"/>
-            <xs:element name="LikeParamGenerator"/>
-            <xs:element name="InputScriptProcessor"/>
-            <xs:element name="OutputScriptProcessor"/>
-            <xs:element name="DateTimeConverter"/>
-            <xs:element name="AgeCalc"/>
-            <xs:element name="SqlLobProcessor"/>
-            <xs:element name="JsonExpand"/>
-        </xs:choice>
-    </xs:group>
-    <xs:group name="executionGroup">
-        <xs:choice>
-            <xs:element name="dbSql" type="xs:string"/>
-            <xs:element name="dbDelete" type="xs:string"/>
-            <xs:element name="dbInsert" type="xs:string"/>
-            <xs:element name="dbQuery" type="xs:string"/>
-            <xs:element name="dbUpdate" type="xs:string"/>
-        </xs:choice>
-    </xs:group>
+    <xs:complexType name="paramProcessorsType">
+        <xs:annotation>
+            <xs:documentation><![CDATA[参数处理器列表]]></xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="GUIDGenerator" type="xs:string"/>
+                <xs:element name="DateTimeGenerator" type="xs:string"/>
+                <xs:element name="AllToString" type="xs:string"/>
+                <xs:element name="DefaultValueGenerator" type="xs:string"/>
+                <xs:element name="QueryTranslator" type="xs:string"/>
+                <xs:element name="DictTranslator" type="xs:string"/>
+                <xs:element name="NotEmpty" type="xs:string"/>
+                <xs:element name="TextToList" type="xs:string"/>
+                <xs:element name="ListToText" type="xs:string"/>
+                <xs:element name="LikeParamGenerator" type="xs:string"/>
+                <xs:element name="InputScriptProcessor" type="xs:string"/>
+                <xs:element name="OutputScriptProcessor" type="xs:string"/>
+                <xs:element name="DateTimeConverter" type="xs:string"/>
+                <xs:element name="AgeCalc" type="xs:string"/>
+                <xs:element name="SqlLobProcessor" type="xs:string"/>
+                <xs:element name="JsonExpand" type="xs:string"/>
+            </xs:choice>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="execution">
+        <xs:complexType>
+            <xs:annotation>
+                <xs:documentation><![CDATA[指令实际执行内容，可以为一个操作序列]]></xs:documentation>
+            </xs:annotation>
+            <xs:sequence>
+                <xs:choice minOccurs="1" maxOccurs="unbounded">
+                    <xs:element name="dbSql" type="xs:string"/>
+                    <xs:element name="dbDelete" type="xs:string"/>
+                    <xs:element name="dbInsert" type="xs:string"/>
+                    <xs:element name="dbQuery" type="xs:string"/>
+                    <xs:element name="dbUpdate" type="xs:string"/>
+                </xs:choice>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
 </xs:schema>

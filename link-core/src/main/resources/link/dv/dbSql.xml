@@ -6,7 +6,8 @@
     <input>
         <param name="" desc="" notEmpty="true" default="" fixed="">
             <processors>
-                <ageCalc></ageCalc>
+                <AllToString></AllToString>
+                <DateTimeConverter></DateTimeConverter>
             </processors>
         </param>
     </input>
