@@ -1,21 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<directive>
+<directive xmlns="http://www.github.com/landyking/link"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.github.com/landyking/link http://www.github.com/landyking/link/link-1.0.xsd">
     <input>
-        <param name="" desc="" notEmpty="" default="" fixed="">
+        <param name="" desc="" notEmpty="false" default="" fixed="">
             <processors>
-                <outputScript></outputScript>
-                <ageCalc></ageCalc>
             </processors>
         </param>
     </input>
-    <output>
-        <param></param>
-    </output>
-    <dbInsert>
-        <field ignoreNull="false" from="" column=""></field>
-        <model></model>
-    </dbInsert>
+
+    <execution>
+        <dbInsert>
+            <field ignoreNull="false" from="" column=""></field>
+            <model></model>
+        </dbInsert>
+    </execution>
     <dependencys>
         <dependency></dependency>
     </dependencys>
+    <output>
+        <param name="count" from="num"/>
+    </output>
 </directive>

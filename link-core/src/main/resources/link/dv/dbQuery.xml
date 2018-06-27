@@ -1,36 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<directive>
+<directive xmlns="http://www.github.com/landyking/link"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.github.com/landyking/link http://www.github.com/landyking/link/link-1.0.xsd">
     <input>
-        <param name="" desc="" notEmpty="" default="" fixed="">
+        <param name="" desc="" notEmpty="false" default="" fixed="">
             <processors>
-                <outputScript></outputScript>
-                <ageCalc></ageCalc>
             </processors>
         </param>
     </input>
     <output>
         <param name="" from=""></param>
     </output>
-    <dbQuery>
-        <select>
-            <field column="name"  model=""/>
-            <field column="count(0)" alias="num"/>
-            <field alias="">(select a from test where a=:aa)</field>
-        </select>
-        <from>
-            <base alias="" name=""/>
-            <join type="" alias="" name="">
-                <on field="" otherModel="" otherField=""/>
-                <on field="" otherModel="" otherField=""/>
-            </join>
-        </from>
-        <where>
-        </where>
-        <groupBy></groupBy>
-        <having></having>
-        <order>
-        </order>
-    </dbQuery>
+    <execution>
+        <dbQuery>
+            <select>
+                <field column="name" model=""/>
+                <field column="count(0)" alias="num"/>
+                <field alias="">(select a from test where a=:aa)</field>
+            </select>
+            <from>
+                <base alias="" name=""/>
+                <join type="" alias="" name="">
+                    <on field="" otherModel="" otherField=""/>
+                    <on field="" otherModel="" otherField=""/>
+                </join>
+            </from>
+            <where>
+            </where>
+            <groupBy></groupBy>
+            <having></having>
+            <order>
+            </order>
+        </dbQuery>
+    </execution>
     <dependencys>
         <dependency></dependency>
     </dependencys>

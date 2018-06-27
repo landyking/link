@@ -1,22 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<directive>
+<directive xmlns="http://www.github.com/landyking/link"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.github.com/landyking/link http://www.github.com/landyking/link/link-1.0.xsd">
+    <description></description>
     <input>
-        <param name="" desc="" notEmpty="" default="" fixed="">
-            <processors>
-                <outputScript></outputScript>
-                <ageCalc></ageCalc>
-            </processors>
-        </param>
+        <param name="1"/>
+        <param name="3"/>
+        <param name="test"/>
     </input>
-    <output>
-        <param></param>
-    </output>
-    <dbDelete>
-        <model></model>
-        <where>
-        </where>
-    </dbDelete>
+
+    <execution>
+        <dbDelete>
+            <table>t_abbsd</table>
+            <where>
+                hello in (:test)
+            </where>
+        </dbDelete>
+    </execution>
     <dependencys>
         <dependency></dependency>
     </dependencys>
+    <output>
+        <param name="1" from=""/>
+        <param name="12" from=""/>
+        <param name="123" from=""/>
+    </output>
 </directive>

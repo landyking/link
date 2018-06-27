@@ -1,11 +1,9 @@
 <?xml version="1.0"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
            targetNamespace="http://www.github.com/landyking/link"
-           xmlns="http://www.github.com/landyking/link"
+           xmlns:lk="http://www.github.com/landyking/link"
            elementFormDefault="qualified"
            attributeFormDefault="unqualified">
-
-
     <xs:element name="directive">
         <xs:complexType>
             <xs:sequence>
@@ -23,21 +21,19 @@
                     </xs:annotation>
                     <xs:complexType>
                         <xs:sequence>
-                            <xs:element name="param" type="paramType"/>
+                            <xs:element name="param" type="lk:paramType" maxOccurs="unbounded"/>
                         </xs:sequence>
                     </xs:complexType>
+                    <xs:unique name="inputParamNameUnique">
+                        <xs:annotation>
+                            <xs:documentation><![CDATA[输入参数名字必须唯一]]></xs:documentation>
+                        </xs:annotation>
+                        <xs:selector xpath="lk:param"/>
+                        <xs:field xpath="@name"/>
+                    </xs:unique>
                 </xs:element>
-                <xs:element name="output">
-                    <xs:annotation>
-                        <xs:documentation><![CDATA[]]></xs:documentation>
-                    </xs:annotation>
-                    <xs:complexType>
-                        <xs:sequence>
-                            <xs:element name="param" type="paramType"/>
-                        </xs:sequence>
-                    </xs:complexType>
-                </xs:element>
-                <xs:element ref="execution"/>
+
+                <xs:element name="execution" type="lk:executionType"/>
                 <xs:element name="dependencys">
                     <xs:annotation>
                         <xs:documentation><![CDATA[当前指令所依赖的其他指令，如果不填写，则无法进行内部指令调用]]></xs:documentation>
@@ -48,45 +44,79 @@
                         </xs:sequence>
                     </xs:complexType>
                 </xs:element>
+                <xs:element name="output">
+                    <xs:annotation>
+                        <xs:documentation><![CDATA[]]></xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="param" type="lk:outputParamType" maxOccurs="unbounded"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                    <xs:unique name="outputParamNameUnique">
+                        <xs:annotation>
+                            <xs:documentation><![CDATA[输出参数名字必须唯一]]></xs:documentation>
+                        </xs:annotation>
+                        <xs:selector xpath="lk:param"/>
+                        <xs:field xpath="@name"/>
+                    </xs:unique>
+                </xs:element>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
     <xs:complexType name="paramType">
         <xs:sequence minOccurs="0">
-            <xs:element name="processors" type="paramProcessorsType"></xs:element>
+            <xs:element name="processors" type="lk:paramProcessorsType"></xs:element>
         </xs:sequence>
-        <xs:attribute name="name" type="xs:string" use="required">
+        <xs:attribute name="name" use="required">
             <xs:annotation>
-                <xs:documentation><![CDATA[]]></xs:documentation>
+                <xs:documentation><![CDATA[参数名，非空，唯一。]]></xs:documentation>
             </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:pattern value="[^\s]+"/>
+                </xs:restriction>
+            </xs:simpleType>
         </xs:attribute>
         <xs:attribute name="desc" type="xs:string">
             <xs:annotation>
-                <xs:documentation><![CDATA[]]></xs:documentation>
+                <xs:documentation><![CDATA[描述信息]]></xs:documentation>
             </xs:annotation>
         </xs:attribute>
         <xs:attribute name="notEmpty" type="xs:boolean" default="true">
             <xs:annotation>
-                <xs:documentation><![CDATA[]]></xs:documentation>
+                <xs:documentation><![CDATA[不允许为空，默认true。]]></xs:documentation>
             </xs:annotation>
         </xs:attribute>
         <xs:attribute name="default" type="xs:string">
             <xs:annotation>
-                <xs:documentation><![CDATA[]]></xs:documentation>
+                <xs:documentation><![CDATA[默认值。与固定值二选一，固定值优先级高。]]></xs:documentation>
             </xs:annotation>
         </xs:attribute>
         <xs:attribute name="fixed" type="xs:string">
             <xs:annotation>
-                <xs:documentation><![CDATA[]]></xs:documentation>
+                <xs:documentation><![CDATA[固定值。与默认值二选一，固定值优先级高。]]></xs:documentation>
             </xs:annotation>
         </xs:attribute>
+
+    </xs:complexType>
+    <xs:complexType name="outputParamType">
+        <xs:complexContent>
+            <xs:extension base="lk:paramType">
+                <xs:attribute name="from" use="required" type="xs:string">
+                    <xs:annotation>
+                        <xs:documentation><![CDATA[输出项的内容来源：特定的数据库列或者表达式。可以为空。]]></xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
     </xs:complexType>
     <xs:complexType name="paramProcessorsType">
         <xs:annotation>
             <xs:documentation><![CDATA[参数处理器列表]]></xs:documentation>
         </xs:annotation>
         <xs:sequence>
-            <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:choice minOccurs="1" maxOccurs="unbounded">
                 <xs:element name="GUIDGenerator" type="xs:string"/>
                 <xs:element name="DateTimeGenerator" type="xs:string"/>
                 <xs:element name="AllToString" type="xs:string"/>
@@ -106,20 +136,42 @@
             </xs:choice>
         </xs:sequence>
     </xs:complexType>
-    <xs:element name="execution">
-        <xs:complexType>
-            <xs:annotation>
-                <xs:documentation><![CDATA[指令实际执行内容，可以为一个操作序列]]></xs:documentation>
-            </xs:annotation>
-            <xs:sequence>
-                <xs:choice minOccurs="1" maxOccurs="unbounded">
-                    <xs:element name="dbSql" type="xs:string"/>
-                    <xs:element name="dbDelete" type="xs:string"/>
-                    <xs:element name="dbInsert" type="xs:string"/>
-                    <xs:element name="dbQuery" type="xs:string"/>
-                    <xs:element name="dbUpdate" type="xs:string"/>
-                </xs:choice>
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
+    <xs:complexType name="executionType">
+        <xs:annotation>
+            <xs:documentation><![CDATA[指令实际执行内容，可以为一个操作序列]]></xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:choice minOccurs="1" maxOccurs="unbounded">
+                <xs:element name="dbSql" type="xs:string"/>
+                <xs:element name="dbDelete" type="lk:dbDeleteType"/>
+                <xs:element name="dbInsert" type="xs:string"/>
+                <xs:element name="dbQuery" type="xs:string"/>
+                <xs:element name="dbUpdate" type="xs:string"/>
+            </xs:choice>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="dbDeleteType">
+        <xs:annotation>
+            <xs:documentation><![CDATA[指令实际执行内容，可以为一个操作序列]]></xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="table">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:pattern value="[^\s*]+"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="where">
+                <xs:annotation>
+                    <xs:documentation><![CDATA[删除过滤条件。防止删除全部，默认不能为空。]]></xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:pattern value="\s*\S+(.|\s)*"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
 </xs:schema>
