@@ -1,0 +1,129 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://www.github.com/landyking/link"
+           xmlns="http://www.github.com/landyking/link"
+           elementFormDefault="qualified"
+           attributeFormDefault="unqualified">
+
+
+    <xs:element name="directive">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="description">
+                    <xs:simpleType>
+                        <xs:annotation>
+                            <xs:documentation><![CDATA[描述信息]]></xs:documentation>
+                        </xs:annotation>
+                        <xs:restriction base="xs:string"/>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="input">
+                    <xs:annotation>
+                        <xs:documentation><![CDATA[]]></xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="param" type="paramType"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="output">
+                    <xs:annotation>
+                        <xs:documentation><![CDATA[]]></xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="param" type="paramType"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="execution">
+                    <xs:complexType>
+                        <xs:annotation>
+                            <xs:documentation><![CDATA[指令实际执行内容，可以为一个操作序列]]></xs:documentation>
+                        </xs:annotation>
+                        <xs:sequence>
+                            <xs:group ref="executionGroup" minOccurs="1"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="dependencys">
+                    <xs:annotation>
+                        <xs:documentation><![CDATA[当前指令所依赖的其他指令，如果不填写，则无法进行内部指令调用]]></xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:sequence minOccurs="0">
+                            <xs:element name="dependency" type="xs:string"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:complexType name="paramType">
+        <xs:sequence minOccurs="0">
+            <xs:element name="processors">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:group ref="paramProcessorGroup"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required">
+            <xs:annotation>
+                <xs:documentation><![CDATA[]]></xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="desc" type="xs:string">
+            <xs:annotation>
+                <xs:documentation><![CDATA[]]></xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="notEmpty" type="xs:boolean" default="true">
+            <xs:annotation>
+                <xs:documentation><![CDATA[]]></xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="default" type="xs:string">
+            <xs:annotation>
+                <xs:documentation><![CDATA[]]></xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="fixed" type="xs:string">
+            <xs:annotation>
+                <xs:documentation><![CDATA[]]></xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:group name="paramProcessorGroup">
+        <xs:choice>
+            <xs:element name="ageCalc"/>
+            <xs:element name="GUIDGenerator"/>
+            <xs:element name="DateTimeGenerator"/>
+            <xs:element name="AllToString"/>
+            <xs:element name="DefaultValueGenerator"/>
+            <xs:element name="QueryTranslator"/>
+            <xs:element name="DictTranslator"/>
+            <xs:element name="NotEmpty"/>
+            <xs:element name="TextToList"/>
+            <xs:element name="ListToText"/>
+            <xs:element name="LikeParamGenerator"/>
+            <xs:element name="InputScriptProcessor"/>
+            <xs:element name="OutputScriptProcessor"/>
+            <xs:element name="DateTimeConverter"/>
+            <xs:element name="AgeCalc"/>
+            <xs:element name="SqlLobProcessor"/>
+            <xs:element name="JsonExpand"/>
+        </xs:choice>
+    </xs:group>
+    <xs:group name="executionGroup">
+        <xs:choice>
+            <xs:element name="dbSql" type="xs:string"/>
+            <xs:element name="dbDelete" type="xs:string"/>
+            <xs:element name="dbInsert" type="xs:string"/>
+            <xs:element name="dbQuery" type="xs:string"/>
+            <xs:element name="dbUpdate" type="xs:string"/>
+        </xs:choice>
+    </xs:group>
+</xs:schema>

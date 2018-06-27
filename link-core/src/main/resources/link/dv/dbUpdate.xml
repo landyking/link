@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<directive>
+    <input>
+        <param name="" desc="" notEmpty="" default="" fixed="">
+            <processors>
+                <outputScript></outputScript>
+                <ageCalc></ageCalc>
+            </processors>
+        </param>
+    </input>
+    <output>
+        <param></param>
+    </output>
+    <dbUpdate>
+        <saveField ignoreNull="false" param="userName" column="user_name">
+            <subSql></subSql>
+        </saveField>
+        <model></model>
+        <where>
+        </where>
+    </dbUpdate>
+    <dependencys>
+        <dependency></dependency>
+    </dependencys>
+</directive>

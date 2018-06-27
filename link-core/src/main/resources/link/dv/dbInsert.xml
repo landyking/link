@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<directive>
+    <input>
+        <param name="" desc="" notEmpty="" default="" fixed="">
+            <processors>
+                <outputScript></outputScript>
+                <ageCalc></ageCalc>
+            </processors>
+        </param>
+    </input>
+    <output>
+        <param></param>
+    </output>
+    <dbInsert>
+        <field ignoreNull="false" from="" column=""></field>
+        <model></model>
+    </dbInsert>
+    <dependencys>
+        <dependency></dependency>
+    </dependencys>
+</directive>

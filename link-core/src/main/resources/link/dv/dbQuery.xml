@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<directive>
+    <input>
+        <param name="" desc="" notEmpty="" default="" fixed="">
+            <processors>
+                <outputScript></outputScript>
+                <ageCalc></ageCalc>
+            </processors>
+        </param>
+    </input>
+    <output>
+        <param name="" from=""></param>
+    </output>
+    <dbQuery>
+        <select>
+            <field column="name"  model=""/>
+            <field column="count(0)" alias="num"/>
+            <field alias="">(select a from test where a=:aa)</field>
+        </select>
+        <from>
+            <base alias="" name=""/>
+            <join type="" alias="" name="">
+                <on field="" otherModel="" otherField=""/>
+                <on field="" otherModel="" otherField=""/>
+            </join>
+        </from>
+        <where>
+        </where>
+        <groupBy></groupBy>
+        <having></having>
+        <order>
+        </order>
+    </dbQuery>
+    <dependencys>
+        <dependency></dependency>
+    </dependencys>
+</directive>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<directive xmlns="http://www.github.com/landyking/link"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.github.com/landyking/link http://www.github.com/landyking/link/link-1.0.xsd">
+    <description><![CDATA[师曾发生]]></description>
+    <input>
+        <param name="" desc="" notEmpty="true" default="" fixed="">
+            <processors>
+                <ageCalc></ageCalc>
+            </processors>
+        </param>
+    </input>
+    <output>
+        <param name=""/>
+    </output>
+    <execution>
+        <dbDelete>22</dbDelete>
+        <dbUpdate>22</dbUpdate>
+        <dbSql>sdfasdf</dbSql>
+        <dbInsert>22</dbInsert>
+        <dbInsert>22</dbInsert>
+        <dbSql>22</dbSql>
+    </execution>
+    <dependencys></dependencys>
+</directive>
