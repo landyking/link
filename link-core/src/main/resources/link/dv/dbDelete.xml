@@ -4,16 +4,18 @@
            xsi:schemaLocation="http://www.github.com/landyking/link http://www.github.com/landyking/link/link-1.0.xsd">
     <description></description>
     <input>
-        <param name="1"/>
+        <param name="33"/>
         <param name="3"/>
         <param name="test"/>
     </input>
 
     <execution>
         <dbDelete>
-            <table>t_abbsd</table>
-            <where>
-                hello in (:test)
+            <table>
+                t_test
+            </table>
+            <where>hello = :test and
+                address in (:lala)
             </where>
         </dbDelete>
     </execution>

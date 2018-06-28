@@ -74,7 +74,7 @@
             </xs:annotation>
             <xs:simpleType>
                 <xs:restriction base="xs:string">
-                    <xs:pattern value="[^\s]+"/>
+                    <xs:pattern value="\S+"/>
                 </xs:restriction>
             </xs:simpleType>
         </xs:attribute>
@@ -133,6 +133,7 @@
                 <xs:element name="AgeCalc" type="xs:string"/>
                 <xs:element name="SqlLobProcessor" type="xs:string"/>
                 <xs:element name="JsonExpand" type="xs:string"/>
+                <xs:element name="CustomClass" type="xs:string"/>
             </xs:choice>
         </xs:sequence>
     </xs:complexType>
@@ -155,23 +156,22 @@
             <xs:documentation><![CDATA[指令实际执行内容，可以为一个操作序列]]></xs:documentation>
         </xs:annotation>
         <xs:sequence>
-            <xs:element name="table">
-                <xs:simpleType>
-                    <xs:restriction base="xs:string">
-                        <xs:pattern value="[^\s*]+"/>
-                    </xs:restriction>
-                </xs:simpleType>
+            <xs:element name="table" type="lk:lineContentType">
             </xs:element>
-            <xs:element name="where">
+            <xs:element name="where" type="lk:lineContentType">
                 <xs:annotation>
                     <xs:documentation><![CDATA[删除过滤条件。防止删除全部，默认不能为空。]]></xs:documentation>
                 </xs:annotation>
-                <xs:simpleType>
-                    <xs:restriction base="xs:string">
-                        <xs:pattern value="\s*\S+(.|\s)*"/>
-                    </xs:restriction>
-                </xs:simpleType>
             </xs:element>
         </xs:sequence>
     </xs:complexType>
+    <xs:simpleType name="lineContentType">
+        <xs:annotation>
+            <xs:documentation><![CDATA[有内容的文本。且内容两边的空白会被移除，内部多个空白以及换行会被替换成一个空格。]]></xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:whiteSpace value="collapse"/>
+            <xs:minLength value="1"/>
+        </xs:restriction>
+    </xs:simpleType>
 </xs:schema>
