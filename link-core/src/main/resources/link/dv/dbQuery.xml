@@ -13,11 +13,9 @@
     </output>
     <execution>
         <dbQuery>
-            <select>
-                <field column="name" model=""/>
-                <field column="count(0)" alias="num"/>
-                <field alias="">(select a from test where a=:aa)</field>
-            </select>
+            <field column="name" tableAlias="pan"/>
+            <field column="count(0)" columnAlias="num"/>
+            <field columnAlias="">(select a from test where a=:aa)</field>
             <from>
                 <base alias="" name=""/>
                 <join type="" alias="" name="">

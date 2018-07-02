@@ -141,7 +141,7 @@
                 <xs:element name="dbDelete" type="lk:dbDeleteType"/>
                 <xs:element name="dbInsert" type="lk:dbInsertType"/>
                 <xs:element name="dbUpdate" type="lk:dbUpdateType"/>
-                <xs:element name="dbQuery" type="xs:string"/>
+                <xs:element name="dbQuery" type="lk:dbSelectType"/>
             </xs:choice>
         </xs:sequence>
     </xs:complexType>
@@ -199,6 +199,14 @@
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
+    <xs:complexType name="dbQueryFieldType">
+        <xs:complexContent>
+            <xs:extension base="lk:dbFieldType">
+                <xs:attribute name="tableAlias" type="lk:needTextType"/>
+                <xs:attribute name="columnAlias" type="lk:needTextType"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
     <xs:complexType name="dbInsertType">
         <xs:annotation>
             <xs:documentation><![CDATA[数据库插入操作。需指定表名和要插入的字段。]]></xs:documentation>
@@ -236,6 +244,30 @@
                     <xs:documentation><![CDATA[更新过滤条件。防止更新全部，默认不能为空。]]></xs:documentation>
                 </xs:annotation>
             </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="dbQuerySelectType">
+        <xs:sequence>
+            <xs:element name="base">
+                TODO
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="dbSelectType">
+        <xs:annotation>
+            <xs:documentation><![CDATA[数据库查询操作。需指定表名和要查询的字段以及过滤条件、排序条件等。]]></xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="field" maxOccurs="unbounded" type="lk:dbQueryFieldType"/>
+            <xs:element name="from" type="dbQuerySelectType"/>
+            <xs:element name="where" type="lk:lineContentType">
+                <xs:annotation>
+                    <xs:documentation><![CDATA[更新过滤条件。防止更新全部，默认不能为空。]]></xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="groupBy" type="lk:lineContentType"/>
+            <xs:element name="having" type="lk:lineContentType"/>
+            <xs:element name="order" type="lk:lineContentType"/>
         </xs:sequence>
     </xs:complexType>
 </xs:schema>
