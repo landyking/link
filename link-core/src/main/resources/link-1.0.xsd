@@ -32,18 +32,7 @@
                         <xs:field xpath="@name"/>
                     </xs:unique>
                 </xs:element>
-
                 <xs:element name="execution" type="lk:executionType"/>
-                <xs:element name="dependencys">
-                    <xs:annotation>
-                        <xs:documentation><![CDATA[当前指令所依赖的其他指令，如果不填写，则无法进行内部指令调用]]></xs:documentation>
-                    </xs:annotation>
-                    <xs:complexType>
-                        <xs:sequence minOccurs="0">
-                            <xs:element name="dependency" type="xs:string"/>
-                        </xs:sequence>
-                    </xs:complexType>
-                </xs:element>
                 <xs:element name="output">
                     <xs:annotation>
                         <xs:documentation><![CDATA[]]></xs:documentation>
@@ -61,6 +50,16 @@
                         <xs:field xpath="@name"/>
                     </xs:unique>
                 </xs:element>
+                <xs:element name="dependencys">
+                    <xs:annotation>
+                        <xs:documentation><![CDATA[当前指令所依赖的其他指令，如果不填写，则无法进行内部指令调用]]></xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:sequence minOccurs="0">
+                            <xs:element name="dependency" type="lk:lineContentType"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -68,15 +67,10 @@
         <xs:sequence minOccurs="0">
             <xs:element name="processors" type="lk:paramProcessorsType"></xs:element>
         </xs:sequence>
-        <xs:attribute name="name" use="required">
+        <xs:attribute name="name" use="required" type="lk:needTextType">
             <xs:annotation>
                 <xs:documentation><![CDATA[参数名，非空，唯一。]]></xs:documentation>
             </xs:annotation>
-            <xs:simpleType>
-                <xs:restriction base="xs:string">
-                    <xs:pattern value="\S+"/>
-                </xs:restriction>
-            </xs:simpleType>
         </xs:attribute>
         <xs:attribute name="desc" type="xs:string">
             <xs:annotation>
@@ -145,24 +139,10 @@
             <xs:choice minOccurs="1" maxOccurs="unbounded">
                 <xs:element name="dbSql" type="xs:string"/>
                 <xs:element name="dbDelete" type="lk:dbDeleteType"/>
-                <xs:element name="dbInsert" type="xs:string"/>
+                <xs:element name="dbInsert" type="lk:dbInsertType"/>
+                <xs:element name="dbUpdate" type="lk:dbUpdateType"/>
                 <xs:element name="dbQuery" type="xs:string"/>
-                <xs:element name="dbUpdate" type="xs:string"/>
             </xs:choice>
-        </xs:sequence>
-    </xs:complexType>
-    <xs:complexType name="dbDeleteType">
-        <xs:annotation>
-            <xs:documentation><![CDATA[指令实际执行内容，可以为一个操作序列]]></xs:documentation>
-        </xs:annotation>
-        <xs:sequence>
-            <xs:element name="table" type="lk:lineContentType">
-            </xs:element>
-            <xs:element name="where" type="lk:lineContentType">
-                <xs:annotation>
-                    <xs:documentation><![CDATA[删除过滤条件。防止删除全部，默认不能为空。]]></xs:documentation>
-                </xs:annotation>
-            </xs:element>
         </xs:sequence>
     </xs:complexType>
     <xs:simpleType name="lineContentType">
@@ -174,4 +154,88 @@
             <xs:minLength value="1"/>
         </xs:restriction>
     </xs:simpleType>
+    <xs:simpleType name="needTextType">
+        <xs:annotation>
+            <xs:documentation><![CDATA[文本，不能为空]]></xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="\S+"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="dbFieldType">
+        <xs:annotation>
+            <xs:documentation><![CDATA[数据库字段]]></xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="subSql" type="lk:lineContentType" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation><![CDATA[内部sql，比如子查询。]]></xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="column" type="lk:needTextType"/>
+        <xs:attribute name="desc" type="lk:needTextType">
+            <xs:annotation>
+                <xs:documentation><![CDATA[描述信息]]></xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="dbSaveFieldType">
+        <xs:complexContent>
+            <xs:extension base="lk:dbFieldType">
+                <xs:attribute name="from" type="lk:needTextType"/>
+                <xs:attribute name="ignoreNull" type="xs:boolean" default="true"/>
+                <xs:attribute name="default" type="lk:needTextType">
+                    <xs:annotation>
+                        <xs:documentation><![CDATA[默认值。与固定值二选一，固定值优先级高。]]></xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="fixed" type="lk:needTextType">
+                    <xs:annotation>
+                        <xs:documentation><![CDATA[固定值。与默认值二选一，固定值优先级高。]]></xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="dbInsertType">
+        <xs:annotation>
+            <xs:documentation><![CDATA[数据库插入操作。需指定表名和要插入的字段。]]></xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="field" maxOccurs="unbounded" type="lk:dbSaveFieldType"/>
+            <xs:element name="table" type="lk:lineContentType">
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="dbDeleteType">
+        <xs:annotation>
+            <xs:documentation><![CDATA[从数据库删除某个表的数据。需要指定表名和过滤条件。]]></xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="table" type="lk:lineContentType">
+            </xs:element>
+            <xs:element name="where" type="lk:lineContentType">
+                <xs:annotation>
+                    <xs:documentation><![CDATA[删除过滤条件。防止删除全部，默认不能为空。]]></xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="dbUpdateType">
+        <xs:annotation>
+            <xs:documentation><![CDATA[数据库更新操作。需指定表名和要插入的字段以及过滤条件。]]></xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="field" maxOccurs="unbounded" type="lk:dbSaveFieldType"/>
+            <xs:element name="table" type="lk:lineContentType">
+            </xs:element>
+            <xs:element name="where" type="lk:lineContentType">
+                <xs:annotation>
+                    <xs:documentation><![CDATA[更新过滤条件。防止更新全部，默认不能为空。]]></xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
 </xs:schema>

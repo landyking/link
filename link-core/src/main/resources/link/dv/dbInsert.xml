@@ -2,23 +2,29 @@
 <directive xmlns="http://www.github.com/landyking/link"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://www.github.com/landyking/link http://www.github.com/landyking/link/link-1.0.xsd">
+    <description>啦啦啦啦</description>
     <input>
-        <param name="" desc="" notEmpty="false" default="" fixed="">
+        <param name="test" desc="" notEmpty="false" default="" fixed="">
             <processors>
+                <AgeCalc></AgeCalc>
             </processors>
         </param>
     </input>
 
     <execution>
         <dbInsert>
-            <field ignoreNull="false" from="" column=""></field>
-            <model></model>
+            <field ignoreNull="false" column="hello" default="2"></field>
+            <field ignoreNull="false" from="aaa" column="bbb"></field>
+            <field ignoreNull="false" column="bbb">
+                <subSql>select * from</subSql>
+            </field>
+            <table>t_student</table>
         </dbInsert>
     </execution>
-    <dependencys>
-        <dependency></dependency>
-    </dependencys>
     <output>
         <param name="count" from="num"/>
     </output>
+    <dependencys>
+    </dependencys>
+
 </directive>

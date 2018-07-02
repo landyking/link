@@ -2,26 +2,22 @@
 <directive xmlns="http://www.github.com/landyking/link"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://www.github.com/landyking/link http://www.github.com/landyking/link/link-1.0.xsd">
+    <description>我是一个描述</description>
     <input>
-        <param name="" desc="" notEmpty="false" default="" fixed="">
-            <processors>
-            </processors>
-        </param>
+        <param name="username" desc="姓名" notEmpty="false"/>
     </input>
-    <output>
-        <param name=""></param>
-    </output>
     <execution>
         <dbUpdate>
-            <saveField ignoreNull="false" param="userName" column="user_name">
-                <subSql></subSql>
-            </saveField>
-            <model></model>
+            <field ignoreNull="false" column="user_name"/>
+            <table>t_update</table>
             <where>
+                1=1
             </where>
         </dbUpdate>
     </execution>
+    <output>
+        <param name="2" from="33"></param>
+    </output>
     <dependencys>
-        <dependency></dependency>
     </dependencys>
 </directive>

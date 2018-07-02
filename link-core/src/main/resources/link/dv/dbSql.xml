@@ -4,23 +4,24 @@
            xsi:schemaLocation="http://www.github.com/landyking/link http://www.github.com/landyking/link/link-1.0.xsd">
     <description><![CDATA[师曾发生]]></description>
     <input>
-        <param name="" desc="" notEmpty="true" default="" fixed="">
+        <param name="22" desc="" notEmpty="true" default="" fixed="">
             <processors>
                 <AllToString></AllToString>
                 <DateTimeConverter></DateTimeConverter>
             </processors>
         </param>
     </input>
-    <output>
-        <param name=""/>
-    </output>
+
     <execution>
-        <dbDelete>22</dbDelete>
-        <dbUpdate>22</dbUpdate>
-        <dbSql>sdfasdf</dbSql>
-        <dbInsert>22</dbInsert>
-        <dbInsert>22</dbInsert>
+        <dbDelete>
+            <table>22</table>
+            <where>333</where>
+        </dbDelete>
+
         <dbSql>22</dbSql>
     </execution>
+    <output>
+        <param name="1" from=""/>
+    </output>
     <dependencys></dependencys>
 </directive>

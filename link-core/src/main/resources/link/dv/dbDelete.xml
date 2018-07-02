@@ -19,12 +19,11 @@
             </where>
         </dbDelete>
     </execution>
-    <dependencys>
-        <dependency></dependency>
-    </dependencys>
     <output>
         <param name="1" from=""/>
         <param name="12" from=""/>
         <param name="123" from=""/>
     </output>
+    <dependencys>
+    </dependencys>
 </directive>
