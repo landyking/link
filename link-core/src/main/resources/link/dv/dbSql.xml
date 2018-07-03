@@ -20,6 +20,7 @@
 
         <dbSql>
             <![CDATA[
+            delete from t_hello where name like '%test%'
             ]]>
         </dbSql>
     </execution>

@@ -97,9 +97,10 @@
     <xs:complexType name="outputParamType">
         <xs:complexContent>
             <xs:extension base="lk:paramType">
-                <xs:attribute name="from" use="required" type="xs:string">
+                <xs:attribute name="from" type="xs:string">
                     <xs:annotation>
-                        <xs:documentation><![CDATA[输出项的内容来源：特定的数据库列或者表达式。可以为空。]]></xs:documentation>
+                        <xs:documentation>
+                            <![CDATA[输出项的内容来源：特定的数据库列或者表达式。可以为空。不设置时表示与name一直.为空时不取值.]]></xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
             </xs:extension>
@@ -162,7 +163,16 @@
             <xs:pattern value="\S+"/>
         </xs:restriction>
     </xs:simpleType>
-
+    <xs:simpleType name="joinTypeType">
+        <xs:annotation>
+            <xs:documentation><![CDATA[SQL join类型]]></xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="left"/>
+            <xs:enumeration value="right"/>
+            <xs:enumeration value="inner"/>
+        </xs:restriction>
+    </xs:simpleType>
     <xs:complexType name="dbFieldType">
         <xs:annotation>
             <xs:documentation><![CDATA[数据库字段]]></xs:documentation>
@@ -249,14 +259,22 @@
     <xs:complexType name="dbQuerySelectType">
         <xs:sequence>
             <xs:element name="base">
-                <xs:complexType >
-                    <xs:attribute name="name" type="lk:needTextType"/>
+                <xs:complexType>
+                    <xs:attribute name="table" type="lk:needTextType"/>
                     <xs:attribute name="alias" type="lk:needTextType"/>
                     <xs:attribute name="prefix" type="lk:needTextType"/>
                 </xs:complexType>
             </xs:element>
             <xs:element name="join">
-
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="on" type="lk:lineContentType" maxOccurs="1" minOccurs="1"/>
+                    </xs:sequence>
+                    <xs:attribute name="table" type="lk:needTextType"/>
+                    <xs:attribute name="alias" type="lk:needTextType"/>
+                    <xs:attribute name="prefix" type="lk:needTextType"/>
+                    <xs:attribute name="type" type="lk:joinTypeType" use="required"/>
+                </xs:complexType>
             </xs:element>
         </xs:sequence>
     </xs:complexType>
@@ -267,14 +285,18 @@
         <xs:sequence>
             <xs:element name="field" maxOccurs="unbounded" type="lk:dbQueryFieldType"/>
             <xs:element name="from" type="dbQuerySelectType"/>
-            <xs:element name="where" type="lk:lineContentType">
+            <xs:element name="where" type="lk:lineContentType" minOccurs="0" maxOccurs="1">
                 <xs:annotation>
                     <xs:documentation><![CDATA[更新过滤条件。防止更新全部，默认不能为空。]]></xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="groupBy" type="lk:lineContentType"/>
-            <xs:element name="having" type="lk:lineContentType"/>
-            <xs:element name="order" type="lk:lineContentType"/>
+            <xs:element name="groupBy" type="lk:lineContentType" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="having" type="lk:lineContentType" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="order" type="lk:lineContentType" minOccurs="0" maxOccurs="1"/>
         </xs:sequence>
+        <xs:attribute name="pagination" type="xs:boolean" default="false"/>
+        <xs:attribute name="pageParamName" type="lk:needTextType" default="page"/>
+        <xs:attribute name="limitParamName" type="lk:needTextType" default="limit"/>
+        <xs:attribute name="limitDefaultSize" type="xs:integer" default="15"/>
     </xs:complexType>
 </xs:schema>
