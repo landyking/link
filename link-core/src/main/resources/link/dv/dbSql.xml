@@ -18,7 +18,10 @@
             <where>333</where>
         </dbDelete>
 
-        <dbSql>22</dbSql>
+        <dbSql>
+            <![CDATA[
+            ]]>
+        </dbSql>
     </execution>
     <output>
         <param name="1" from=""/>

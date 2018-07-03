@@ -137,7 +137,7 @@
         </xs:annotation>
         <xs:sequence>
             <xs:choice minOccurs="1" maxOccurs="unbounded">
-                <xs:element name="dbSql" type="xs:string"/>
+                <xs:element name="dbSql" type="lk:lineContentType"/>
                 <xs:element name="dbDelete" type="lk:dbDeleteType"/>
                 <xs:element name="dbInsert" type="lk:dbInsertType"/>
                 <xs:element name="dbUpdate" type="lk:dbUpdateType"/>
@@ -249,7 +249,14 @@
     <xs:complexType name="dbQuerySelectType">
         <xs:sequence>
             <xs:element name="base">
-                TODO
+                <xs:complexType >
+                    <xs:attribute name="name" type="lk:needTextType"/>
+                    <xs:attribute name="alias" type="lk:needTextType"/>
+                    <xs:attribute name="prefix" type="lk:needTextType"/>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="join">
+
             </xs:element>
         </xs:sequence>
     </xs:complexType>
