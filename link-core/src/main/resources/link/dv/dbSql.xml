@@ -17,7 +17,7 @@
     </input>
 
     <execution>
-        <dbDelete>
+        <dbDelete dataSource="default">
             <table>
                 t_test
             </table>
@@ -25,7 +25,7 @@
                 hello = :test and address in (:lala)
             </where>
         </dbDelete>
-        <dbInsert>
+        <dbInsert dataSource="default">
             <field ignoreNull="false" column="hello" default="2"/>
             <field ignoreNull="false" from="aaa" column="bbb"/>
             <field ignoreNull="false" column="bbb">
@@ -33,16 +33,16 @@
             </field>
             <table>t_student</table>
         </dbInsert>
-        <dbDelete>
+        <dbDelete dataSource="default">
             <table>22</table>
             <where>333</where>
         </dbDelete>
-        <dbSql pagination="true" limitDefaultSize="15">
+        <dbSql dataSource="default" pagination="true" limitDefaultSize="15">
             <![CDATA[
             delete from t_hello where name like '%test%'
             ]]>
         </dbSql>
-        <dbQuery pagination="true" >
+        <dbQuery dataSource="default" pagination="true" >
             <field column="name" tableAlias="address" columnAlias="address_name"/>
             <field column="name" tableAlias="road" columnAlias="road_name"/>
             <from>

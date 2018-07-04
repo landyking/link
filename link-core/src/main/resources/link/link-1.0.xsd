@@ -283,7 +283,6 @@
                 </xs:complexType>
             </xs:element>
         </xs:sequence>
-        <xs:attributeGroup ref="lk:dataSourceAttributeGroup"/>
     </xs:complexType>
     <xs:complexType name="dbSelectType">
         <xs:annotation>
@@ -322,7 +321,7 @@
         <xs:attribute name="limitDefaultSize" type="xs:integer" default="15"/>
     </xs:attributeGroup>
     <xs:attributeGroup name="dataSourceAttributeGroup">
-        <xs:attribute name="dataSource" type="xs:string" default="default"/>
+        <xs:attribute name="dataSource" type="xs:string" default="default" />
     </xs:attributeGroup>
     <xs:complexType name="classPropType">
         <xs:simpleContent>
