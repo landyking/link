@@ -12,7 +12,15 @@
         <module>link-demo</module>
     </modules>
     <packaging>pom</packaging>
-
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.github.landyking</groupId>
+                <artifactId>link-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     <dependencies>
         <dependency>
             <groupId>junit</groupId>

@@ -4,10 +4,12 @@
            xsi:schemaLocation="http://www.github.com/landyking/link http://www.github.com/landyking/link/link-1.0.xsd">
     <description><![CDATA[师曾发生]]></description>
     <input>
+        <param name="name" desc="姓名" notEmpty="false"/>
+        <param name="addressId" desc="地址id"/>
         <param name="22" desc="" notEmpty="true" default="" fixed="">
             <processors>
                 <CustomClass className="hello.world.CClass">
-                    <prop name="name">黄</prop>
+                    <prop name="name">刘</prop>
                     <prop name="age">12</prop>
                 </CustomClass>
             </processors>
@@ -16,18 +18,55 @@
 
     <execution>
         <dbDelete>
+            <table>
+                t_test
+            </table>
+            <where>
+                hello = :test and address in (:lala)
+            </where>
+        </dbDelete>
+        <dbInsert>
+            <field ignoreNull="false" column="hello" default="2"/>
+            <field ignoreNull="false" from="aaa" column="bbb"/>
+            <field ignoreNull="false" column="bbb">
+                <subSql>select * from</subSql>
+            </field>
+            <table>t_student</table>
+        </dbInsert>
+        <dbDelete>
             <table>22</table>
             <where>333</where>
         </dbDelete>
-
         <dbSql pagination="true" limitDefaultSize="15">
             <![CDATA[
             delete from t_hello where name like '%test%'
             ]]>
         </dbSql>
+        <dbQuery pagination="true" >
+            <field column="name" tableAlias="address" columnAlias="address_name"/>
+            <field column="name" tableAlias="road" columnAlias="road_name"/>
+            <from>
+                <base alias="address" table="t_address" prefix="hyuser"/>
+                <join type="left" alias="road" table="t_road">
+                    <on>address.road_id=road.id</on>
+                </join>
+            </from>
+            <where>address.id = :addressId</where>
+            <!--<groupBy>111</groupBy>-->
+            <!--<having></having>-->
+            <order>address.create_time desc</order>
+        </dbQuery>
+        <dbUpdate dataSource="hello">
+            <field ignoreNull="false" column="user_name"/>
+            <table>t_update</table>
+            <where>
+                1=1
+            </where>
+        </dbUpdate>
     </execution>
     <output>
         <param name="1" from=""/>
+        <param name="count" from="num" desc="总数量"/>
     </output>
     <dependencys></dependencys>
 </directive>

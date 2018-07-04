@@ -11,5 +11,10 @@
 
     <artifactId>link-demo</artifactId>
 
-
+    <dependencies>
+        <dependency>
+            <groupId>com.github.landyking</groupId>
+            <artifactId>link-core</artifactId>
+        </dependency>
+    </dependencies>
 </project>
