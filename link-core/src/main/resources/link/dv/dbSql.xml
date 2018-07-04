@@ -6,8 +6,10 @@
     <input>
         <param name="22" desc="" notEmpty="true" default="" fixed="">
             <processors>
-                <AllToString></AllToString>
-                <DateTimeConverter></DateTimeConverter>
+                <CustomClass className="hello.world.CClass">
+                    <prop name="name">黄</prop>
+                    <prop name="age">12</prop>
+                </CustomClass>
             </processors>
         </param>
     </input>

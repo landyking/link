@@ -126,7 +126,7 @@
                 <xs:element name="AgeCalc" type="lk:AgeCalcType"/>
                 <xs:element name="SqlLobProcessor" type="lk:SqlLobProcessorType"/>
                 <xs:element name="JsonExpand" type="lk:JsonExpandType"/>
-                <xs:element name="CustomClass" type="lk:CustomParamProcessorClassType"/>
+                <xs:element ref="lk:CustomClass"/>
             </xs:choice>
         </xs:sequence>
     </xs:complexType>
@@ -331,15 +331,26 @@
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>
-    <xs:complexType name="CustomParamProcessorClassType">
+    <xs:element name="CustomClass">
         <xs:annotation>
             <xs:documentation>自定义参数处理器类</xs:documentation>
         </xs:annotation>
-        <xs:sequence>
-            <xs:element name="prop" type="lk:classPropType" maxOccurs="unbounded" minOccurs="0"/>
-        </xs:sequence>
-        <xs:attribute name="className" type="xs:string"/>
-    </xs:complexType>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="prop" type="lk:classPropType" maxOccurs="unbounded" minOccurs="0"/>
+            </xs:sequence>
+
+            <xs:attribute name="className" type="xs:string"/>
+        </xs:complexType>
+        <xs:unique name="customClassPropNameUnique">
+            <xs:annotation>
+                <xs:documentation><![CDATA[自定义类中的参数名字必须唯一]]></xs:documentation>
+            </xs:annotation>
+            <xs:selector xpath="lk:prop"/>
+            <xs:field xpath="@name"/>
+        </xs:unique>
+    </xs:element>
+
     <xs:complexType name="GUIDGeneratorType"></xs:complexType>
     <xs:complexType name="DateTimeGeneratorType"></xs:complexType>
     <xs:complexType name="AllToStringType"></xs:complexType>
