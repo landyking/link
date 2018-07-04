@@ -112,23 +112,21 @@
         </xs:annotation>
         <xs:sequence>
             <xs:choice minOccurs="1" maxOccurs="unbounded">
-                <xs:element name="GUIDGenerator" type="xs:string"/>
-                <xs:element name="DateTimeGenerator" type="xs:string"/>
-                <xs:element name="AllToString" type="xs:string"/>
-                <xs:element name="DefaultValueGenerator" type="xs:string"/>
-                <xs:element name="QueryTranslator" type="xs:string"/>
-                <xs:element name="DictTranslator" type="xs:string"/>
-                <xs:element name="NotEmpty" type="xs:string"/>
-                <xs:element name="TextToList" type="xs:string"/>
-                <xs:element name="ListToText" type="xs:string"/>
-                <xs:element name="LikeParamGenerator" type="xs:string"/>
-                <xs:element name="InputScriptProcessor" type="xs:string"/>
-                <xs:element name="OutputScriptProcessor" type="xs:string"/>
-                <xs:element name="DateTimeConverter" type="xs:string"/>
-                <xs:element name="AgeCalc" type="xs:string"/>
-                <xs:element name="SqlLobProcessor" type="xs:string"/>
-                <xs:element name="JsonExpand" type="xs:string"/>
-                <xs:element name="CustomClass" type="xs:string"/>
+                <xs:element name="GUIDGenerator" type="lk:GUIDGeneratorType"/>
+                <xs:element name="DateTimeGenerator" type="lk:DateTimeGeneratorType"/>
+                <xs:element name="AllToString" type="lk:AllToStringType"/>
+                <xs:element name="QueryTranslator" type="lk:QueryTranslatorType"/>
+                <xs:element name="DictTranslator" type="lk:DictTranslatorType"/>
+                <xs:element name="TextToList" type="lk:TextToListType"/>
+                <xs:element name="ListToText" type="lk:ListToTextType"/>
+                <xs:element name="LikeParamGenerator" type="lk:LikeParamGeneratorType"/>
+                <xs:element name="InputScriptProcessor" type="lk:InputScriptProcessorType"/>
+                <xs:element name="OutputScriptProcessor" type="lk:OutputScriptProcessorType"/>
+                <xs:element name="DateTimeConverter" type="lk:DateTimeConverterType"/>
+                <xs:element name="AgeCalc" type="lk:AgeCalcType"/>
+                <xs:element name="SqlLobProcessor" type="lk:SqlLobProcessorType"/>
+                <xs:element name="JsonExpand" type="lk:JsonExpandType"/>
+                <xs:element name="CustomClass" type="lk:CustomParamProcessorClassType"/>
             </xs:choice>
         </xs:sequence>
     </xs:complexType>
@@ -284,7 +282,7 @@
         </xs:annotation>
         <xs:sequence>
             <xs:element name="field" maxOccurs="unbounded" type="lk:dbQueryFieldType"/>
-            <xs:element name="from" type="dbQuerySelectType"/>
+            <xs:element name="from" type="lk:dbQuerySelectType"/>
             <xs:element name="where" type="lk:lineContentType" minOccurs="0" maxOccurs="1">
                 <xs:annotation>
                     <xs:documentation><![CDATA[更新过滤条件。防止更新全部，默认不能为空。]]></xs:documentation>
@@ -299,4 +297,34 @@
         <xs:attribute name="limitParamName" type="lk:needTextType" default="limit"/>
         <xs:attribute name="limitDefaultSize" type="xs:integer" default="15"/>
     </xs:complexType>
+    <xs:complexType name="classPropType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="name" type="lk:needTextType"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="CustomParamProcessorClassType">
+        <xs:annotation>
+            <xs:documentation>自定义参数处理器类</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="prop" type="lk:classPropType" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute name="className" type="xs:string"/>
+    </xs:complexType>
+    <xs:complexType name="GUIDGeneratorType"></xs:complexType>
+    <xs:complexType name="DateTimeGeneratorType"></xs:complexType>
+    <xs:complexType name="AllToStringType"></xs:complexType>
+    <xs:complexType name="QueryTranslatorType"></xs:complexType>
+    <xs:complexType name="DictTranslatorType"></xs:complexType>
+    <xs:complexType name="TextToListType"></xs:complexType>
+    <xs:complexType name="ListToTextType"></xs:complexType>
+    <xs:complexType name="LikeParamGeneratorType"></xs:complexType>
+    <xs:complexType name="InputScriptProcessorType"></xs:complexType>
+    <xs:complexType name="OutputScriptProcessorType"></xs:complexType>
+    <xs:complexType name="DateTimeConverterType"></xs:complexType>
+    <xs:complexType name="AgeCalcType"></xs:complexType>
+    <xs:complexType name="SqlLobProcessorType"></xs:complexType>
+    <xs:complexType name="JsonExpandType"></xs:complexType>
 </xs:schema>
