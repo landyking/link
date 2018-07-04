@@ -138,13 +138,18 @@
         </xs:annotation>
         <xs:sequence>
             <xs:choice minOccurs="1" maxOccurs="unbounded">
-                <xs:element name="dbSql" type="lk:lineContentType"/>
+                <xs:element name="dbSql" type="lk:dbSqlType"/>
                 <xs:element name="dbDelete" type="lk:dbDeleteType"/>
                 <xs:element name="dbInsert" type="lk:dbInsertType"/>
                 <xs:element name="dbUpdate" type="lk:dbUpdateType"/>
                 <xs:element name="dbQuery" type="lk:dbSelectType"/>
             </xs:choice>
         </xs:sequence>
+        <xs:attribute name="transaction" type="xs:boolean" default="false">
+            <xs:annotation>
+                <xs:documentation>是否启用事务</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
     </xs:complexType>
     <xs:simpleType name="lineContentType">
         <xs:annotation>
@@ -226,6 +231,7 @@
             <xs:element name="table" type="lk:lineContentType">
             </xs:element>
         </xs:sequence>
+        <xs:attributeGroup ref="lk:dataSourceAttributeGroup"/>
     </xs:complexType>
     <xs:complexType name="dbDeleteType">
         <xs:annotation>
@@ -240,6 +246,7 @@
                 </xs:annotation>
             </xs:element>
         </xs:sequence>
+        <xs:attributeGroup ref="lk:dataSourceAttributeGroup"/>
     </xs:complexType>
     <xs:complexType name="dbUpdateType">
         <xs:annotation>
@@ -255,6 +262,7 @@
                 </xs:annotation>
             </xs:element>
         </xs:sequence>
+        <xs:attributeGroup ref="lk:dataSourceAttributeGroup"/>
     </xs:complexType>
     <xs:complexType name="dbQuerySelectType">
         <xs:sequence>
@@ -277,6 +285,7 @@
                 </xs:complexType>
             </xs:element>
         </xs:sequence>
+        <xs:attributeGroup ref="lk:dataSourceAttributeGroup"/>
     </xs:complexType>
     <xs:complexType name="dbSelectType">
         <xs:annotation>
@@ -284,7 +293,7 @@
         </xs:annotation>
         <xs:sequence>
             <xs:element name="field" maxOccurs="unbounded" type="lk:dbQueryFieldType"/>
-            <xs:element name="from" type="dbQuerySelectType"/>
+            <xs:element name="from" type="lk:dbQuerySelectType"/>
             <xs:element name="where" type="lk:lineContentType" minOccurs="0" maxOccurs="1">
                 <xs:annotation>
                     <xs:documentation><![CDATA[更新过滤条件。防止更新全部，默认不能为空。]]></xs:documentation>
@@ -294,9 +303,27 @@
             <xs:element name="having" type="lk:lineContentType" minOccurs="0" maxOccurs="1"/>
             <xs:element name="order" type="lk:lineContentType" minOccurs="0" maxOccurs="1"/>
         </xs:sequence>
+        <xs:attributeGroup ref="lk:dataSourceAttributeGroup"/>
+        <xs:attributeGroup ref="lk:pageAttributeGroup"/>
+    </xs:complexType>
+    <xs:complexType name="dbSqlType">
+        <xs:annotation>
+            <xs:documentation><![CDATA[数据库操作。使用自定义sql。]]></xs:documentation>
+        </xs:annotation>
+        <xs:simpleContent>
+            <xs:extension base="lk:lineContentType">
+                <xs:attributeGroup ref="lk:dataSourceAttributeGroup"/>
+                <xs:attributeGroup ref="lk:pageAttributeGroup"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:attributeGroup name="pageAttributeGroup">
         <xs:attribute name="pagination" type="xs:boolean" default="false"/>
         <xs:attribute name="pageParamName" type="lk:needTextType" default="page"/>
         <xs:attribute name="limitParamName" type="lk:needTextType" default="limit"/>
         <xs:attribute name="limitDefaultSize" type="xs:integer" default="15"/>
-    </xs:complexType>
+    </xs:attributeGroup>
+    <xs:attributeGroup name="dataSourceAttributeGroup">
+        <xs:attribute name="dataSource" type="xs:string" default="default"/>
+    </xs:attributeGroup>
 </xs:schema>

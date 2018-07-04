@@ -18,7 +18,7 @@
             <where>333</where>
         </dbDelete>
 
-        <dbSql>
+        <dbSql pagination="true" limitDefaultSize="15">
             <![CDATA[
             delete from t_hello where name like '%test%'
             ]]>
