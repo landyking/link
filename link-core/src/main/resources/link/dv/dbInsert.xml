@@ -13,8 +13,8 @@
 
     <execution>
         <dbInsert>
-            <field ignoreNull="false" column="hello" default="2"></field>
-            <field ignoreNull="false" from="aaa" column="bbb"></field>
+            <field ignoreNull="false" column="hello" default="2"/>
+            <field ignoreNull="false" from="aaa" column="bbb"/>
             <field ignoreNull="false" column="bbb">
                 <subSql>select * from</subSql>
             </field>

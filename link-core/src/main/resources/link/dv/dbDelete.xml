@@ -8,14 +8,13 @@
         <param name="3"/>
         <param name="test"/>
     </input>
-
-    <execution>
+    <execution transaction="false">
         <dbDelete>
             <table>
                 t_test
             </table>
-            <where>hello = :test and
-                address in (:lala)
+            <where>
+                hello = :test and address in (:lala)
             </where>
         </dbDelete>
     </execution>

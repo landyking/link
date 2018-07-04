@@ -7,7 +7,7 @@
         <param name="username" desc="姓名" notEmpty="false"/>
     </input>
     <execution>
-        <dbUpdate>
+        <dbUpdate dataSource="hello">
             <field ignoreNull="false" column="user_name"/>
             <table>t_update</table>
             <where>
