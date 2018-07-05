@@ -16,7 +16,7 @@
         </param>
     </input>
     <execution>
-        <custom className="com.huiyunit.Test">
+        <custom  className="com.huiyunit.Test">
             <prop name="first">world</prop>
             <prop name="first2">hello</prop>
         </custom>
