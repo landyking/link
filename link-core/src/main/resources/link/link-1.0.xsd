@@ -126,7 +126,15 @@
                 <xs:element name="AgeCalc" type="lk:AgeCalcType"/>
                 <xs:element name="SqlLobProcessor" type="lk:SqlLobProcessorType"/>
                 <xs:element name="JsonExpand" type="lk:JsonExpandType"/>
-                <xs:element ref="lk:CustomClass"/>
+                <xs:element name="custom" type="lk:paramProcessorCustomType">
+                    <xs:unique name="customParamProcessorClassPropNameUnique">
+                        <xs:annotation>
+                            <xs:documentation><![CDATA[自定义类中的参数名字必须唯一]]></xs:documentation>
+                        </xs:annotation>
+                        <xs:selector xpath="lk:prop"/>
+                        <xs:field xpath="@name"/>
+                    </xs:unique>
+                </xs:element>
             </xs:choice>
         </xs:sequence>
     </xs:complexType>
@@ -136,6 +144,16 @@
         </xs:annotation>
         <xs:sequence>
             <xs:choice minOccurs="1" maxOccurs="unbounded">
+                <xs:element name="custom" type="lk:executionCustomClassType">
+                    <xs:unique name="customExecutionClassPropNameUnique">
+                        <xs:annotation>
+                            <xs:documentation><![CDATA[自定义类中的参数名字必须唯一]]></xs:documentation>
+                        </xs:annotation>
+                        <xs:selector xpath="lk:prop"/>
+                        <xs:field xpath="@name"/>
+                    </xs:unique>
+                </xs:element>
+                <xs:element name="script" type="lk:executionScriptType"/>
                 <xs:element name="dbSql" type="lk:dbSqlType"/>
                 <xs:element name="dbDelete" type="lk:dbDeleteType"/>
                 <xs:element name="dbInsert" type="lk:dbInsertType"/>
@@ -224,104 +242,129 @@
         <xs:annotation>
             <xs:documentation><![CDATA[数据库插入操作。需指定表名和要插入的字段。]]></xs:documentation>
         </xs:annotation>
-        <xs:sequence>
-            <xs:element name="field" maxOccurs="unbounded" type="lk:dbSaveFieldType"/>
-            <xs:element name="table" type="lk:lineContentType">
-            </xs:element>
-        </xs:sequence>
-        <xs:attributeGroup ref="lk:dataSourceAttributeGroup"/>
+        <xs:complexContent>
+            <xs:extension base="lk:abstractDbExecutionType">
+                <xs:sequence>
+                    <xs:element name="field" maxOccurs="unbounded" type="lk:dbSaveFieldType"/>
+                    <xs:element name="table" type="lk:lineContentType">
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
     </xs:complexType>
     <xs:complexType name="dbDeleteType">
         <xs:annotation>
             <xs:documentation><![CDATA[从数据库删除某个表的数据。需要指定表名和过滤条件。]]></xs:documentation>
         </xs:annotation>
-        <xs:sequence>
-            <xs:element name="table" type="lk:lineContentType">
-            </xs:element>
-            <xs:element name="where" type="lk:lineContentType">
-                <xs:annotation>
-                    <xs:documentation><![CDATA[删除过滤条件。防止删除全部，默认不能为空。]]></xs:documentation>
-                </xs:annotation>
-            </xs:element>
-        </xs:sequence>
-        <xs:attributeGroup ref="lk:dataSourceAttributeGroup"/>
+        <xs:complexContent>
+            <xs:extension base="lk:abstractDbExecutionType">
+                <xs:sequence>
+                    <xs:element name="table" type="lk:lineContentType">
+                    </xs:element>
+                    <xs:element name="where" type="lk:lineContentType">
+                        <xs:annotation>
+                            <xs:documentation><![CDATA[删除过滤条件。防止删除全部，默认不能为空。]]></xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
     </xs:complexType>
     <xs:complexType name="dbUpdateType">
         <xs:annotation>
             <xs:documentation><![CDATA[数据库更新操作。需指定表名和要插入的字段以及过滤条件。]]></xs:documentation>
         </xs:annotation>
-        <xs:sequence>
-            <xs:element name="field" maxOccurs="unbounded" type="lk:dbSaveFieldType"/>
-            <xs:element name="table" type="lk:lineContentType">
-            </xs:element>
-            <xs:element name="where" type="lk:lineContentType">
-                <xs:annotation>
-                    <xs:documentation><![CDATA[更新过滤条件。防止更新全部，默认不能为空。]]></xs:documentation>
-                </xs:annotation>
-            </xs:element>
-        </xs:sequence>
-        <xs:attributeGroup ref="lk:dataSourceAttributeGroup"/>
+        <xs:complexContent>
+            <xs:extension base="lk:abstractDbExecutionType">
+                <xs:sequence>
+                    <xs:element name="field" maxOccurs="unbounded" type="lk:dbSaveFieldType"/>
+                    <xs:element name="table" type="lk:lineContentType">
+                    </xs:element>
+                    <xs:element name="where" type="lk:lineContentType">
+                        <xs:annotation>
+                            <xs:documentation><![CDATA[更新过滤条件。防止更新全部，默认不能为空。]]></xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
     </xs:complexType>
     <xs:complexType name="dbQuerySelectType">
-        <xs:sequence>
-            <xs:element name="base">
-                <xs:complexType>
-                    <xs:attribute name="table" type="lk:needTextType"/>
-                    <xs:attribute name="alias" type="lk:needTextType"/>
-                    <xs:attribute name="prefix" type="lk:needTextType"/>
-                </xs:complexType>
-            </xs:element>
-            <xs:element name="join">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element name="on" type="lk:lineContentType" maxOccurs="1" minOccurs="1"/>
-                    </xs:sequence>
-                    <xs:attribute name="table" type="lk:needTextType"/>
-                    <xs:attribute name="alias" type="lk:needTextType"/>
-                    <xs:attribute name="prefix" type="lk:needTextType"/>
-                    <xs:attribute name="type" type="lk:joinTypeType" use="required"/>
-                </xs:complexType>
-            </xs:element>
-        </xs:sequence>
+        <xs:complexContent>
+            <xs:extension base="lk:abstractDbExecutionType">
+                <xs:sequence>
+                    <xs:element name="base">
+                        <xs:complexType>
+                            <xs:attribute name="table" type="lk:needTextType"/>
+                            <xs:attribute name="alias" type="lk:needTextType"/>
+                            <xs:attribute name="prefix" type="lk:needTextType"/>
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="join">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="on" type="lk:lineContentType" maxOccurs="1" minOccurs="1"/>
+                            </xs:sequence>
+                            <xs:attribute name="table" type="lk:needTextType"/>
+                            <xs:attribute name="alias" type="lk:needTextType"/>
+                            <xs:attribute name="prefix" type="lk:needTextType"/>
+                            <xs:attribute name="type" type="lk:joinTypeType" use="required"/>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
     </xs:complexType>
     <xs:complexType name="dbSelectType">
         <xs:annotation>
             <xs:documentation><![CDATA[数据库查询操作。需指定表名和要查询的字段以及过滤条件、排序条件等。]]></xs:documentation>
         </xs:annotation>
-        <xs:sequence>
-            <xs:element name="field" maxOccurs="unbounded" type="lk:dbQueryFieldType"/>
-            <xs:element name="from" type="lk:dbQuerySelectType"/>
-            <xs:element name="where" type="lk:lineContentType" minOccurs="0" maxOccurs="1">
-                <xs:annotation>
-                    <xs:documentation><![CDATA[更新过滤条件。防止更新全部，默认不能为空。]]></xs:documentation>
-                </xs:annotation>
-            </xs:element>
-            <xs:element name="groupBy" type="lk:lineContentType" minOccurs="0" maxOccurs="1"/>
-            <xs:element name="having" type="lk:lineContentType" minOccurs="0" maxOccurs="1"/>
-            <xs:element name="order" type="lk:lineContentType" minOccurs="0" maxOccurs="1"/>
-        </xs:sequence>
-        <xs:attributeGroup ref="lk:dataSourceAttributeGroup"/>
-        <xs:attributeGroup ref="lk:pageAttributeGroup"/>
+        <xs:complexContent>
+            <xs:extension base="lk:abstractDbExecutionType">
+                <xs:sequence>
+                    <xs:element name="field" maxOccurs="unbounded" type="lk:dbQueryFieldType"/>
+                    <xs:element name="from" type="lk:dbQuerySelectType"/>
+                    <xs:element name="where" type="lk:lineContentType" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation><![CDATA[更新过滤条件。防止更新全部，默认不能为空。]]></xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="groupBy" type="lk:lineContentType" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="having" type="lk:lineContentType" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="order" type="lk:lineContentType" minOccurs="0" maxOccurs="1"/>
+                </xs:sequence>
+                <xs:attributeGroup ref="lk:pageAttributeGroup"/>
+            </xs:extension>
+        </xs:complexContent>
     </xs:complexType>
-    <xs:complexType name="dbSqlType">
+    <xs:complexType name="dbSqlType" mixed="true">
         <xs:annotation>
             <xs:documentation><![CDATA[数据库操作。使用自定义sql。]]></xs:documentation>
         </xs:annotation>
-        <xs:simpleContent>
-            <xs:extension base="lk:lineContentType">
-                <xs:attributeGroup ref="lk:dataSourceAttributeGroup"/>
+        <xs:complexContent>
+            <xs:extension base="lk:abstractDbExecutionType">
                 <xs:attributeGroup ref="lk:pageAttributeGroup"/>
             </xs:extension>
-        </xs:simpleContent>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="executionCustomClassType">
+        <xs:annotation>
+            <xs:documentation>自定义执行处理类</xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="lk:abstractDbExecutionType">
+                <xs:sequence>
+                    <xs:element name="prop" type="lk:classPropType" maxOccurs="unbounded" minOccurs="0"/>
+                </xs:sequence>
+                <xs:attribute name="className" type="xs:string"/>
+            </xs:extension>
+        </xs:complexContent>
     </xs:complexType>
     <xs:attributeGroup name="pageAttributeGroup">
         <xs:attribute name="pagination" type="xs:boolean" default="false"/>
         <xs:attribute name="pageParamName" type="lk:needTextType" default="page"/>
         <xs:attribute name="limitParamName" type="lk:needTextType" default="limit"/>
         <xs:attribute name="limitDefaultSize" type="xs:integer" default="15"/>
-    </xs:attributeGroup>
-    <xs:attributeGroup name="dataSourceAttributeGroup">
-        <xs:attribute name="dataSource" type="xs:string" default="default" />
     </xs:attributeGroup>
     <xs:complexType name="classPropType">
         <xs:simpleContent>
@@ -330,38 +373,106 @@
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>
-    <xs:element name="CustomClass">
+    <xs:complexType name="paramProcessorCustomType">
         <xs:annotation>
             <xs:documentation>自定义参数处理器类</xs:documentation>
         </xs:annotation>
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element name="prop" type="lk:classPropType" maxOccurs="unbounded" minOccurs="0"/>
-            </xs:sequence>
+        <xs:complexContent>
+            <xs:extension base="lk:abstractParamProcessorType">
+                <xs:sequence>
+                    <xs:element name="prop" type="lk:classPropType" maxOccurs="unbounded" minOccurs="0"/>
+                </xs:sequence>
+                <xs:attribute name="className" type="xs:string"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="abstractParamProcessorType" abstract="true">
+    </xs:complexType>
+    <xs:complexType name="abstractExecutionType" abstract="true">
+        <xs:attribute name="test" type="lk:needTextType"/>
+    </xs:complexType>
+    <xs:complexType name="abstractDbExecutionType" abstract="true">
+        <xs:complexContent>
+            <xs:extension base="lk:abstractExecutionType">
+                <xs:attribute name="dataSource" type="xs:string" default="default"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
 
-            <xs:attribute name="className" type="xs:string"/>
-        </xs:complexType>
-        <xs:unique name="customClassPropNameUnique">
-            <xs:annotation>
-                <xs:documentation><![CDATA[自定义类中的参数名字必须唯一]]></xs:documentation>
-            </xs:annotation>
-            <xs:selector xpath="lk:prop"/>
-            <xs:field xpath="@name"/>
-        </xs:unique>
-    </xs:element>
-
-    <xs:complexType name="GUIDGeneratorType"></xs:complexType>
-    <xs:complexType name="DateTimeGeneratorType"></xs:complexType>
-    <xs:complexType name="AllToStringType"></xs:complexType>
-    <xs:complexType name="QueryTranslatorType"></xs:complexType>
-    <xs:complexType name="DictTranslatorType"></xs:complexType>
-    <xs:complexType name="TextToListType"></xs:complexType>
-    <xs:complexType name="ListToTextType"></xs:complexType>
-    <xs:complexType name="LikeParamGeneratorType"></xs:complexType>
-    <xs:complexType name="InputScriptProcessorType"></xs:complexType>
-    <xs:complexType name="OutputScriptProcessorType"></xs:complexType>
-    <xs:complexType name="DateTimeConverterType"></xs:complexType>
-    <xs:complexType name="AgeCalcType"></xs:complexType>
-    <xs:complexType name="SqlLobProcessorType"></xs:complexType>
-    <xs:complexType name="JsonExpandType"></xs:complexType>
+    <xs:complexType name="GUIDGeneratorType">
+        <xs:complexContent>
+            <xs:extension base="lk:abstractParamProcessorType"></xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="DateTimeGeneratorType">
+        <xs:complexContent>
+            <xs:extension base="lk:abstractParamProcessorType"></xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="AllToStringType">
+        <xs:complexContent>
+            <xs:extension base="lk:abstractParamProcessorType"></xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="QueryTranslatorType">
+        <xs:complexContent>
+            <xs:extension base="lk:abstractParamProcessorType"></xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="DictTranslatorType">
+        <xs:complexContent>
+            <xs:extension base="lk:abstractParamProcessorType"></xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="TextToListType">
+        <xs:complexContent>
+            <xs:extension base="lk:abstractParamProcessorType"></xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="ListToTextType">
+        <xs:complexContent>
+            <xs:extension base="lk:abstractParamProcessorType"></xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="LikeParamGeneratorType">
+        <xs:complexContent>
+            <xs:extension base="lk:abstractParamProcessorType"></xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="InputScriptProcessorType">
+        <xs:complexContent>
+            <xs:extension base="lk:abstractParamProcessorType"></xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="OutputScriptProcessorType">
+        <xs:complexContent>
+            <xs:extension base="lk:abstractParamProcessorType"></xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="DateTimeConverterType">
+        <xs:complexContent>
+            <xs:extension base="lk:abstractParamProcessorType"></xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="AgeCalcType">
+        <xs:complexContent>
+            <xs:extension base="lk:abstractParamProcessorType"></xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="SqlLobProcessorType">
+        <xs:complexContent>
+            <xs:extension base="lk:abstractParamProcessorType"></xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="JsonExpandType">
+        <xs:complexContent>
+            <xs:extension base="lk:abstractParamProcessorType"></xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="executionScriptType">
+        <xs:complexContent>
+            <xs:extension base="lk:abstractExecutionType">
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
 </xs:schema>

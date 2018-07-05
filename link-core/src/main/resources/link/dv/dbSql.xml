@@ -8,16 +8,19 @@
         <param name="addressId" desc="地址id"/>
         <param name="22" desc="" notEmpty="true" default="" fixed="">
             <processors>
-                <CustomClass className="hello.world.CClass">
+                <custom className="hello.world.CClass">
                     <prop name="name">刘</prop>
                     <prop name="age">12</prop>
-                </CustomClass>
+                </custom>
             </processors>
         </param>
     </input>
-
     <execution>
-        <dbDelete dataSource="default">
+        <custom className="com.huiyunit.Test">
+            <prop name="first">world</prop>
+            <prop name="first2">hello</prop>
+        </custom>
+        <dbDelete  dataSource="default">
             <table>
                 t_test
             </table>
@@ -42,7 +45,7 @@
             delete from t_hello where name like '%test%'
             ]]>
         </dbSql>
-        <dbQuery dataSource="default" pagination="true" >
+        <dbQuery dataSource="default" pagination="true">
             <field column="name" tableAlias="address" columnAlias="address_name"/>
             <field column="name" tableAlias="road" columnAlias="road_name"/>
             <from>
