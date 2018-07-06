@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<directive xmlns="http://www.github.com/landyking/link"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.github.com/landyking/link http://www.github.com/landyking/link/link-1.0.xsd">
+    <description>测试指令</description>
+    <input>
+        <param name="name"/>
+    </input>
+    <execution>
+        <dbSql></dbSql>
+    </execution>
+    <output>
+        <param name="out" 3/>
+    </output>
+    <dependencys></dependencys>
+</directive>
