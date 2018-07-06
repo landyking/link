@@ -28,7 +28,7 @@ public class DirectiveManager implements ApplicationContextAware {
     }
 
     public DirectiveMojo callDirective(String code, InputPot pot) throws LinkException {
-        logger.info("call directive: {}", code);
+        logger.info("调用指令: {}", code);
         DirectiveParser parser = loadDirectiveXml(code);
         DirectiveMojo mojo = new DirectiveMojo(code, pot, parser);
         exec.execute(mojo);
@@ -36,7 +36,7 @@ public class DirectiveManager implements ApplicationContextAware {
     }
 
     private DirectiveParser loadDirectiveXml(String code) throws LinkException {
-        logger.info("load directive xml file for code: {}", code);
+        logger.info("加载指令xml文件，编码为: {}", code);
         String path = code.replaceAll("\\.", "/");
         String location = "classpath:/link/dv/" + path + ".xml";
         Resource resource = applicationContext.getResource(location);
@@ -45,7 +45,7 @@ public class DirectiveManager implements ApplicationContextAware {
                 try {
                     return new DirectiveParser(resource);
                 } catch (Exception e) {
-                    throw new DirectiveParseException("File [" + resource.toString() + "] parse error", e);
+                    throw new DirectiveParseException(resource.toString() + " parse error", e);
                 }
             } else {
                 throw new DirectiveNotFoundException("File " + location + " can't read.");

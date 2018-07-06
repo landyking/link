@@ -10,7 +10,7 @@
         <dbSql></dbSql>
     </execution>
     <output>
-        <param name="out" 3/>
+        <param name="out" />
     </output>
     <dependencys></dependencys>
 </directive>

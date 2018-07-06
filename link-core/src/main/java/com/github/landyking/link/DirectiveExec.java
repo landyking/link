@@ -15,7 +15,10 @@ public class DirectiveExec implements BeanFactoryAware {
     private BeanFactory beanFactory;
 
     public void execute(DirectiveMojo mojo) {
-        logger.info("execute directive: {}", mojo.getDirectiveCode());
+        logger.info("执行指令: {}", mojo.getDirectiveCode());
+        logger.info("处理输入参数");
+        logger.info("执行指令内容");
+        logger.info("处理输出参数");
     }
 
     @Override

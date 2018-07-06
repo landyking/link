@@ -23,28 +23,26 @@ import java.io.IOException;
  * 指令解析器
  */
 public class DirectiveParser {
+    public static final String LINK_1_0_XSD = "http://www.github.com/landyking/link/link-1.0.xsd";
+    public static final String XSD_LOCATION = "/link/link-1.0.xsd";
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private String directiveCode;
+    private final Document document;
 
     public DirectiveParser(Resource resource) throws Exception {
-        logger.info("start parse file: {}", resource.getURL().toString());
+        logger.info("开始解析文件: {}", resource.getURL().toString());
         DefaultDocumentLoader documentLoader = new DefaultDocumentLoader();
         DefaultHandler errorHandler = new DefaultHandler();
-        Document doc = documentLoader.loadDocument(new InputSource(resource.getInputStream()), new EntityResolver() {
+        document = documentLoader.loadDocument(new InputSource(resource.getInputStream()), new EntityResolver() {
             @Override
             public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
-                if (systemId.equals("http://www.github.com/landyking/link/link-1.0.xsd")) {
-                    return new InputSource(getClass().getResourceAsStream("/link/link-1.0.xsd"));
+                if (systemId.equals(LINK_1_0_XSD)) {
+                    return new InputSource(getClass().getResourceAsStream(XSD_LOCATION));
                 } else {
                     return null;
                 }
             }
         }, errorHandler, XmlValidationModeDetector.VALIDATION_XSD, true);
-        validateXmlSchema();
-    }
-
-    private void validateXmlSchema() {
-        logger.info("start validate xml schema");
     }
 
     public String getDirectiveCode() {
