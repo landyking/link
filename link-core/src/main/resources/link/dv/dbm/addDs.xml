@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<directive xmlns="http://www.github.com/landyking/link"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.github.com/landyking/link http://www.github.com/landyking/link/link-1.0.xsd">
+    <description>新增数据源</description>
+    <input>
+        <param name="name" desc="名称"/>
+        <param name="description" desc="描述"/>
+        <param name="driverClass" desc="驱动类"/>
+        <param name="jdbcUrl" desc="连接地址"/>
+        <param name="account" desc="账号" notEmpty="false"/>
+        <param name="password" desc="密码" notEmpty="false"/>
+        <param name="extraConfig" desc="其他参数" notEmpty="false"/>
+    </input>
+    <execution>
+        <custom className=""/>
+    </execution>
+    <output>
+    </output>
+    <dependencys></dependencys>
+</directive>

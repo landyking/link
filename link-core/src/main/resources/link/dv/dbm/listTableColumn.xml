@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<directive xmlns="http://www.github.com/landyking/link"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.github.com/landyking/link http://www.github.com/landyking/link/link-1.0.xsd">
+    <description>列出数据库表中包含的列信息</description>
+    <input>
+        <param name="dsName" desc="数据源名称"/>
+        <param name="catalog" desc="类别"/>
+        <param name="schema" desc="格式"/>
+        <param name="tableName" desc="表名"/>
+    </input>
+    <execution>
+        <custom className=""/>
+    </execution>
+    <output>
+        <param name="name" desc="字段名称"/>
+        <param name="comment" desc="注释"/>
+        <param name="type" desc="类型"/>
+        <param name="size" desc="大小"/>
+        <param name="precision" desc="精度"/>
+        <param name="nullable" default="可否为空"/>
+        <param name="primaryKey" desc="是否主键"/>
+    </output>
+    <dependencys></dependencys>
+</directive>

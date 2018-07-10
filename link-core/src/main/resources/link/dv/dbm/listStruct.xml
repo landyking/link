@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<directive xmlns="http://www.github.com/landyking/link"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.github.com/landyking/link http://www.github.com/landyking/link/link-1.0.xsd">
+    <description>列出数据库结构</description>
+    <input>
+        <param name="dsName" desc="数据源名称"/>
+    </input>
+    <execution>
+        <custom className=""/>
+    </execution>
+    <output>
+        <param name="catalog"/>
+        <param name="schema"/>
+    </output>
+    <dependencys></dependencys>
+</directive>

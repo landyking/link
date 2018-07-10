@@ -126,6 +126,7 @@
             <artifactId>spring-test</artifactId>
             <version>${version.spring}</version>
         </dependency>
+
     </dependencies>
     <build>
         <plugins>

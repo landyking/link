@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<directive xmlns="http://www.github.com/landyking/link"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.github.com/landyking/link http://www.github.com/landyking/link/link-1.0.xsd">
+    <description>删除数据源</description>
+    <input>
+        <param name="name" desc="名称"/>
+    </input>
+    <execution>
+        <custom className=""/>
+    </execution>
+    <output>
+    </output>
+    <dependencys></dependencys>
+</directive>
