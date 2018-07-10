@@ -4,7 +4,12 @@
            xsi:schemaLocation="http://www.github.com/landyking/link http://www.github.com/landyking/link/link-1.0.xsd">
     <description>新增数据源</description>
     <input>
-        <param name="name" desc="名称"/>
+        <param name="name" desc="名称">
+            <processors>
+                <AgeCalc/>
+                <AllToString/>
+            </processors>
+        </param>
         <param name="description" desc="描述"/>
         <param name="driverClass" desc="驱动类"/>
         <param name="jdbcUrl" desc="连接地址"/>

@@ -17,9 +17,10 @@ import static org.junit.Assert.*;
 public class DirectiveManagerTest {
     @Resource
     private DirectiveManager dm;
+
     @Test
     public void callDirective() throws Exception {
-        dm.callDirective("hello.world", new InputPot());
+        dm.callDirective("dbm.addDs", new InputPot());
     }
 
 }
