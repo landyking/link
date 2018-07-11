@@ -127,7 +127,7 @@
                 <xs:element name="AgeCalc" type="lk:AgeCalcType"/>
                 <xs:element name="SqlLobProcessor" type="lk:SqlLobProcessorType"/>
                 <xs:element name="JsonExpand" type="lk:JsonExpandType"/>
-                <xs:element name="custom" type="lk:paramProcessorCustomType">
+                <xs:element name="Custom" type="lk:paramProcessorCustomType">
                     <xs:unique name="customParamProcessorClassPropNameUnique">
                         <xs:annotation>
                             <xs:documentation><![CDATA[自定义类中的参数名字必须唯一]]></xs:documentation>
@@ -372,7 +372,7 @@
     <xs:complexType name="classPropType">
         <xs:simpleContent>
             <xs:extension base="xs:string">
-                <xs:attribute name="name" type="lk:needTextType"/>
+                <xs:attribute name="name" type="lk:needTextType" use="required"/>
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>
@@ -385,7 +385,7 @@
                 <xs:sequence>
                     <xs:element name="prop" type="lk:classPropType" maxOccurs="unbounded" minOccurs="0"/>
                 </xs:sequence>
-                <xs:attribute name="className" type="xs:string"/>
+                <xs:attribute name="className" type="lk:needTextType" use="required"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>

@@ -6,8 +6,9 @@
     <input>
         <param name="name" desc="名称">
             <processors>
-                <AgeCalc/>
-                <AllToString/>
+                <Custom className="com.github.landyking.link.paramProcessor.custom.TestCustom">
+                    <prop name="param2">hello 你好</prop>
+                </Custom>
             </processors>
         </param>
         <param name="description" desc="描述"/>

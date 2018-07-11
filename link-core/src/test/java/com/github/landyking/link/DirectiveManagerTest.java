@@ -20,7 +20,7 @@ public class DirectiveManagerTest {
 
     @Test
     public void callDirective() throws Exception {
-        dm.callDirective("dbm.addDs", new InputPot());
+        dm.callDirective("dbm.addDs", new TestInputPot());
     }
 
 }

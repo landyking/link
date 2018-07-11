@@ -10,6 +10,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.EntityResolver;
+import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -18,6 +19,11 @@ import javax.xml.XMLConstants;
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
@@ -76,13 +82,57 @@ public class DirectiveParser {
                 }
             }
         };
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        factory.setNamespaceAware(true); // never forget this!
-        DocumentBuilder documentBuilder = factory.newDocumentBuilder();
-        documentBuilder.setEntityResolver(entityResolver);
-        documentBuilder.setErrorHandler(errorHandler);
-//        document = documentLoader.loadDocument(new InputSource(resource.getInputStream()), entityResolver, errorHandler, XmlValidationModeDetector.VALIDATION_XSD, true);
+        DocumentBuilderFactory factory = createDocumentBuilderFactory();
+        DocumentBuilder documentBuilder = createDocumentBuilder(factory, entityResolver, errorHandler);
         document = documentBuilder.parse(resource.getURL().toString());
+        SchemaFactory schemaFactory = SchemaFactory
+                .newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+        Schema schema = schemaFactory.newSchema(getClass().getResource(XSD_LOCATION));
+        Validator validator = schema.newValidator();
+        validator.validate(new DOMSource(document));
+    }
+
+    /**
+     * JAXP attribute used to configure the schema language for validation.
+     */
+    private static final String SCHEMA_LANGUAGE_ATTRIBUTE = "http://java.sun.com/xml/jaxp/properties/schemaLanguage";
+
+    /**
+     * JAXP attribute value indicating the XSD schema language.
+     */
+    private static final String XSD_SCHEMA_LANGUAGE = "http://www.w3.org/2001/XMLSchema";
+
+    protected DocumentBuilderFactory createDocumentBuilderFactory()
+            throws ParserConfigurationException {
+
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(true);
+        factory.setValidating(true);
+        try {
+            factory.setAttribute(SCHEMA_LANGUAGE_ATTRIBUTE, XSD_SCHEMA_LANGUAGE);
+        } catch (IllegalArgumentException ex) {
+            ParserConfigurationException pcex = new ParserConfigurationException(
+                    "Unable to validate using XSD: Your JAXP provider [" + factory +
+                            "] does not support XML Schema. Are you running on Java 1.4 with Apache Crimson? " +
+                            "Upgrade to Apache Xerces (or Java 1.5) for full XSD support.");
+            pcex.initCause(ex);
+            throw pcex;
+        }
+        return factory;
+    }
+
+    protected DocumentBuilder createDocumentBuilder(
+            DocumentBuilderFactory factory, EntityResolver entityResolver, ErrorHandler errorHandler)
+            throws ParserConfigurationException {
+
+        DocumentBuilder docBuilder = factory.newDocumentBuilder();
+        if (entityResolver != null) {
+            docBuilder.setEntityResolver(entityResolver);
+        }
+        if (errorHandler != null) {
+            docBuilder.setErrorHandler(errorHandler);
+        }
+        return docBuilder;
     }
 
     public String getDirectiveCode() {
@@ -140,5 +190,33 @@ public class DirectiveParser {
         } catch (XPathExpressionException e) {
             throw new LinkException("parse execution failure", e);
         }
+    }
+
+    public String getParam(Element config, String pname) {
+        if (config.hasAttribute(pname)) {
+            //首先从尝试从属性中解析该参数
+            return config.getAttribute(pname);
+        } else {
+            //接着尝试从同名子节点解析该参数
+            NodeList childNodes = config.getChildNodes();
+            for (int i = 0; i < childNodes.getLength(); i++) {
+                Node item = childNodes.item(i);
+                if (item.getNodeName().equals(pname)) {
+                    return item.getTextContent();
+                }
+            }
+            //最后尝试从特定子节点解析该参数
+            for (int i = 0; i < childNodes.getLength(); i++) {
+                Node item = childNodes.item(i);
+                if (item.getNodeName().equals("prop") && item instanceof Element) {
+                    Element tmp = (Element) item;
+                    String name = tmp.getAttribute("name");
+                    if (name.equals(pname)) {
+                        return tmp.getTextContent();
+                    }
+                }
+            }
+        }
+        return null;
     }
 }

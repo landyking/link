@@ -45,7 +45,7 @@ public class DirectiveManager implements ApplicationContextAware {
                 try {
                     return new DirectiveParser(resource);
                 } catch (Exception e) {
-                    throw new DirectiveParseException(resource.toString() + " parse error", e);
+                    throw new DirectiveParseException(resource.toString() + "指令解析异常", e);
                 }
             } else {
                 throw new DirectiveNotFoundException("File " + location + " can't read.");

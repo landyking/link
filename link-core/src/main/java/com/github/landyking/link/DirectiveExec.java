@@ -4,20 +4,20 @@ import com.github.landyking.link.exception.LinkException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.BeanFactoryAware;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.w3c.dom.Element;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by landy on 2018/7/5.
  * 指令执行器
  */
-public class DirectiveExec implements BeanFactoryAware {
+public class DirectiveExec implements ApplicationContextAware {
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    private BeanFactory beanFactory;
+    private ApplicationContext application;
 
     public void execute(DirectiveMojo mojo) throws LinkException {
         logger.info("执行指令: {}", mojo.getDirectiveCode());
@@ -28,10 +28,10 @@ public class DirectiveExec implements BeanFactoryAware {
         logger.info("处理输出参数");
     }
 
-    private void processExecution(DirectiveMojo mojo)throws LinkException {
-        Element execution= mojo.getParser().getExecution();
+    private void processExecution(DirectiveMojo mojo) throws LinkException {
+        Element execution = mojo.getParser().getExecution();
         String transaction = execution.getAttribute("transaction");
-        List<Element> execList= mojo.getParser().getExecutionElementList(execution);
+        List<Element> execList = mojo.getParser().getExecutionElementList(execution);
         for (Element one : execList) {
             System.out.println(one.getNodeName());
         }
@@ -41,21 +41,55 @@ public class DirectiveExec implements BeanFactoryAware {
     private void processInputParam(DirectiveMojo mojo) throws LinkException {
         List<Element> inputParams = mojo.getParser().getInputParamList();
         for (Element param : inputParams) {
+            Object val = null;
+            String in;
             String name = param.getAttribute("name");
             String desc = param.getAttribute("desc");
             String notEmpty = param.getAttribute("notEmpty");
-            String defval = param.getAttribute("default");
-            String fixed = param.getAttribute("fixed");
-            System.out.println(Arrays.asList(name,desc,notEmpty,defval,fixed));
+            if (param.hasAttribute("fixed")) {
+                in = param.getAttribute("fixed");
+            } else {
+                in = mojo.getPot().getInputParamText(name);
+                if (!Texts.hasText(in)) {
+                    //参数为空，进行检测
+                    if (param.hasAttribute("default")) {
+                        in = param.getAttribute("default");
+                    }
+                    if (LkTools.isTrue(notEmpty) && !Texts.hasText(in)) {
+                        //不能为空，但实际为空，抛出异常
+                        throw new LinkException("参数[" + name + ":" + desc + "]不能为空");
+                    }
+                }
+            }
             List<Element> processorList = mojo.getParser().getParamProcessorList(param);
             for (Element process : processorList) {
-                System.out.println("# "+process.getNodeName());
+                AbstractParamProcessor pps = getParamProcessor(process);
+                if (pps == null) {
+                    throw new LinkException("无法获取节点" + process.getNodeName() + "对应的参数处理器");
+                }
+                try {
+                    val = pps.processInput(process, param, mojo, in);
+                } catch (Exception e) {
+                    throw new LinkException("处理入参[" + name + ":" + desc + "]异常", e);
+                }
             }
         }
+
     }
 
+    private AbstractParamProcessor getParamProcessor(Element process) {
+        Map<String, AbstractParamProcessor> beans = application.getBeansOfType(AbstractParamProcessor.class);
+        for (AbstractParamProcessor one : beans.values()) {
+            if (one.tag().equalsIgnoreCase(process.getNodeName())) {
+                return one;
+            }
+        }
+        return null;
+    }
+
+
     @Override
-    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
-        this.beanFactory = beanFactory;
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.application = applicationContext;
     }
 }
