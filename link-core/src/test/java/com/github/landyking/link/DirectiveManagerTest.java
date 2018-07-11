@@ -1,5 +1,6 @@
 package com.github.landyking.link;
 
+import com.github.landyking.link.pot.EmptyInputPot;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
@@ -20,7 +21,14 @@ public class DirectiveManagerTest {
 
     @Test
     public void callDirective() throws Exception {
-        dm.callDirective("dbm.addDs", new TestInputPot());
+        EmptyInputPot pot = new EmptyInputPot();
+        pot.put("name", "student");
+        pot.put("description", "学生信息");
+        pot.put("driverClass", "com.mysql.jdbc.Driver");
+        pot.put("jdbcUrl", "jdbc:mysql://192.168.50.133:3306/test?useUnicode=true&amp;characterEncoding=utf-8&amp;autoReconnect=true&amp;failOverReadOnly=false");
+        pot.put("username", "root");
+        pot.put("password", "manager");
+        dm.callDirective("dbm.addDs", pot);
     }
 
 }

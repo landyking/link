@@ -14,12 +14,21 @@
         <param name="description" desc="描述"/>
         <param name="driverClass" desc="驱动类"/>
         <param name="jdbcUrl" desc="连接地址"/>
-        <param name="account" desc="账号" notEmpty="false"/>
+        <param name="username" desc="账号" notEmpty="false"/>
         <param name="password" desc="密码" notEmpty="false"/>
         <param name="extraConfig" desc="其他参数" notEmpty="false"/>
     </input>
     <execution>
-        <custom className=""/>
+        <dbInsert dataSource="default">
+            <field column="name"/>
+            <field column="description"/>
+            <field column="driver_class" from="driverClass"/>
+            <field column="jdbc_url" from="jdbcUrl"/>
+            <field column="username"/>
+            <field column="password"/>
+            <field column="extra_config" from="extraConfig"/>
+            <table>t_datasource</table>
+        </dbInsert>
     </execution>
     <output>
     </output>

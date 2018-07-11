@@ -33,8 +33,22 @@ public class DirectiveExec implements ApplicationContextAware {
         String transaction = execution.getAttribute("transaction");
         List<Element> execList = mojo.getParser().getExecutionElementList(execution);
         for (Element one : execList) {
-            System.out.println(one.getNodeName());
+            AbstractExecution e = getExecution(one);
+            if (e == null) {
+                throw new LinkException("无法获取节点" + one.getNodeName() + "对应的执行器");
+            }
+            e.execute(one, mojo);
         }
+    }
+
+    private AbstractExecution getExecution(Element e) {
+        Map<String, AbstractExecution> beans = application.getBeansOfType(AbstractExecution.class);
+        for (AbstractExecution one : beans.values()) {
+            if (one.tag().equalsIgnoreCase(e.getNodeName())) {
+                return one;
+            }
+        }
+        return null;
     }
 
 
