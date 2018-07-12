@@ -29,6 +29,10 @@
             <field column="extra_config" from="extraConfig"/>
             <table>t_datasource</table>
         </dbInsert>
+        <custom className="com.github.landyking.link.execution.custom.HelloCustom">
+            <prop name="name">王</prop>
+            <prop name="age">12</prop>
+        </custom>
     </execution>
     <output>
     </output>

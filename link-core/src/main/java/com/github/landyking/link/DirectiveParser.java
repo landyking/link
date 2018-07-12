@@ -2,9 +2,14 @@ package com.github.landyking.link;
 
 import com.github.landyking.link.exception.LinkException;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.io.Resource;
+import org.springframework.util.LinkedCaseInsensitiveMap;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -31,6 +36,7 @@ import javax.xml.xpath.XPathFactory;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by landy on 2018/7/5.
@@ -41,6 +47,7 @@ public class DirectiveParser {
     public static final String XSD_LOCATION = "/link/link-1.0.xsd";
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private final XPath xPath = initXPath();
+    private final DirectiveManager directiveManager;
 
     private XPath initXPath() {
         XPath xPath = XPathFactory.newInstance().newXPath();
@@ -68,7 +75,8 @@ public class DirectiveParser {
     private String directiveCode;
     private final Document document;
 
-    public DirectiveParser(Resource resource) throws Exception {
+    public DirectiveParser(Resource resource, DirectiveManager directiveManager) throws Exception {
+        this.directiveManager = directiveManager;
         logger.info("开始解析文件: {}", resource.getURL().toString());
 //        DefaultDocumentLoader documentLoader = new DefaultDocumentLoader();
         DefaultHandler errorHandler = new DefaultHandler();
@@ -182,15 +190,6 @@ public class DirectiveParser {
         }
     }
 
-    public List<Element> getExecutionElementList(Element execution) throws LinkException {
-        try {
-            NodeList params = (NodeList) xPath.evaluate("./*", execution, XPathConstants.NODESET);
-            List<Element> rst = nodeList2ElementList(params);
-            return rst;
-        } catch (XPathExpressionException e) {
-            throw new LinkException("parse execution failure", e);
-        }
-    }
 
     public String getParam(Element config, String pname) {
         if (config.hasAttribute(pname)) {
@@ -219,4 +218,34 @@ public class DirectiveParser {
         }
         return null;
     }
+
+    private List<Element> getExecutionElementList(Element execution) throws LinkException {
+        try {
+            NodeList params = (NodeList) xPath.evaluate("./*", execution, XPathConstants.NODESET);
+            List<Element> rst = nodeList2ElementList(params);
+            return rst;
+        } catch (XPathExpressionException e) {
+            throw new LinkException("parse execution failure", e);
+        }
+    }
+
+    public List<AbstractExecution> getExecutionList(Element execution) throws LinkException {
+        List<AbstractExecution> rst = Lists.newLinkedList();
+        List<Element> list = getExecutionElementList(execution);
+        Map<String, AbstractExecutionFactory> tmpList = this.directiveManager.getApplicationContext().getBeansOfType(AbstractExecutionFactory.class);
+        LinkedCaseInsensitiveMap<AbstractExecutionFactory> map = new LinkedCaseInsensitiveMap<AbstractExecutionFactory>();
+        for (AbstractExecutionFactory a : tmpList.values()) {
+            map.put(a.tag(), a);
+        }
+        for (Element one : list) {
+            AbstractExecutionFactory factory = map.get(one.getNodeName());
+            if (factory == null) {
+                throw new LinkException("无法为节点" + one.getNodeName() + "找到指令执行器");
+            } else {
+                rst.add(factory.generate(one));
+            }
+        }
+        return rst;
+    }
+
 }

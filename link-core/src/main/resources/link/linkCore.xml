@@ -9,4 +9,5 @@
         <property name="exec" ref="directiveExec"/>
     </bean>
     <bean id="directiveExec" class="com.github.landyking.link.DirectiveExec"/>
+    <bean id="dataSourceManager" class="com.github.landyking.link.DataSourceManager"/>
 </beans>

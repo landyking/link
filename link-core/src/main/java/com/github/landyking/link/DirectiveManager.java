@@ -43,7 +43,7 @@ public class DirectiveManager implements ApplicationContextAware {
         if (resource.exists()) {
             if (resource.isReadable()) {
                 try {
-                    return new DirectiveParser(resource);
+                    return new DirectiveParser(resource,this);
                 } catch (Exception e) {
                     throw new DirectiveParseException(resource.toString() + "指令解析异常", e);
                 }
@@ -58,5 +58,9 @@ public class DirectiveManager implements ApplicationContextAware {
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
+    }
+
+    public ApplicationContext getApplicationContext() {
+        return applicationContext;
     }
 }
