@@ -20,11 +20,20 @@ public class DirectiveManagerTest {
     private DirectiveManager dm;
 
     @Test
-    public void callDirective() throws Exception {
+    public void addDepartment() throws Exception {
         EmptyInputPot pot = new EmptyInputPot();
         pot.put("departmentNo", "d013");
         pot.put("departmentName", "UI");
         dm.callDirective("emp.addDepartment", pot);
+    }
+
+    @Test
+    public void updateDepartment() throws Exception {
+        EmptyInputPot pot = new EmptyInputPot();
+        pot.put("departmentNo", "d013");
+        pot.put("departmentName", "UI");
+        pot.put("employeeGender", "F");
+        dm.callDirective("emp.updateDepartment", pot);
     }
 
 }

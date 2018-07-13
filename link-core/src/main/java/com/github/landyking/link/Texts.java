@@ -23,8 +23,8 @@ public class Texts {
         return null;
     }
 
-    public static boolean hasText(String one) {
-        return one != null && one.trim().length() > 0;
+    public static boolean hasText(Object one) {
+        return one != null && one.toString().trim().length() > 0;
     }
 
     public static String toStr(Object obj, String def) {
@@ -48,8 +48,8 @@ public class Texts {
     }
 
     public static String inline(String sql) {
-        sql=sql.replace('\r',' ');
-        sql=sql.replace('\n',' ');
+        sql = sql.replace('\r', ' ');
+        sql = sql.replace('\n', ' ');
         return sql;
     }
 }

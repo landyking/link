@@ -414,7 +414,7 @@
     <xs:complexType name="abstractDbExecutionType" abstract="true">
         <xs:complexContent>
             <xs:extension base="lk:abstractExecutionType">
-                <xs:attribute name="dataSource" type="xs:string" default="default"/>
+                <xs:attribute name="dataSource" type="lk:needTextType" use="required"/>
                 <xs:attribute name="transaction" type="xs:boolean" default="false">
                     <xs:annotation>
                         <xs:documentation>是否启用事务</xs:documentation>
