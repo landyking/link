@@ -39,7 +39,7 @@ public class DirectiveManagerTest {
     @Test
     public void addEmployee() throws Exception {
         EmptyInputPot pot = new EmptyInputPot();
-        pot.put("empNo", "990003");
+        pot.put("empNo", "990004");
         pot.put("birthDate", "19530421");
         pot.put("firstName", "Landy");
         pot.put("lastName", "King");

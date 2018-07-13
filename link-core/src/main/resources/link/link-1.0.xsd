@@ -409,7 +409,7 @@
     </xs:complexType>
     <xs:complexType name="abstractExecutionType" abstract="true">
         <xs:attribute name="test" type="lk:needTextType"/>
-        <xs:attribute name="id" type="lk:needTextType" use="required" />
+        <xs:attribute name="id" type="lk:needTextType" use="required"/>
     </xs:complexType>
     <xs:complexType name="abstractDbExecutionType" abstract="true">
         <xs:complexContent>
@@ -426,7 +426,16 @@
 
     <xs:complexType name="GUIDGeneratorType">
         <xs:complexContent>
-            <xs:extension base="lk:abstractParamProcessorType"></xs:extension>
+            <xs:extension base="lk:abstractParamProcessorType">
+                <xs:attribute name="type" use="required">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="snowflake"/>
+                            <xs:enumeration value="uuid"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+            </xs:extension>
         </xs:complexContent>
     </xs:complexType>
     <xs:complexType name="DateTimeGeneratorType">
@@ -476,7 +485,29 @@
     </xs:complexType>
     <xs:complexType name="DateTimeConverterType">
         <xs:complexContent>
-            <xs:extension base="lk:abstractParamProcessorType"></xs:extension>
+            <xs:extension base="lk:abstractParamProcessorType">
+                <xs:attribute name="srcType" use="required">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="auto"/>
+                            <xs:enumeration value="string"/>
+                            <xs:enumeration value="long"/>
+                            <xs:enumeration value="date"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="srcFmt" type="xs:string"/>
+                <xs:attribute name="destType" use="required">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="string"/>
+                            <xs:enumeration value="long"/>
+                            <xs:enumeration value="date"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="destFmt" type="xs:string"/>
+            </xs:extension>
         </xs:complexContent>
     </xs:complexType>
     <xs:complexType name="AgeCalcType">

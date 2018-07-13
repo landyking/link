@@ -7,19 +7,23 @@
         <param name="empNo" default="雇员编号"/>
         <param name="birthDate" desc="生日">
             <processors>
-                <DateTimeConverter/>
+                <DateTimeConverter srcType="auto" destType="date"/>
             </processors>
         </param>
         <param name="firstName" desc="名"/>
         <param name="lastName" desc="姓"/>
         <param name="gender" desc="性别"/>
-        <param name="hireDate" desc="雇佣时间"/>
+        <param name="hireDate" desc="雇佣时间">
+            <processors>
+                <DateTimeConverter srcType="auto" destType="date"/>
+            </processors>
+        </param>
     </input>
     <execution>
         <dbInsert id="default" dataSource="emp" transaction="true">
             <field column="emp_no" from="empNo"/>
             <field column="birth_date" from="birthDate"/>
-            <field column="first_name" from="firstName"/>
+            <field column="first_name" from="firstName" fixed="lalal"/>
             <field column="last_name" from="lastName"/>
             <field column="gender" from="gender"/>
             <field column="hire_date" from="hireDate"/>
