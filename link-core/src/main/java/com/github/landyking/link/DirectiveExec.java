@@ -51,7 +51,6 @@ public class DirectiveExec implements ApplicationContextAware {
     private void processInputParam(DirectiveMojo mojo) throws LinkException {
         List<Element> inputParams = mojo.getParser().getInputParamList();
         for (Element param : inputParams) {
-            Object val = null;
             String in;
             String name = param.getAttribute("name");
             String desc = param.getAttribute("desc");
@@ -71,6 +70,7 @@ public class DirectiveExec implements ApplicationContextAware {
                     }
                 }
             }
+            mojo.setProcessedInputParam(name, in);
             List<Element> processorList = mojo.getParser().getParamProcessorList(param);
             for (Element process : processorList) {
                 AbstractParamProcessor pps = getParamProcessor(process);
@@ -78,7 +78,8 @@ public class DirectiveExec implements ApplicationContextAware {
                     throw new LinkException("无法获取节点" + process.getNodeName() + "对应的参数处理器");
                 }
                 try {
-                    val = pps.processInput(process, param, mojo, in);
+                    Object val = pps.processInput(process, param, mojo, mojo.getProcessedInputParam(name));
+                    mojo.setProcessedInputParam(name, val);
                 } catch (Exception e) {
                     throw new LinkException("处理入参[" + name + ":" + desc + "]异常", e);
                 }

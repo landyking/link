@@ -10,5 +10,5 @@ public abstract class AbstractParamProcessor {
         return getClass().getSimpleName();
     }
 
-    public abstract Object processInput(Element config, Element param, DirectiveMojo mojo, String in) throws Exception;
+    public abstract Object processInput(Element config, Element param, DirectiveMojo mojo, Object in) throws Exception;
 }

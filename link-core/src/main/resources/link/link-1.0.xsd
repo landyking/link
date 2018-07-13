@@ -217,7 +217,7 @@
         <xs:complexContent>
             <xs:extension base="lk:dbFieldType">
                 <xs:attribute name="from" type="lk:needTextType"/>
-                <xs:attribute name="ignoreNull" type="xs:boolean" default="true"/>
+                <xs:attribute name="ignoreNull" type="xs:boolean" default="false"/>
                 <xs:attribute name="default" type="lk:needTextType">
                     <xs:annotation>
                         <xs:documentation><![CDATA[默认值。与固定值二选一，固定值优先级高。]]></xs:documentation>
@@ -398,6 +398,11 @@
         <xs:complexContent>
             <xs:extension base="lk:abstractExecutionType">
                 <xs:attribute name="dataSource" type="xs:string" default="default"/>
+                <xs:attribute name="transaction" type="xs:boolean" default="false">
+                    <xs:annotation>
+                        <xs:documentation>是否启用事务</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>

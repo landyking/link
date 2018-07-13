@@ -8,9 +8,11 @@
         <param name="departmentName" desc="部门名称"/>
     </input>
     <execution>
-        <dbInsert dataSource="emp">
+        <dbInsert dataSource="emp" transaction="true">
             <field column="dept_no" from="departmentNo"/>
-            <field column="dept_name" from="departmentName"/>
+            <field column="dept_name">
+                <subSql>SELECT concat('d',count(0)+1) FROM employees</subSql>
+            </field>
             <table>departments</table>
         </dbInsert>
     </execution>

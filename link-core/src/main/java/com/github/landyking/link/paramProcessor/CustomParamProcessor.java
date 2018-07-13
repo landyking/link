@@ -20,7 +20,7 @@ public class CustomParamProcessor extends AbstractParamProcessor implements Appl
     }
 
     @Override
-    public Object processInput(Element config, Element param, DirectiveMojo mojo, String in) throws Exception {
+    public Object processInput(Element config, Element param, DirectiveMojo mojo, Object in) throws Exception {
         String className = config.getAttribute("className");
         Assert.hasText(className, "自定义参数处理器类不能为空");
         Object pps = application.getBean(Class.forName(className));

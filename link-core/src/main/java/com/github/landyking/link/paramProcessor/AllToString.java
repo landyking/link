@@ -9,7 +9,7 @@ import org.w3c.dom.Element;
  */
 public class AllToString extends AbstractParamProcessor {
     @Override
-    public Object processInput(Element config, Element param, DirectiveMojo mojo, String in) throws Exception {
+    public Object processInput(Element config, Element param, DirectiveMojo mojo, Object in) throws Exception {
         return null;
     }
 }

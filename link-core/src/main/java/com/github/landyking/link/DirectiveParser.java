@@ -219,19 +219,28 @@ public class DirectiveParser {
         return null;
     }
 
-    private List<Element> getExecutionElementList(Element execution) throws LinkException {
+    public List<Element> getSubElementList(Element ele, String xpath) throws LinkException {
         try {
-            NodeList params = (NodeList) xPath.evaluate("./*", execution, XPathConstants.NODESET);
+            NodeList params = (NodeList) xPath.evaluate(xpath, ele, XPathConstants.NODESET);
             List<Element> rst = nodeList2ElementList(params);
             return rst;
         } catch (XPathExpressionException e) {
-            throw new LinkException("parse execution failure", e);
+            throw new LinkException("parse xpath for element list error", e);
+        }
+    }
+
+    public Element getSubElement(Element ele, String xpath) throws LinkException {
+        try {
+            Element params = (Element) xPath.evaluate(xpath, ele, XPathConstants.NODE);
+            return params;
+        } catch (XPathExpressionException e) {
+            throw new LinkException("parse xpath for single element error", e);
         }
     }
 
     public List<AbstractExecution> getExecutionList(Element execution) throws LinkException {
         List<AbstractExecution> rst = Lists.newLinkedList();
-        List<Element> list = getExecutionElementList(execution);
+        List<Element> list = getSubElementList(execution, "./*");
         Map<String, AbstractExecutionFactory> tmpList = this.directiveManager.getApplicationContext().getBeansOfType(AbstractExecutionFactory.class);
         LinkedCaseInsensitiveMap<AbstractExecutionFactory> map = new LinkedCaseInsensitiveMap<AbstractExecutionFactory>();
         for (AbstractExecutionFactory a : tmpList.values()) {
