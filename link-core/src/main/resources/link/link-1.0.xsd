@@ -246,8 +246,8 @@
         <xs:complexContent>
             <xs:extension base="lk:abstractDbExecutionType">
                 <xs:sequence>
-                    <xs:element name="field" maxOccurs="unbounded" type="lk:dbSaveFieldType"/>
-                    <xs:element name="table" type="lk:lineContentType">
+                    <xs:element name="field" maxOccurs="unbounded" minOccurs="1" type="lk:dbSaveFieldType"/>
+                    <xs:element name="table" type="lk:lineContentType" minOccurs="1" maxOccurs="1">
                     </xs:element>
                 </xs:sequence>
             </xs:extension>
