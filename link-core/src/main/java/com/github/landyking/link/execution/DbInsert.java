@@ -34,6 +34,7 @@ public class DbInsert implements AbstractExecutionFactory {
             @Override
             public void execute(final DirectiveMojo mojo) throws LinkException {
                 System.out.println("DbInsert.execute");
+                final String executionId = element.getAttribute("id");
                 final String dataSourceId = element.getAttribute("dataSource");
                 if (dataSourceManager.hasDataSource(dataSourceId)) {
                     logger.debug("解析要插入的表");
@@ -107,11 +108,11 @@ public class DbInsert implements AbstractExecutionFactory {
                         transactionTemplate.execute(new TransactionCallbackWithoutResult() {
                             @Override
                             protected void doInTransactionWithoutResult(TransactionStatus status) {
-                                doInsert(dataSourceId, mojo, insertSql, finalPkName);
+                                doInsert(executionId,dataSourceId, mojo, insertSql, finalPkName);
                             }
                         });
                     } else {
-                        doInsert(dataSourceId, mojo, insertSql, pkName);
+                        doInsert(executionId,dataSourceId, mojo, insertSql, pkName);
                     }
 
                 } else {
@@ -121,7 +122,7 @@ public class DbInsert implements AbstractExecutionFactory {
         };
     }
 
-    private void doInsert(String dataSourceId, DirectiveMojo mojo, String insertSql, String pkName) {
+    private void doInsert(String executionId, String dataSourceId, DirectiveMojo mojo, String insertSql, String pkName) {
         NamedParameterJdbcTemplate jdbc = dataSourceManager.getNamedParameterJdbcTemplate(dataSourceId);
         Map<String, Object> paramMap = mojo.getProcessedInputParamMap();
         Object pkValue = null;
@@ -139,6 +140,7 @@ public class DbInsert implements AbstractExecutionFactory {
         ExecuteResult rst = new ExecuteResult();
         rst.setEffectCount(updateCount);
         rst.setPrimaryKeyValue(pkValue);
+        mojo.setExecuteResult(executionId, rst);
         logger.debug("执行插入结果" + rst);
     }
 }

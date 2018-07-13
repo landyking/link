@@ -1,6 +1,7 @@
 package com.github.landyking.link;
 
 import com.google.common.collect.Maps;
+import org.springframework.util.Assert;
 
 import java.util.Map;
 
@@ -13,6 +14,7 @@ public class DirectiveMojo {
     private final InputPot pot;
     private final String code;
     private final Map<String, Object> processedInputParam = Maps.newHashMap();
+    private final Map<String, ExecuteResult> executeResultMap = Maps.newHashMap();
 
     public DirectiveMojo(String code, InputPot pot, DirectiveParser parser) {
         this.code = code;
@@ -46,5 +48,10 @@ public class DirectiveMojo {
 
     public void setProcessedInputParam(String name, Object in) {
         processedInputParam.put(name, in);
+    }
+
+    public void setExecuteResult(String executionId, ExecuteResult rst) {
+        Assert.isTrue(!executeResultMap.containsKey(executionId), executionId + "的执行结果已存在");
+        executeResultMap.put(executionId, rst);
     }
 }
