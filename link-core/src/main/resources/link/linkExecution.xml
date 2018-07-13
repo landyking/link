@@ -4,5 +4,6 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
     <bean class="com.github.landyking.link.execution.DbInsert"/>
     <bean class="com.github.landyking.link.execution.DbUpdate"/>
+    <bean class="com.github.landyking.link.execution.DbDelete"/>
     <bean class="com.github.landyking.link.execution.CustomExecution"/>
 </beans>

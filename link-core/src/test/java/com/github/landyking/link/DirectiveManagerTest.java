@@ -39,13 +39,25 @@ public class DirectiveManagerTest {
     @Test
     public void addEmployee() throws Exception {
         EmptyInputPot pot = new EmptyInputPot();
-        pot.put("empNo", "990004");
+        pot.put("empNo", "990003");
         pot.put("birthDate", "19530421");
         pot.put("firstName", "Landy");
         pot.put("lastName", "King");
         pot.put("gender", "F");
         pot.put("hireDate", "1987-09-21");
         dm.callDirective("emp.addEmployee", pot);
+        pot.put("empNo", "990004");
+        pot.put("firstName", "Landy2");
+        dm.callDirective("emp.addEmployee", pot);
+        pot.put("empNo", "990002");
+        pot.put("firstName", "Landy3");
+        dm.callDirective("emp.addEmployee", pot);
     }
 
+    @Test
+    public void deleteEmployee() throws Exception {
+        EmptyInputPot pot = new EmptyInputPot();
+        pot.put("firstName", "Landy,Landy2,Landy3");
+        dm.callDirective("emp.deleteEmployee", pot);
+    }
 }

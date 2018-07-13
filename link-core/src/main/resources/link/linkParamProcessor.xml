@@ -7,5 +7,6 @@
     <bean class="com.github.landyking.link.paramProcessor.CustomParamProcessor"/>
     <bean class="com.github.landyking.link.paramProcessor.DateTimeConverter"/>
     <bean class="com.github.landyking.link.paramProcessor.GUIDGenerator"/>
+    <bean class="com.github.landyking.link.paramProcessor.TextToList"/>
     <bean class="com.github.landyking.link.paramProcessor.custom.TestCustom"/>
 </beans>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<directive xmlns="http://www.github.com/landyking/link"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.github.com/landyking/link http://www.github.com/landyking/link/link-1.0.xsd">
+    <description>新增雇员信息</description>
+    <input>
+        <param name="firstName" desc="名">
+            <processors>
+                <TextToList/>
+            </processors>
+        </param>
+    </input>
+    <execution>
+        <dbDelete id="default" dataSource="emp">
+            <table>employees</table>
+            <where>first_name in (:firstName)</where>
+        </dbDelete>
+    </execution>
+    <output>
+    </output>
+    <dependencys></dependencys>
+</directive>
