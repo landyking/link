@@ -22,7 +22,7 @@ public class DirectiveManagerTest {
     @Test
     public void callDirective() throws Exception {
         EmptyInputPot pot = new EmptyInputPot();
-        pot.put("departmentNo", "d011");
+        pot.put("departmentNo", "d013");
         pot.put("departmentName", "UI");
         dm.callDirective("emp.addDepartment", pot);
     }

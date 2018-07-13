@@ -4,7 +4,9 @@ import com.github.landyking.link.*;
 import com.github.landyking.link.exception.LinkException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -43,6 +45,7 @@ public class DbInsert implements AbstractExecutionFactory {
                     sql.append(tableEle.getTextContent());
                     sql.append(" (");
                     StringBuilder valuesSql = new StringBuilder(") values (");
+                    String pkName = null;
                     for (Element f : fields) {
                         String column = f.getAttribute("column");
                         String from = f.getAttribute("from");
@@ -54,11 +57,16 @@ public class DbInsert implements AbstractExecutionFactory {
                         String defVal = f.getAttribute("default");
                         String fixed = f.getAttribute("fixed");
                         String ignoreNull = f.getAttribute("ignoreNull");
+                        String pk = f.getAttribute("pk");
                         String subSql = mojo.getParser().getParam(f, "subSql");
+
                         if (Texts.hasText(fixed)) {
                             paramMap.put(from, fixed);
                         }
                         if (!Texts.hasText(subSql)) {
+                            if (LkTools.isTrue(pk)) {
+                                pkName = from;
+                            }
                             if (!paramMap.containsKey(from) && paramMap.get(from) == null) {
                                 if (LkTools.isTrue(ignoreNull)) {
                                     //空值忽略不插入
@@ -95,14 +103,15 @@ public class DbInsert implements AbstractExecutionFactory {
                     logger.debug("根据情况开启事务");
                     if (LkTools.isTrue(transaction)) {
                         TransactionTemplate transactionTemplate = dataSourceManager.getTransactionTemplate(dataSourceId, null);
+                        final String finalPkName = pkName;
                         transactionTemplate.execute(new TransactionCallbackWithoutResult() {
                             @Override
                             protected void doInTransactionWithoutResult(TransactionStatus status) {
-                                doInsert(dataSourceId, mojo, insertSql);
+                                doInsert(dataSourceId, mojo, insertSql, finalPkName);
                             }
                         });
                     } else {
-                        doInsert(dataSourceId, mojo, insertSql);
+                        doInsert(dataSourceId, mojo, insertSql, pkName);
                     }
 
                 } else {
@@ -112,10 +121,24 @@ public class DbInsert implements AbstractExecutionFactory {
         };
     }
 
-    private void doInsert(String dataSourceId, DirectiveMojo mojo, String insertSql) {
+    private void doInsert(String dataSourceId, DirectiveMojo mojo, String insertSql, String pkName) {
         NamedParameterJdbcTemplate jdbc = dataSourceManager.getNamedParameterJdbcTemplate(dataSourceId);
         Map<String, Object> paramMap = mojo.getProcessedInputParamMap();
-        int updateCount = jdbc.update(insertSql, paramMap);
-        logger.debug("执行插入" + updateCount);
+        Object pkValue = null;
+        if (Texts.hasText(pkName)) {
+            pkValue = paramMap.get(pkName);
+        }
+        int updateCount;
+        if (pkValue != null) {
+            updateCount = jdbc.update(insertSql, paramMap);
+        } else {
+            GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
+            updateCount = jdbc.update(insertSql, new MapSqlParameterSource(paramMap), generatedKeyHolder);
+            pkValue = generatedKeyHolder.getKey();
+        }
+        ExecuteResult rst = new ExecuteResult();
+        rst.setEffectCount(updateCount);
+        rst.setPrimaryKeyValue(pkValue);
+        logger.debug("执行插入结果" + rst);
     }
 }

@@ -10,9 +10,7 @@
     <execution>
         <dbInsert dataSource="emp" transaction="true">
             <field column="dept_no" from="departmentNo"/>
-            <field column="dept_name">
-                <subSql>SELECT concat('d',count(0)+1) FROM employees</subSql>
-            </field>
+            <field column="dept_name" from="departmentName"/>
             <table>departments</table>
         </dbInsert>
     </execution>
