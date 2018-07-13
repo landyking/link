@@ -167,7 +167,7 @@
                 <xs:element name="dbDelete" type="lk:dbDeleteType"/>
                 <xs:element name="dbInsert" type="lk:dbInsertType"/>
                 <xs:element name="dbUpdate" type="lk:dbUpdateType"/>
-                <xs:element name="dbQuery" type="lk:dbSelectType"/>
+                <xs:element name="dbSelect" type="lk:dbSelectType"/>
             </xs:choice>
         </xs:sequence>
         <xs:attribute name="transaction" type="xs:boolean" default="false">
@@ -306,31 +306,27 @@
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
-    <xs:complexType name="dbQuerySelectType">
-        <xs:complexContent>
-            <xs:extension base="lk:abstractDbExecutionType">
-                <xs:sequence>
-                    <xs:element name="base">
-                        <xs:complexType>
-                            <xs:attribute name="table" type="lk:needTextType"/>
-                            <xs:attribute name="alias" type="lk:needTextType"/>
-                            <xs:attribute name="prefix" type="lk:needTextType"/>
-                        </xs:complexType>
-                    </xs:element>
-                    <xs:element name="join">
-                        <xs:complexType>
-                            <xs:sequence>
-                                <xs:element name="on" type="lk:lineContentType" maxOccurs="1" minOccurs="1"/>
-                            </xs:sequence>
-                            <xs:attribute name="table" type="lk:needTextType"/>
-                            <xs:attribute name="alias" type="lk:needTextType"/>
-                            <xs:attribute name="prefix" type="lk:needTextType"/>
-                            <xs:attribute name="type" type="lk:joinTypeType" use="required"/>
-                        </xs:complexType>
-                    </xs:element>
-                </xs:sequence>
-            </xs:extension>
-        </xs:complexContent>
+    <xs:complexType name="dbSelectFromType">
+        <xs:sequence>
+            <xs:element name="base" minOccurs="1" maxOccurs="1">
+                <xs:complexType>
+                    <xs:attribute name="table" type="lk:needTextType"/>
+                    <xs:attribute name="alias" type="lk:needTextType"/>
+                    <xs:attribute name="prefix" type="lk:needTextType"/>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="join" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="on" type="lk:lineContentType" maxOccurs="1" minOccurs="1"/>
+                    </xs:sequence>
+                    <xs:attribute name="table" type="lk:needTextType"/>
+                    <xs:attribute name="alias" type="lk:needTextType"/>
+                    <xs:attribute name="prefix" type="lk:needTextType"/>
+                    <xs:attribute name="type" type="lk:joinTypeType" use="required"/>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
     </xs:complexType>
     <xs:complexType name="dbSelectType">
         <xs:annotation>
@@ -340,7 +336,7 @@
             <xs:extension base="lk:abstractDbExecutionType">
                 <xs:sequence>
                     <xs:element name="field" maxOccurs="unbounded" type="lk:dbQueryFieldType"/>
-                    <xs:element name="from" type="lk:dbQuerySelectType"/>
+                    <xs:element name="from" type="lk:dbSelectFromType"/>
                     <xs:element name="where" type="lk:lineContentType" minOccurs="0" maxOccurs="1">
                         <xs:annotation>
                             <xs:documentation><![CDATA[更新过滤条件。防止更新全部，默认不能为空。]]></xs:documentation>

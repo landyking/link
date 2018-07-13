@@ -2,19 +2,17 @@
 <directive xmlns="http://www.github.com/landyking/link"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://www.github.com/landyking/link http://www.github.com/landyking/link/link-1.0.xsd">
-    <description>删除雇员信息</description>
+    <description>列出雇员信息</description>
     <input>
-        <param name="firstName" desc="名">
-            <processors>
-                <TextToList/>
-            </processors>
-        </param>
     </input>
     <execution>
-        <dbDelete id="default" dataSource="emp">
-            <table>employees</table>
-            <where>first_name in (:firstName)</where>
-        </dbDelete>
+        <dbSelect id="default" dataSource="emp">
+            <field column="emp_no"/>
+            <from>
+                <base table="employees"/>
+            </from>
+            <where>1=1</where>
+        </dbSelect>
     </execution>
     <output>
     </output>
