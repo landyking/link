@@ -1,7 +1,7 @@
 package com.github.landyking.link.beetl;
 
 import com.github.landyking.link.DirectiveMojo;
-import com.github.landyking.link.Texts;
+import com.github.landyking.link.util.Texts;
 import org.beetl.core.GeneralVarTagBinding;
 import org.springframework.util.Assert;
 

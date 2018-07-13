@@ -1,7 +1,6 @@
 package com.github.landyking.link.beetl;
 
 import com.github.landyking.link.DirectiveMojo;
-import com.github.landyking.link.Texts;
 import com.github.landyking.link.exception.LinkException;
 import com.google.common.base.Throwables;
 import org.beetl.core.Configuration;

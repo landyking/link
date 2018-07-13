@@ -1,4 +1,4 @@
-package com.github.landyking.link;
+package com.github.landyking.link.util;
 
 import java.util.UUID;
 import java.util.regex.Pattern;
