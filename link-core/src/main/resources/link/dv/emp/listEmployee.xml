@@ -13,14 +13,14 @@
     <execution>
         <dbSelect id="default" dataSource="emp">
             <field tableAlias="ep" column="emp_no" columnAlias="empNo" desc="员工序号"/>
-            <field column="birth_date" columnAlias="birthDate" tableAlias="ep" desc="生日" />
-            <field column="first_name" tableAlias="ep" />
-            <field column="last_name" />
-            <field tableAlias="ep" column="gender" />
+            <field column="birth_date" columnAlias="birthDate" tableAlias="ep" desc="生日"/>
+            <field column="first_name" tableAlias="ep"/>
+            <field column="last_name"/>
+            <field tableAlias="ep" column="gender"/>
             <field tableAlias="dp" column="dept_no" columnAlias="deptNo"/>
             <field tableAlias="dp" column="dept_name" columnAlias="deptName"/>
             <from>
-                <base table="employees" prefix="employees" alias="ep" />
+                <base table="employees" prefix="employees" alias="ep"/>
                 <join type="left" table="dept_emp" alias="de">
                     <on>ep.emp_no=de.emp_no</on>
                 </join>
@@ -29,8 +29,16 @@
                 </join>
             </from>
             <where>
-                ep.first_name in (:firstName)
+                1=1
+                <!--<![CDATA[-->
+                <!--<#trim>-->
+                <!--and ep.first_name in (:firstName)-->
+                <!--</#trim>-->
+                <!--]]>-->
             </where>
+            <other>
+                order by ep.emp_no asc
+            </other>
         </dbSelect>
     </execution>
     <output>

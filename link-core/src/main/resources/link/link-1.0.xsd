@@ -374,8 +374,14 @@
         </xs:complexContent>
     </xs:complexType>
     <xs:attributeGroup name="pageAttributeGroup">
-        <xs:attribute name="pagination" type="xs:boolean" default="false"/>
-        <xs:attribute name="pageParamName" type="lk:needTextType" default="page"/>
+        <xs:attribute name="pagination" type="xs:boolean" default="true"/>
+        <xs:attribute name="countQuery" type="xs:boolean" default="true"/>
+        <xs:attribute name="pageParamName" type="lk:needTextType" default="page">
+            <xs:annotation>
+                <xs:documentation>默认从第1页开始</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="pageStartParamName" type="lk:needTextType" default="pageStart"/>
         <xs:attribute name="limitParamName" type="lk:needTextType" default="limit"/>
         <xs:attribute name="limitDefaultSize" type="xs:integer" default="15"/>
     </xs:attributeGroup>

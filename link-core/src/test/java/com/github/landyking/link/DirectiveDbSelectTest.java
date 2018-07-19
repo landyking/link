@@ -21,6 +21,9 @@ public class DirectiveDbSelectTest {
     public void listEmployee() throws Exception {
         EmptyInputPot pot = new EmptyInputPot();
         pot.put("firstName", "Landy,Landy2,Landy3");
+        pot.put("page", "3");
+//        pot.put("pageStart", "13");
+        pot.put("limit", "30");
         dm.callDirective("emp.listEmployee", pot);
     }
 }

@@ -1,5 +1,6 @@
 package com.github.landyking.link;
 
+import com.github.landyking.link.util.DBType;
 import com.google.common.collect.Maps;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
@@ -7,12 +8,16 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.jdbc.support.DatabaseMetaDataCallback;
+import org.springframework.jdbc.support.JdbcUtils;
+import org.springframework.jdbc.support.MetaDataAccessException;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.StringUtils;
 
 import javax.sql.DataSource;
+import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.util.Map;
 
@@ -24,6 +29,7 @@ public class DataSourceManager implements ApplicationContextAware, InitializingB
     private Map<String, DataSource> dataSourceMap;
     private Map<String, DataSourceTransactionManager> dataSourceTransactionManagerMap = Maps.newHashMap();
     private Map<String, NamedParameterJdbcTemplate> namedParameterJdbcTemplateMap = Maps.newHashMap();
+    private Map<String, DBType> dbTypeMap = Maps.newHashMap();
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
@@ -37,6 +43,25 @@ public class DataSourceManager implements ApplicationContextAware, InitializingB
     @Override
     public void afterPropertiesSet() throws Exception {
         dataSourceMap = application.getBeansOfType(DataSource.class);
+        for (String key : dataSourceMap.keySet()) {
+            DataSource ds = dataSourceMap.get(key);
+            DBType type = (DBType) JdbcUtils.extractDatabaseMetaData(ds, new DatabaseMetaDataCallback() {
+                @Override
+                public Object processMetaData(DatabaseMetaData dbmd) throws SQLException, MetaDataAccessException {
+                    String databaseProductName = dbmd.getDatabaseProductName();
+                    if (databaseProductName.toUpperCase().contains("ORACLE")) {
+                        return DBType.Oracle;
+                    } else if (databaseProductName.toUpperCase().contains("MYSQL")) {
+                        return DBType.Mysql;
+                    } else if (databaseProductName.toUpperCase().contains("HIVE")) {
+                        return DBType.ApacheHive;
+                    } else {
+                        throw new RuntimeException("不支持的数据库类型:" + databaseProductName);
+                    }
+                }
+            });
+            dbTypeMap.put(key, type);
+        }
     }
 
     /**
@@ -77,5 +102,9 @@ public class DataSourceManager implements ApplicationContextAware, InitializingB
             namedParameterJdbcTemplateMap.put(dataSourceId, jdbcTemplate);
         }
         return jdbcTemplate;
+    }
+
+    public DBType getDataBaseType(String dataSourceId) {
+        return dbTypeMap.get(dataSourceId);
     }
 }
