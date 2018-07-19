@@ -153,13 +153,7 @@ public class DirectiveParser {
     }
 
     public List<Element> getInputParamList() throws LinkException {
-        try {
-            NodeList params = (NodeList) xPath.evaluate("/lk:directive/lk:input/lk:param", document, XPathConstants.NODESET);
-            List<Element> rst = nodeList2ElementList(params);
-            return rst;
-        } catch (XPathExpressionException e) {
-            throw new LinkException("parse input param failure", e);
-        }
+        return getSubElementList(document, "/lk:directive/lk:input/lk:param");
     }
 
     private List<Element> nodeList2ElementList(NodeList params) {
@@ -174,21 +168,11 @@ public class DirectiveParser {
     }
 
     public List<Element> getParamProcessorList(Element param) throws LinkException {
-        try {
-            NodeList params = (NodeList) xPath.evaluate("lk:processors/*", param, XPathConstants.NODESET);
-            List<Element> rst = nodeList2ElementList(params);
-            return rst;
-        } catch (XPathExpressionException e) {
-            throw new LinkException("parse input param failure", e);
-        }
+        return getSubElementList(param, "lk:processors/*");
     }
 
     public Element getExecution() throws LinkException {
-        try {
-            return (Element) xPath.evaluate("/lk:directive/lk:execution", document, XPathConstants.NODE);
-        } catch (XPathExpressionException e) {
-            throw new LinkException("parse execution failure", e);
-        }
+        return getSubElement(document, "/lk:directive/lk:execution");
     }
 
 
@@ -220,17 +204,17 @@ public class DirectiveParser {
         return null;
     }
 
-    public List<Element> getSubElementList(Element ele, String xpath) throws LinkException {
+    public List<Element> getSubElementList(Object ele, String xpath) throws LinkException {
         try {
             NodeList params = (NodeList) xPath.evaluate(xpath, ele, XPathConstants.NODESET);
             List<Element> rst = nodeList2ElementList(params);
             return rst;
         } catch (XPathExpressionException e) {
-            throw new LinkException("parse xpath [" + xpath + "] for element [" + ele.getNodeName() + "] error", e);
+            throw new LinkException("parse xpath [" + xpath + "] for element [" + ele.toString() + "] error", e);
         }
     }
 
-    public Element getSubElement(Element ele, String xpath) throws LinkException {
+    public Element getSubElement(Object ele, String xpath) throws LinkException {
         List<Element> list = getSubElementList(ele, xpath);
         return Iterables.getFirst(list, null);
     }
@@ -254,4 +238,11 @@ public class DirectiveParser {
         return rst;
     }
 
+    public Element getExecutionEnding() throws LinkException {
+        return getSubElement(document, "/lk:directive/lk:executionEnding");
+    }
+
+    public Element getResultRender() throws LinkException {
+        return getSubElement(document, "/lk:directive/lk:resultRender");
+    }
 }

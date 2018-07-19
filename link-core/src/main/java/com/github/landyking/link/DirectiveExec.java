@@ -23,11 +23,55 @@ public class DirectiveExec implements ApplicationContextAware {
 
     public void execute(DirectiveMojo mojo) throws LinkException {
         logger.info("执行指令: {}", mojo.getDirectiveCode());
-        logger.info("处理输入参数");
-        processInputParam(mojo);
-        logger.info("执行指令内容");
-        processExecution(mojo);
-        logger.info("处理输出参数");
+        try {
+            logger.info("处理输入参数");
+            processInputParam(mojo);
+            logger.info("执行指令内容");
+            processExecution(mojo);
+            logger.info("指令执行收尾");
+            processExecutionEnding(mojo);
+            logger.info("处理输出参数");
+            processOutputParam(mojo);
+        } catch (Exception e) {
+            mojo.setException(e);
+        }
+        logger.info("处理结果渲染");
+        processResultRender(mojo);
+    }
+
+    private void processOutputParam(DirectiveMojo mojo) {
+        Object o = mojo.getEndingData().forOutput();
+        //process output
+        mojo.setAfterOutput(o);
+    }
+
+    private void processExecutionEnding(DirectiveMojo mojo) throws LinkException {
+        Element executionEnding = mojo.getParser().getExecutionEnding();
+        String type = executionEnding.getAttribute("type");
+        try {
+            Class<ExecutionEnding> requiredType = (Class<ExecutionEnding>) Class.forName(type);
+            ExecutionEnding bean = application.getBean(requiredType);
+            ExecutionEndingData endingData = bean.process(mojo);
+            mojo.setEndingData(endingData);
+        } catch (ClassNotFoundException e) {
+            throw new LinkException("executionEnding定义的type类" + type + "不存在");
+        } catch (Exception e) {
+            throw new LinkException("executionEnding处理异常", e);
+        }
+    }
+
+    private void processResultRender(DirectiveMojo mojo) throws LinkException {
+        Element resultRender = mojo.getParser().getResultRender();
+        String type = resultRender.getAttribute("type");
+        try {
+            Class<ResultRender> requiredType = (Class<ResultRender>) Class.forName(type);
+            ResultRender bean = application.getBean(requiredType);
+            bean.render(mojo);
+        } catch (ClassNotFoundException e) {
+            throw new LinkException("resultRender定义的type类" + type + "不存在");
+        } catch (Exception e) {
+            throw new LinkException("resultRender处理异常", e);
+        }
     }
 
     private void processExecution(DirectiveMojo mojo) throws LinkException {
@@ -37,16 +81,6 @@ public class DirectiveExec implements ApplicationContextAware {
         for (AbstractExecution one : execList) {
             one.execute(mojo);
         }
-    }
-
-    private AbstractExecution getExecution(Element e) {
-        Map<String, AbstractExecution> beans = application.getBeansOfType(AbstractExecution.class);
-        for (AbstractExecution one : beans.values()) {
-            if (one.tag().equalsIgnoreCase(e.getNodeName())) {
-                return one;
-            }
-        }
-        return null;
     }
 
 

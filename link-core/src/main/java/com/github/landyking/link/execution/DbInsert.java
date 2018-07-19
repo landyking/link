@@ -99,10 +99,10 @@ public class DbInsert implements AbstractExecutionFactory {
                     final String insertSql = sql.toString() + valuesSql.toString();
                     logger.debug("解析事务配置");
                     String transaction = element.getAttribute("transaction");
-                    System.out.println(transaction);
+//                    System.out.println(transaction);
                     logger.debug("组织sql语句和参数");
-                    System.out.println(insertSql);
-                    System.out.println(paramMap);
+                    logger.info("插入语句: {}", insertSql);
+                    logger.info("参数情况: {}", paramMap);
                     logger.debug("根据情况开启事务");
                     if (LkTools.isTrue(transaction)) {
                         TransactionTemplate transactionTemplate = dataSourceManager.getTransactionTemplate(dataSourceId, null);
@@ -110,11 +110,11 @@ public class DbInsert implements AbstractExecutionFactory {
                         transactionTemplate.execute(new TransactionCallbackWithoutResult() {
                             @Override
                             protected void doInTransactionWithoutResult(TransactionStatus status) {
-                                doInsert(executionId,dataSourceId, mojo, insertSql, finalPkName);
+                                doInsert(executionId, dataSourceId, mojo, insertSql, finalPkName);
                             }
                         });
                     } else {
-                        doInsert(executionId,dataSourceId, mojo, insertSql, pkName);
+                        doInsert(executionId, dataSourceId, mojo, insertSql, pkName);
                     }
 
                 } else {

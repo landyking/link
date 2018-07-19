@@ -16,7 +16,9 @@
             <where>first_name in (:firstName)</where>
         </dbDelete>
     </execution>
+    <executionEnding/>
     <output>
     </output>
+    <resultRender/>
     <dependencys></dependencys>
 </directive>

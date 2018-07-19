@@ -23,7 +23,7 @@ public class DirectiveDbSelectTest {
         pot.put("firstName", "Landy,Landy2,Landy3");
         pot.put("page", "3");
 //        pot.put("pageStart", "13");
-        pot.put("limit", "30");
+        pot.put("limit", "10");
         dm.callDirective("emp.listEmployee", pot);
     }
 }

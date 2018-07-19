@@ -14,7 +14,9 @@
             <table>departments</table>
         </dbInsert>
     </execution>
+    <executionEnding/>
     <output>
     </output>
+    <resultRender/>
     <dependencys></dependencys>
 </directive>

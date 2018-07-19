@@ -41,6 +41,12 @@
                         <xs:field xpath="@id"/>
                     </xs:unique>
                 </xs:element>
+                <xs:element name="executionEnding">
+                    <xs:complexType>
+                        <xs:attribute name="type" type="lk:needTextType"
+                                      default="com.github.landyking.link.DefaultExecutionEnding"/>
+                    </xs:complexType>
+                </xs:element>
                 <xs:element name="output">
                     <xs:annotation>
                         <xs:documentation><![CDATA[]]></xs:documentation>
@@ -58,6 +64,12 @@
                         <xs:selector xpath="lk:param"/>
                         <xs:field xpath="@name"/>
                     </xs:unique>
+                </xs:element>
+                <xs:element name="resultRender">
+                    <xs:complexType>
+                        <xs:attribute name="type" type="lk:needTextType"
+                                      default="com.github.landyking.link.DefaultResultRender"/>
+                    </xs:complexType>
                 </xs:element>
                 <xs:element name="dependencys">
                     <xs:annotation>

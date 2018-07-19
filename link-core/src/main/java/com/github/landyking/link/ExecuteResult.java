@@ -3,7 +3,7 @@ package com.github.landyking.link;
 /**
  * Created by landy on 2018/4/23.
  */
-public class ExecuteResult {
+public class ExecuteResult implements ExecutionEndingData {
 
 
     /**
@@ -64,4 +64,10 @@ public class ExecuteResult {
                 ", totalCount=" + totalCount +
                 '}';
     }
+
+    @Override
+    public Object forOutput() {
+        return data;
+    }
+
 }

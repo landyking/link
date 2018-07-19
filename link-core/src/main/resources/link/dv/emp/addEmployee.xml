@@ -21,7 +21,7 @@
     </input>
     <execution>
         <dbInsert id="default" dataSource="emp" transaction="true">
-            <field column="emp_no" from="empNo"/>
+            <field column="emp_no" from="empNo" pk="true"/>
             <field column="birth_date" from="birthDate"/>
             <field column="first_name" from="firstName"/>
             <field column="last_name" from="lastName"/>
@@ -30,7 +30,9 @@
             <table>employees</table>
         </dbInsert>
     </execution>
+    <executionEnding/>
     <output>
     </output>
+    <resultRender/>
     <dependencys></dependencys>
 </directive>

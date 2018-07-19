@@ -41,7 +41,9 @@
             </other>
         </dbSelect>
     </execution>
+    <executionEnding/>
     <output>
     </output>
+    <resultRender/>
     <dependencys></dependencys>
 </directive>
