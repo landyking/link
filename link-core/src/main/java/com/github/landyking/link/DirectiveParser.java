@@ -1,6 +1,7 @@
 package com.github.landyking.link;
 
 import com.github.landyking.link.exception.LinkException;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.slf4j.Logger;
@@ -225,17 +226,13 @@ public class DirectiveParser {
             List<Element> rst = nodeList2ElementList(params);
             return rst;
         } catch (XPathExpressionException e) {
-            throw new LinkException("parse xpath for element list error", e);
+            throw new LinkException("parse xpath [" + xpath + "] for element [" + ele.getNodeName() + "] error", e);
         }
     }
 
     public Element getSubElement(Element ele, String xpath) throws LinkException {
-        try {
-            Element params = (Element) xPath.evaluate(xpath, ele, XPathConstants.NODE);
-            return params;
-        } catch (XPathExpressionException e) {
-            throw new LinkException("parse xpath for single element error", e);
-        }
+        List<Element> list = getSubElementList(ele, xpath);
+        return Iterables.getFirst(list, null);
     }
 
     public List<AbstractExecution> getExecutionList(Element execution) throws LinkException {
