@@ -11,6 +11,9 @@
         </param>
     </input>
     <execution>
+        <custom id="cst" className="com.github.landyking.link.execution.custom.HelloCustom">
+            <prop name="name">你好</prop>
+        </custom>
         <dbSelect id="default" dataSource="emp">
             <field tableAlias="ep" column="emp_no" columnAlias="empNo" desc="员工序号"/>
             <field column="birth_date" columnAlias="birthDate" tableAlias="ep" desc="生日"/>

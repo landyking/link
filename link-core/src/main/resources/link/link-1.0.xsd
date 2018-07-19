@@ -377,7 +377,7 @@
             <xs:documentation>自定义执行处理类</xs:documentation>
         </xs:annotation>
         <xs:complexContent>
-            <xs:extension base="lk:abstractDbExecutionType">
+            <xs:extension base="lk:abstractExecutionType">
                 <xs:sequence>
                     <xs:element name="prop" type="lk:classPropType" maxOccurs="unbounded" minOccurs="0"/>
                 </xs:sequence>
