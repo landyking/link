@@ -1,5 +1,8 @@
 package com.github.landyking.link;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * Created by landy on 2018/4/23.
  */
@@ -17,7 +20,7 @@ public class ExecuteResult implements ExecutionEndingData {
     /**
      * 查询操作返回的数据
      */
-    private Object data;
+    private List<Map<String,Object>> data;
     /**
      * 查询操作查到的数据总数
      */
@@ -43,7 +46,7 @@ public class ExecuteResult implements ExecutionEndingData {
         return data;
     }
 
-    public void setData(Object data) {
+    public void setData(List<Map<String,Object>> data) {
         this.data = data;
     }
 
@@ -66,7 +69,7 @@ public class ExecuteResult implements ExecutionEndingData {
     }
 
     @Override
-    public Object forOutput() {
+    public List<Map<String,Object>> forOutput() {
         return data;
     }
 
