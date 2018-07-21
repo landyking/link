@@ -39,9 +39,45 @@ public class DirectiveExec implements ApplicationContextAware {
         processResultRender(mojo);
     }
 
-    private void processOutputParam(DirectiveMojo mojo) {
+    private void processOutputParam(DirectiveMojo mojo) throws LinkException {
         Object o = mojo.getEndingData().forOutput();
         //process output
+        List<Element> params = mojo.getParser().getOutputParamList();
+        /*for (Element param : params) {
+            String in;
+            String name = param.getAttribute("name");
+            String desc = param.getAttribute("desc");
+            String notEmpty = param.getAttribute("notEmpty");
+            if (param.hasAttribute("fixed")) {
+                in = param.getAttribute("fixed");
+            } else {
+                in = mojo.getPot().getInputParamText(name);
+                if (!Texts.hasText(in)) {
+                    //参数为空，进行检测
+                    if (param.hasAttribute("default")) {
+                        in = param.getAttribute("default");
+                    }
+                    if (LkTools.isTrue(notEmpty) && !Texts.hasText(in)) {
+                        //不能为空，但实际为空，抛出异常
+                        throw new LinkException("参数[" + name + ":" + desc + "]不能为空");
+                    }
+                }
+            }
+            mojo.setProcessedInputParam(name, in);
+            List<Element> processorList = mojo.getParser().getParamProcessorList(param);
+            for (Element process : processorList) {
+                AbstractParamProcessor pps = getParamProcessor(process);
+                if (pps == null) {
+                    throw new LinkException("无法获取节点" + process.getNodeName() + "对应的参数处理器");
+                }
+                try {
+                    Object val = pps.processInput(process, param, mojo, mojo.getProcessedInputParam(name));
+                    mojo.setProcessedInputParam(name, val);
+                } catch (Exception e) {
+                    throw new LinkException("处理入参[" + name + ":" + desc + "]异常", e);
+                }
+            }
+        }*/
         mojo.setAfterOutput(o);
     }
 

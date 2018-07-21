@@ -46,6 +46,8 @@
     </execution>
     <executionEnding/>
     <output>
+        <param name="hello" from="last_name" default="2" desc="测试" fixed="" notEmpty="true">
+        </param>
     </output>
     <resultRender/>
     <dependencys></dependencys>
