@@ -12,4 +12,7 @@
     </bean>
     <bean id="directiveExec" class="com.github.landyking.link.DirectiveExec"/>
     <bean id="dataSourceManager" class="com.github.landyking.link.DataSourceManager"/>
+    <bean id="cacheManager" class="org.springframework.cache.guava.GuavaCacheManager">
+        <property name="cacheSpecification" value="maximumSize=1000,expireAfterWrite=60s"/>
+    </bean>
 </beans>

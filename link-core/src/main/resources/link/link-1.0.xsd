@@ -481,7 +481,52 @@
     </xs:complexType>
     <xs:complexType name="QueryTranslatorType">
         <xs:complexContent>
-            <xs:extension base="lk:abstractParamProcessorType"></xs:extension>
+            <xs:extension base="lk:abstractParamProcessorType">
+                <xs:sequence>
+                    <xs:element name="where" type="lk:needTextType">
+                        <xs:annotation>
+                            <xs:documentation>额外的过滤条件</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+                <xs:attribute name="srcField" type="xs:string" use="required">
+                    <xs:annotation>
+                        <xs:documentation>将被翻译的值所属字段</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="queryDataSource" type="xs:string" use="required">
+                    <xs:annotation>
+                        <xs:documentation>翻译将要查询的数据源</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="table" type="xs:string" use="required">
+                    <xs:annotation>
+                        <xs:documentation>翻译将要查询的数据表</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="destField" type="xs:string" use="required">
+                    <xs:annotation>
+                        <xs:documentation>翻译使用数据表中对应的值字段</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="destFieldType" default="string">
+                    <xs:annotation>
+                        <xs:documentation>翻译使用数据表中对应的值字段类型</xs:documentation>
+                    </xs:annotation>
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="string"/>
+                            <xs:enumeration value="int"/>
+                            <xs:enumeration value="decimal"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="displayField" type="xs:string" use="required">
+                    <xs:annotation>
+                        <xs:documentation>翻译使用数据表中翻译后显示的字段</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
         </xs:complexContent>
     </xs:complexType>
     <xs:complexType name="DictTranslatorType">

@@ -9,5 +9,9 @@
     <bean class="com.github.landyking.link.paramProcessor.DateTimeGenerator"/>
     <bean class="com.github.landyking.link.paramProcessor.GUIDGenerator"/>
     <bean class="com.github.landyking.link.paramProcessor.TextToList"/>
+    <bean class="com.github.landyking.link.paramProcessor.QueryTranslator">
+        <property name="cacheManager" ref="cacheManager"/>
+        <property name="dataSourceManager" ref="dataSourceManager"/>
+    </bean>
     <bean class="com.github.landyking.link.paramProcessor.custom.TestCustom"/>
 </beans>
