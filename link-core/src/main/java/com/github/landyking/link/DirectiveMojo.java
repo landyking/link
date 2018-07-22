@@ -3,6 +3,7 @@ package com.github.landyking.link;
 import com.google.common.collect.Maps;
 import org.springframework.util.Assert;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -27,7 +28,7 @@ public class DirectiveMojo {
     /**
      * 经过output节点处理之后的数据
      */
-    private Object afterOutput;
+    private List<Map<String, ValueBag>> afterOutput;
 
     public DirectiveMojo(String code, InputPot pot, DirectiveParser parser) {
         this.code = code;
@@ -85,11 +86,11 @@ public class DirectiveMojo {
         return exception;
     }
 
-    public Object getAfterOutput() {
+    public List<Map<String, ValueBag>> getAfterOutput() {
         return afterOutput;
     }
 
-    public void setAfterOutput(Object afterOutput) {
+    public void setAfterOutput(List<Map<String, ValueBag>> afterOutput) {
         this.afterOutput = afterOutput;
     }
 }

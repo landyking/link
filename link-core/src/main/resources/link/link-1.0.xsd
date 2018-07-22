@@ -489,7 +489,7 @@
                         </xs:annotation>
                     </xs:element>
                 </xs:sequence>
-                <xs:attribute name="srcField" type="xs:string" use="required">
+                <xs:attribute name="srcField" type="xs:string" >
                     <xs:annotation>
                         <xs:documentation>将被翻译的值所属字段</xs:documentation>
                     </xs:annotation>

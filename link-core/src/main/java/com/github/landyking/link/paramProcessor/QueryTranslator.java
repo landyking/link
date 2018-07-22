@@ -48,11 +48,15 @@ public class QueryTranslator extends AbstractParamProcessor {
     public void processOutput(Element config, Element param, DirectiveMojo ctx, String name, List<Map<String, ValueBag>> outList) throws Exception {
         String tableName = getTableName(ctx, config);
         String srcFieldName = getSrcFieldName(ctx, config);
+        if (!Texts.hasText(srcFieldName)) {
+            srcFieldName = Texts.firstHasText(param.getAttribute("from"), name);
+        }
         String destFieldName = getDestFieldName(ctx, config);
         String whereCondition = getWhereCondition(ctx, config);
         String displayFieldName = getDisplayFieldName(ctx, config);
         Boolean failUseOriginal = getFailUseOriginal(ctx, config);
         String cacheName = getCacheName(tableName, destFieldName, displayFieldName, whereCondition);
+
         boolean containsCache = cacheManager.getCacheNames().contains(cacheName);
         Map<String, Object> transMap = null;
         boolean allMatch = true;
@@ -129,7 +133,8 @@ public class QueryTranslator extends AbstractParamProcessor {
     protected Map<String, Object> makeTransMap(DirectiveMojo ctx, Element config, List<Map<String, ValueBag>> rstList, String tableName, String srcFieldName, String destFieldName, String whereCondition, String displayFieldName) throws LinkException {
         Set<Object> inSet = Sets.newHashSet();
         Set<String> inSetString = Sets.newHashSet();
-        for (Map<String, ValueBag> one : rstList) {
+        for (int i = 0; i < rstList.size(); i++) {
+            Map<String, ValueBag> one = rstList.get(i);
             ValueBag item = one.get(srcFieldName);
             Assert.notNull(item, "参数" + srcFieldName + "对应结果项为空");
             if (item.getFinalValue() != null) {
@@ -137,6 +142,7 @@ public class QueryTranslator extends AbstractParamProcessor {
                 inSetString.add(Texts.toStr(item.getFinalValue()));
             }
         }
+
         if (inSet.isEmpty()) {
             LOG.debug("要翻译的原始值集合为空，结束翻译");
             return null;

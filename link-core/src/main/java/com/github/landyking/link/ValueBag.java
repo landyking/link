@@ -8,6 +8,15 @@ import com.github.landyking.link.util.Texts;
 public class ValueBag {
     private Object originValue;
     private Object modifyValue;
+    private final boolean internal;
+
+    public ValueBag(boolean internal) {
+        this.internal = internal;
+    }
+
+    public boolean isInternal() {
+        return internal;
+    }
 
     public Object getOriginValue() {
         return originValue;

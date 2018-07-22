@@ -43,17 +43,17 @@
     <executionEnding/>
     <output>
         <param name="hello" from="last_name" desc="姓"/>
-        <param name="first_name" desc="名"/>
+        <param name="firstName" from="first_name" desc="名"/>
         <param name="test" default="2" desc="test">
             <processors>
                 <DateTimeGenerator type="string" format="yyyy-MM-dd HH:mm:ss"/>
             </processors>
         </param>
-        <param name="deptNo"/>
-        <param name="deptName">
+        <!--<param name="deptNo"/>-->
+        <param name="deptName" from="deptNo">
             <processors>
-                <QueryTranslator srcField="deptNo" queryDataSource="emp" table="departments"
-                                 destField="dept_no" displayField="dept_name">
+                <QueryTranslator  queryDataSource="emp" table="departments"
+                                 destField="dept_no"  displayField="dept_name">
                     <where>1=1</where>
                 </QueryTranslator>
             </processors>

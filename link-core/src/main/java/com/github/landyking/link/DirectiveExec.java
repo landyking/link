@@ -50,6 +50,7 @@ public class DirectiveExec implements ApplicationContextAware {
         for (Map<String, Object> one : outList) {
             finalData.add(new HashMap<String, ValueBag>());
         }
+        // 对外暴露的数据
         for (Element param : params) {
             String name = param.getAttribute("name");
             String from = param.getAttribute("from");
@@ -70,17 +71,29 @@ public class DirectiveExec implements ApplicationContextAware {
             for (int i = 0; i < outList.size(); i++) {
                 Map<String, ValueBag> bagMap = finalData.get(i);
                 if (isFixed) {
-                    bagMap.put(name, new ValueBag().setOriginValue(fixed));
+                    bagMap.put(name, new ValueBag(false).setOriginValue(fixed));
                 } else {
                     Map<String, Object> vals = outList.get(i);
                     Object o = vals.get(from);
                     if (o != null) {
-                        bagMap.put(name, new ValueBag().setOriginValue(o));
+                        bagMap.put(name, new ValueBag(false).setOriginValue(o));
                     } else {
                         if (isDefault) {
-                            bagMap.put(name, new ValueBag().setOriginValue(defValue));
+                            bagMap.put(name, new ValueBag(false).setOriginValue(defValue));
+                        } else {
+                            bagMap.put(name, new ValueBag(false).setOriginValue(null));
                         }
                     }
+                }
+            }
+        }
+        //内部使用的数据
+        for (int i = 0; i < outList.size(); i++) {
+            Map<String, Object> before = outList.get(i);
+            Map<String, ValueBag> after = finalData.get(i);
+            for (Map.Entry<String, Object> tmp : before.entrySet()) {
+                if (!after.containsKey(tmp.getKey())) {
+                    after.put(tmp.getKey(), new ValueBag(true).setModifyValue(tmp.getValue()));
                 }
             }
         }
@@ -95,14 +108,26 @@ public class DirectiveExec implements ApplicationContextAware {
                     throw new LinkException("无法获取节点" + process.getNodeName() + "对应的参数处理器");
                 }
                 try {
-                    pps.processOutput(process, param, mojo, name,finalData);
+                    pps.processOutput(process, param, mojo, name, finalData);
                 } catch (Exception e) {
                     throw new LinkException("处理出参[" + name + ":" + desc + "]异常", e);
                 }
             }
         }
-
-        mojo.setAfterOutput(finalData);
+        //清理，移除内部使用的数据
+        List<Map<String, ValueBag>> tmpDataList = Lists.newLinkedList();
+        for (Map<String, ValueBag> one : finalData) {
+            HashMap<String, ValueBag> newMap = Maps.newHashMap();
+            for (Map.Entry<String, ValueBag> me : one.entrySet()) {
+                if (!me.getValue().isInternal()) {
+                    newMap.put(me.getKey(), me.getValue());
+                }
+            }
+            one.clear();
+            tmpDataList.add(newMap);
+        }
+        finalData.clear();
+        mojo.setAfterOutput(tmpDataList);
     }
 
     private void processExecutionEnding(DirectiveMojo mojo) throws LinkException {
