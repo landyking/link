@@ -1,10 +1,12 @@
 package com.github.landyking.link.paramProcessor;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.github.landyking.link.AbstractParamProcessor;
+import com.github.landyking.link.DataSourceManager;
 import com.github.landyking.link.DirectiveMojo;
 import com.github.landyking.link.ValueBag;
+import com.github.landyking.link.exception.LinkException;
 import com.github.landyking.link.util.LkTools;
+import com.github.landyking.link.util.Texts;
 import com.google.common.base.Charsets;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -32,20 +34,25 @@ public class QueryTranslator extends AbstractParamProcessor {
     protected final Logger LOG = LoggerFactory.getLogger(getClass());
     public static final String SPLIT = "#";
     private CacheManager cacheManager;
+    private DataSourceManager dataSourceManager;
+
+    public void setDataSourceManager(DataSourceManager dataSourceManager) {
+        this.dataSourceManager = dataSourceManager;
+    }
 
     public void setCacheManager(CacheManager cacheManager) {
         this.cacheManager = cacheManager;
     }
 
     @Override
-    public void processOutput(Element config, Element param, DirectiveMojo mojo, String name, List<Map<String, ValueBag>> outList) throws Exception {
-        String businessModelCode = getBusinessModelCode(mojo, config);
-        String srcFieldName = getSrcFieldName(mojo, config);
-        String destFieldName = getDestFieldName(mojo, config);
-        String whereCondition = getWhereCondition(mojo, config);
-        String displayFieldName = getDisplayFieldName(mojo, config);
-        Boolean failUseOriginal = getFailUseOriginal(mojo, config);
-        String cacheName = getCacheName(businessModelCode, destFieldName, displayFieldName, whereCondition, config);
+    public void processOutput(Element config, Element param, DirectiveMojo ctx, String name, List<Map<String, ValueBag>> outList) throws Exception {
+        String tableName = getTableName(ctx, config);
+        String srcFieldName = getSrcFieldName(ctx, config);
+        String destFieldName = getDestFieldName(ctx, config);
+        String whereCondition = getWhereCondition(ctx, config);
+        String displayFieldName = getDisplayFieldName(ctx, config);
+        Boolean failUseOriginal = getFailUseOriginal(ctx, config);
+        String cacheName = getCacheName(tableName, destFieldName, displayFieldName, whereCondition);
         boolean containsCache = cacheManager.getCacheNames().contains(cacheName);
         Map<String, Object> transMap = null;
         boolean allMatch = true;
@@ -54,9 +61,9 @@ public class QueryTranslator extends AbstractParamProcessor {
             Cache cache = cacheManager.getCache(cacheName);
             transMap = Maps.newHashMap();
             //检查要翻译的项是否都能匹配
-            for (Map<String, ResultItem> one : rstList) {
-                ResultItem srcItem = one.get(srcFieldName);
-                Object ov = srcItem.getResultValue();
+            for (Map<String, ValueBag> one : outList) {
+                ValueBag srcItem = one.get(srcFieldName);
+                Object ov = srcItem.getFinalValue();
                 if (ov != null) {
                     String key = ov.toString();
                     Cache.ValueWrapper wrapper = cache.get(key);
@@ -71,13 +78,13 @@ public class QueryTranslator extends AbstractParamProcessor {
             if (!allMatch) {
                 //不能匹配，清理已填充的内容，从数据库加载
                 transMap.clear();
-                transMap = makeTransMap(ctx, config, rstList, businessModelCode, srcFieldName, destFieldName, whereCondition, displayFieldName);
+                transMap = makeTransMap(ctx, config, outList, tableName, srcFieldName, destFieldName, whereCondition, displayFieldName);
             } else {
                 LOG.debug("使用缓存{}进行翻译", cacheName);
             }
         } else {
             //缓存不存在，从数据库加载
-            transMap = makeTransMap(ctx, config, rstList, businessModelCode, srcFieldName, destFieldName, whereCondition, displayFieldName);
+            transMap = makeTransMap(ctx, config, outList, tableName, srcFieldName, destFieldName, whereCondition, displayFieldName);
         }
         if (transMap == null) return;
         if (!containsCache || !allMatch) {
@@ -88,22 +95,21 @@ public class QueryTranslator extends AbstractParamProcessor {
             }
         }
         //使用最终的map进行翻译
-        for (Map<String, ResultItem> one : rstList) {
-            ResultItem srcItem = one.get(srcFieldName);
-            ResultItem outItem = one.get(param.getName());
-            Object ov = srcItem.getResultValue();
+        for (Map<String, ValueBag> one : outList) {
+            ValueBag srcItem = one.get(srcFieldName);
+            ValueBag outItem = one.get(name);
+            Object ov = srcItem.getFinalValue();
             if (ov != null) {
                 Object out = transMap.get(ov.toString());
                 if (out != null) {
-                    outItem.setFinalValue(out);
+                    outItem.setModifyValue(out);
                 } else {
                     if (failUseOriginal) {
-                        outItem.setFinalValue(ov);
+                        outItem.setModifyValue(ov);
                     } else {
-                        outItem.setFinalValue(null);
+                        outItem.setModifyValue(null);
                     }
                 }
-                outItem.setValueProcessed(true);
             }
         }
     }
@@ -112,23 +118,23 @@ public class QueryTranslator extends AbstractParamProcessor {
         return LkTools.isTrue(mojo.getParser().getParam(config, "failUseOriginal"));
     }
 
-    protected String getCacheName(String businessModelCode, String destFieldName, String displayFieldName, String whereCondition, JsonNode config) {
-        String name = businessModelCode + SPLIT + destFieldName + SPLIT + displayFieldName;
+    protected String getCacheName(String tableName, String destFieldName, String displayFieldName, String whereCondition) {
+        String name = tableName + SPLIT + destFieldName + SPLIT + displayFieldName;
         if (Texts.hasText(whereCondition)) {
             name += SPLIT + Hashing.md5().hashString(whereCondition, Charsets.UTF_8).toString();
         }
         return name;
     }
 
-    protected Map<String, Object> makeTransMap(DirectiveContext ctx, JsonNode config, List<Map<String, ResultItem>> rstList, String businessModelCode, String srcFieldName, String destFieldName, String whereCondition, String displayFieldName) throws DirectiveExecutionException {
+    protected Map<String, Object> makeTransMap(DirectiveMojo ctx, Element config, List<Map<String, ValueBag>> rstList, String tableName, String srcFieldName, String destFieldName, String whereCondition, String displayFieldName) throws LinkException {
         Set<Object> inSet = Sets.newHashSet();
         Set<String> inSetString = Sets.newHashSet();
-        for (Map<String, ResultItem> one : rstList) {
-            ResultItem item = one.get(srcFieldName);
+        for (Map<String, ValueBag> one : rstList) {
+            ValueBag item = one.get(srcFieldName);
             Assert.notNull(item, "参数" + srcFieldName + "对应结果项为空");
-            if (item.getResultValue() != null) {
-                inSet.add(item.getResultValue());
-                inSetString.add(item.getResultValueString());
+            if (item.getFinalValue() != null) {
+                inSet.add(item.getFinalValue());
+                inSetString.add(Texts.toStr(item.getFinalValue()));
             }
         }
         if (inSet.isEmpty()) {
@@ -136,24 +142,23 @@ public class QueryTranslator extends AbstractParamProcessor {
             return null;
         }
         LOG.debug("要翻译的原始值集合为: {}", inSet.toString());
-        BusinessModel businessModel = ctx.getDirective().getBusinessModelManager().getBusinessModel(businessModelCode);
-        Integer destType = getJdbcType(businessModel, destFieldName);
+        String destType = getDestFileType(ctx, config);
         if (destType != null) {
-            if (JDBCType.isText(destType)) {
+            if (Texts.isSame("string", destType)) {
                 Set<Object> tmp = Sets.newHashSet();
                 for (Object one : inSet) {
                     tmp.add(one.toString());
                 }
                 inSet.clear();
                 inSet = tmp;
-            } else if (JDBCType.isInteger(destType)) {
+            } else if (Texts.isSame("int", destType)) {
                 Set<Object> tmp = Sets.newHashSet();
                 for (Object one : inSet) {
                     tmp.add(NumberUtils.parseNumber(one.toString(), Integer.class));
                 }
                 inSet.clear();
                 inSet = tmp;
-            } else if (JDBCType.isDecimal(destType)) {
+            } else if (Texts.isSame("decimal", destType)) {
                 Set<Object> tmp = Sets.newHashSet();
                 for (Object one : inSet) {
                     tmp.add(NumberUtils.parseNumber(one.toString(), BigDecimal.class));
@@ -162,14 +167,14 @@ public class QueryTranslator extends AbstractParamProcessor {
                 inSet = tmp;
             }
         }
-        String dataStorageCode = businessModel.getDataStorageCode();
+        String queryDataSource = getQueryDataSource(ctx, config);
         StringBuilder sql = new StringBuilder();
         sql.append("select ");
         sql.append(destFieldName);
         sql.append(",");
         sql.append(displayFieldName);
         sql.append(" from ");
-        SpringJdbcUtils.buildOperateObject(businessModel, sql);
+        sql.append(tableName);
         sql.append(" where ");
         if (Texts.hasText(whereCondition)) {
             sql.append(whereCondition);
@@ -179,7 +184,7 @@ public class QueryTranslator extends AbstractParamProcessor {
         sql.append(" in (:inSet)");
         String query = sql.toString();
         LOG.debug("用于获取翻译值的SQL为: {}", query);
-        NamedParameterJdbcTemplate jdbc = ctx.getDirective().getDataStorageManager().getNamedParameterJdbcTemplate(dataStorageCode);
+        NamedParameterJdbcTemplate jdbc = dataSourceManager.getNamedParameterJdbcTemplate(queryDataSource);
         MapSqlParameterSource msps = new MapSqlParameterSource();
         msps.addValue("inSet", inSet);
         List<Map<String, Object>> mapList = jdbc.queryForList(query, msps);
@@ -197,17 +202,17 @@ public class QueryTranslator extends AbstractParamProcessor {
         return transMap;
     }
 
-    private Integer getJdbcType(BusinessModel businessModel, String destFieldName) {
-        for (BusinessModelField one : businessModel.getFieldSet()) {
-            if (one.getFieldName().equalsIgnoreCase(destFieldName)) {
-                return one.getJdbcType();
-            }
-        }
-        return null;
+    private String getQueryDataSource(DirectiveMojo ctx, Element config) {
+        return ctx.getParser().getParam(config, "queryDataSource");
     }
 
+    private String getDestFileType(DirectiveMojo mojo, Element config) {
+        return mojo.getParser().getParam(config, "destFieldType");
+    }
+
+
     protected String getDisplayFieldName(DirectiveMojo mojo, Element config) {
-        return mojo.getParser().getParam(config, "displayColumn");
+        return mojo.getParser().getParam(config, "displayField");
     }
 
     protected String getWhereCondition(DirectiveMojo mojo, Element config) {
@@ -215,14 +220,14 @@ public class QueryTranslator extends AbstractParamProcessor {
     }
 
     protected String getDestFieldName(DirectiveMojo mojo, Element config) {
-        return mojo.getParser().getParam(config, "destColumn");
+        return mojo.getParser().getParam(config, "destField");
     }
 
     protected String getSrcFieldName(DirectiveMojo mojo, Element config) {
-        return mojo.getParser().getParam(config, "srcColumn");
+        return mojo.getParser().getParam(config, "srcField");
     }
 
-    protected String getBusinessModelCode(DirectiveMojo mojo, Element config) {
+    protected String getTableName(DirectiveMojo mojo, Element config) {
         return mojo.getParser().getParam(config, "table");
     }
 

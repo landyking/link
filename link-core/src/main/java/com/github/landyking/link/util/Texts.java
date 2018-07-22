@@ -52,4 +52,22 @@ public class Texts {
         sql = sql.replace('\n', ' ');
         return sql;
     }
+
+    public static boolean isSame(String a, String b) {
+        return isSame(a, b, false);
+    }
+
+    public static boolean isSame(String a, String b, boolean ignoreCase) {
+        if (a == null && b == null) {
+            return true;
+        } else if (a != null && b != null) {
+            if (ignoreCase) {
+                return a.equalsIgnoreCase(b);
+            } else {
+
+                return a.equals(b);
+            }
+        }
+        return false;
+    }
 }
