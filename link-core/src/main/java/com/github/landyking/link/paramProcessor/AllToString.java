@@ -2,6 +2,7 @@ package com.github.landyking.link.paramProcessor;
 
 import com.github.landyking.link.AbstractParamProcessor;
 import com.github.landyking.link.DirectiveMojo;
+import com.github.landyking.link.util.Texts;
 import org.w3c.dom.Element;
 
 /**
@@ -10,6 +11,6 @@ import org.w3c.dom.Element;
 public class AllToString extends AbstractParamProcessor {
     @Override
     public Object processInput(Element config, Element param, DirectiveMojo mojo, Object in) throws Exception {
-        return null;
+        return Texts.toStr(in);
     }
 }

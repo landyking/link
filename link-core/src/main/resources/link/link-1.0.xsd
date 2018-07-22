@@ -56,6 +56,14 @@
                             <xs:element name="param" type="lk:outputParamType" minOccurs="0" maxOccurs="unbounded"/>
                         </xs:sequence>
                         <xs:attribute name="custom" type="xs:boolean" default="false"/>
+                        <xs:attribute name="dataType" default="list">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:enumeration value="single"/>
+                                    <xs:enumeration value="list"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:attribute>
                     </xs:complexType>
                     <xs:unique name="outputParamNameUnique">
                         <xs:annotation>
