@@ -460,7 +460,18 @@
     </xs:complexType>
     <xs:complexType name="DateTimeGeneratorType">
         <xs:complexContent>
-            <xs:extension base="lk:abstractParamProcessorType"></xs:extension>
+            <xs:extension base="lk:abstractParamProcessorType">
+                <xs:attribute name="type" use="required">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="long"/>
+                            <xs:enumeration value="string"/>
+                            <xs:enumeration value="date"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="format" type="xs:string" default="yyyyMMddHHmmss"/>
+            </xs:extension>
         </xs:complexContent>
     </xs:complexType>
     <xs:complexType name="AllToStringType">

@@ -46,11 +46,11 @@
     </execution>
     <executionEnding/>
     <output>
-        <param name="hello" from="last_name"  desc="姓"/>
-        <param name="first_name"  desc="名"  />
-        <param name="test" default="2"  desc="test">
+        <param name="hello" from="last_name" desc="姓"/>
+        <param name="first_name" desc="名"/>
+        <param name="test" default="2" desc="test">
             <processors>
-                <DateTimeGenerator/>
+                <DateTimeGenerator type="string" format="yyyy-MM-dd HH:mm:ss"/>
             </processors>
         </param>
     </output>

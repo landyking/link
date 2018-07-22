@@ -19,9 +19,9 @@ public abstract class OutputOneByOneProcessor extends AbstractParamProcessor {
         for (Map<String, ValueBag> one : outList) {
             ValueBag item = one.get(name);
             Assert.notNull(item, "输出参数" + name + "没有对应的结果项");
-            processOutput(mojo,  param, config,one,name, item);
+            processOutputOne(mojo,  param, config,one,name, item);
         }
     }
 
-    protected abstract void processOutput(DirectiveMojo mojo, Element param, Element config, Map<String, ValueBag> one, String name, ValueBag item);
+    protected abstract void processOutputOne(DirectiveMojo mojo, Element param, Element config, Map<String, ValueBag> one, String name, ValueBag item);
 }
