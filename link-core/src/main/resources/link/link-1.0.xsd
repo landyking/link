@@ -93,7 +93,7 @@
                 <xs:documentation><![CDATA[参数名，非空，唯一。]]></xs:documentation>
             </xs:annotation>
         </xs:attribute>
-        <xs:attribute name="desc" type="xs:string">
+        <xs:attribute name="desc" type="lk:needTextType">
             <xs:annotation>
                 <xs:documentation><![CDATA[描述信息]]></xs:documentation>
             </xs:annotation>
@@ -103,12 +103,12 @@
                 <xs:documentation><![CDATA[不允许为空，默认true。]]></xs:documentation>
             </xs:annotation>
         </xs:attribute>
-        <xs:attribute name="default" type="xs:string">
+        <xs:attribute name="default" type="lk:needTextType">
             <xs:annotation>
                 <xs:documentation><![CDATA[默认值。与固定值二选一，固定值优先级高。]]></xs:documentation>
             </xs:annotation>
         </xs:attribute>
-        <xs:attribute name="fixed" type="xs:string">
+        <xs:attribute name="fixed" type="lk:needTextType">
             <xs:annotation>
                 <xs:documentation><![CDATA[固定值。与默认值二选一，固定值优先级高。]]></xs:documentation>
             </xs:annotation>

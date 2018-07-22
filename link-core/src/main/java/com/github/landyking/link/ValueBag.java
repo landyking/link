@@ -1,5 +1,7 @@
 package com.github.landyking.link;
 
+import com.github.landyking.link.util.Texts;
+
 /**
  * Created by landy on 2018/7/21.
  */
@@ -27,5 +29,10 @@ public class ValueBag {
 
     public Object getFinalValue() {
         return modifyValue == null ? originValue : modifyValue;
+    }
+
+    @Override
+    public String toString() {
+        return Texts.toStr(getFinalValue());
     }
 }

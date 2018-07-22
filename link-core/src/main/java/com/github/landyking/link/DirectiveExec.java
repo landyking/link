@@ -95,10 +95,9 @@ public class DirectiveExec implements ApplicationContextAware {
                     throw new LinkException("无法获取节点" + process.getNodeName() + "对应的参数处理器");
                 }
                 try {
-//                    Object val = pps.processInput(process, param, mojo, mojo.getProcessedInputParam(name));
-//                    mojo.setProcessedInputParam(name, val);
+                    pps.processOutput(process, param, mojo, name,finalData);
                 } catch (Exception e) {
-                    throw new LinkException("处理入参[" + name + ":" + desc + "]异常", e);
+                    throw new LinkException("处理出参[" + name + ":" + desc + "]异常", e);
                 }
             }
         }
