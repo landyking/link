@@ -3,6 +3,8 @@ package com.github.landyking.link;
 import com.github.landyking.link.exception.LinkException;
 import com.github.landyking.link.util.LkTools;
 import com.github.landyking.link.util.Texts;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -10,6 +12,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.w3c.dom.Element;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -39,10 +42,67 @@ public class DirectiveExec implements ApplicationContextAware {
         processResultRender(mojo);
     }
 
-    private void processOutputParam(DirectiveMojo mojo) {
-        Object o = mojo.getEndingData().forOutput();
+    private void processOutputParam(DirectiveMojo mojo) throws LinkException {
+        List<Map<String, Object>> outList = mojo.getEndingData().forOutput();
         //process output
-        mojo.setAfterOutput(o);
+        List<Element> params = mojo.getParser().getOutputParamList();
+        List<Map<String, ValueBag>> finalData = Lists.newArrayListWithCapacity(outList.size());
+        for (Map<String, Object> one : outList) {
+            finalData.add(new HashMap<String, ValueBag>());
+        }
+        for (Element param : params) {
+            String name = param.getAttribute("name");
+            String from = param.getAttribute("from");
+            if (!Texts.hasText(from)) {
+                from = name;
+            }
+            String desc = param.getAttribute("desc");
+            String fixed = null;
+            boolean isFixed = param.hasAttribute("fixed");
+            if (isFixed) {
+                fixed = param.getAttribute("fixed");
+            }
+            boolean isDefault = param.hasAttribute("default");
+            String defValue = null;
+            if (isDefault) {
+                defValue = param.getAttribute("default");
+            }
+            for (int i = 0; i < outList.size(); i++) {
+                Map<String, ValueBag> bagMap = finalData.get(i);
+                if (isFixed) {
+                    bagMap.put(name, new ValueBag().setOriginValue(fixed));
+                } else {
+                    Map<String, Object> vals = outList.get(i);
+                    Object o = vals.get(from);
+                    if (o != null) {
+                        bagMap.put(name, new ValueBag().setOriginValue(o));
+                    } else {
+                        if (isDefault) {
+                            bagMap.put(name, new ValueBag().setOriginValue(defValue));
+                        }
+                    }
+                }
+            }
+        }
+        for (Element param : params) {
+            String name = param.getAttribute("name");
+            String desc = param.getAttribute("desc");
+
+            List<Element> processorList = mojo.getParser().getParamProcessorList(param);
+            for (Element process : processorList) {
+                AbstractParamProcessor pps = getParamProcessor(process);
+                if (pps == null) {
+                    throw new LinkException("无法获取节点" + process.getNodeName() + "对应的参数处理器");
+                }
+                try {
+                    pps.processOutput(process, param, mojo, name,finalData);
+                } catch (Exception e) {
+                    throw new LinkException("处理出参[" + name + ":" + desc + "]异常", e);
+                }
+            }
+        }
+
+        mojo.setAfterOutput(finalData);
     }
 
     private void processExecutionEnding(DirectiveMojo mojo) throws LinkException {

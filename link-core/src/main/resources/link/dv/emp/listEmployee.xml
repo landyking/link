@@ -46,6 +46,13 @@
     </execution>
     <executionEnding/>
     <output>
+        <param name="hello" from="last_name"  desc="姓"/>
+        <param name="first_name"  desc="名"  />
+        <param name="test" default="2"  desc="test">
+            <processors>
+                <DateTimeGenerator/>
+            </processors>
+        </param>
     </output>
     <resultRender/>
     <dependencys></dependencys>

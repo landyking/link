@@ -155,6 +155,9 @@ public class DirectiveParser {
     public List<Element> getInputParamList() throws LinkException {
         return getSubElementList(document, "/lk:directive/lk:input/lk:param");
     }
+    public List<Element> getOutputParamList() throws LinkException {
+        return getSubElementList(document, "/lk:directive/lk:output/lk:param");
+    }
 
     private List<Element> nodeList2ElementList(NodeList params) {
         List<Element> rst = Lists.newLinkedList();
