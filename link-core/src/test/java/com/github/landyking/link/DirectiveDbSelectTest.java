@@ -35,4 +35,10 @@ public class DirectiveDbSelectTest {
         pot.put("limit", "10");
         dm.callDirective("emp.listEmployee2", pot);
     }
+    @Test
+    public void listQtTest() throws Exception {
+        EmptyInputPot pot = new EmptyInputPot();
+        pot.put("deptName", "d004");
+        dm.callDirective("emp.qtTest1", pot);
+    }
 }

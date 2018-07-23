@@ -49,7 +49,7 @@
                 <DateTimeGenerator type="string" format="yyyy-MM-dd HH:mm:ss"/>
             </processors>
         </param>
-        <!--<param name="deptNo"/>-->
+        <param name="deptNo"/>
         <param name="deptName" from="deptNo">
             <processors>
                 <QueryTranslator  queryDataSource="emp" table="departments"

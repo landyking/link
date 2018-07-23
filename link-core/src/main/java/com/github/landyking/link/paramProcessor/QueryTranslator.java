@@ -22,9 +22,7 @@ import org.springframework.util.NumberUtils;
 import org.w3c.dom.Element;
 
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author: landy
@@ -239,6 +237,11 @@ public class QueryTranslator extends AbstractParamProcessor {
 
     @Override
     public Object processInput(Element config, Element param, DirectiveMojo mojo, Object in) throws Exception {
-        return null;
+        String name = param.getAttribute("name");
+        Map<String, ValueBag> vals = Maps.newHashMap();
+        ValueBag bag = new ValueBag(true).setOriginValue(in);
+        vals.put(name, bag);
+        processOutput(config, param, mojo, name, Arrays.asList(vals));
+        return bag.getFinalValue();
     }
 }
