@@ -489,7 +489,7 @@
                         </xs:annotation>
                     </xs:element>
                 </xs:sequence>
-                <xs:attribute name="srcField" type="xs:string" >
+                <xs:attribute name="srcField" type="xs:string">
                     <xs:annotation>
                         <xs:documentation>将被翻译的值所属字段</xs:documentation>
                     </xs:annotation>
@@ -526,12 +526,32 @@
                         <xs:documentation>翻译使用数据表中翻译后显示的字段</xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
+                <xs:attribute name="failUseOriginal" type="xs:boolean" default="true"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
     <xs:complexType name="DictTranslatorType">
         <xs:complexContent>
-            <xs:extension base="lk:abstractParamProcessorType"></xs:extension>
+            <xs:extension base="lk:abstractParamProcessorType">
+                <xs:sequence>
+                    <xs:element name="where" type="lk:lineContentType" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation>额外的过滤条件</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+                <xs:attribute name="srcField" type="xs:string">
+                    <xs:annotation>
+                        <xs:documentation>将被翻译的值所属字段</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="dict" type="xs:string" use="required">
+                    <xs:annotation>
+                        <xs:documentation>字典名称</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="failUseOriginal" type="xs:boolean" default="true"/>
+            </xs:extension>
         </xs:complexContent>
     </xs:complexType>
     <xs:complexType name="TextToListType">

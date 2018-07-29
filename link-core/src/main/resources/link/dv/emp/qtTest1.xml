@@ -12,6 +12,7 @@
                 </QueryTranslator>
             </processors>
         </param>
+        <param name="ld" default="223" desc="本地字典翻译测试"/>
     </input>
     <execution>
         <custom id="default" className="com.github.landyking.link.execution.custom.InputGotoOutput"/>
@@ -19,6 +20,11 @@
     <executionEnding/>
     <output>
         <param name="deptName"/>
+        <param name="ld">
+            <processors>
+                <DictTranslator dict="hello"/>
+            </processors>
+        </param>
     </output>
     <resultRender/>
     <dependencys></dependencys>

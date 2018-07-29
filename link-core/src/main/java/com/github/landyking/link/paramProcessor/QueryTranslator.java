@@ -109,7 +109,7 @@ public class QueryTranslator extends AbstractParamProcessor {
                     if (failUseOriginal) {
                         outItem.setModifyValue(ov);
                     } else {
-                        outItem.setModifyValue(null);
+                        outItem.setModifyValue("");
                     }
                 }
             }

@@ -10,6 +10,7 @@
     <bean id="directiveManager" class="com.github.landyking.link.DirectiveManager">
         <property name="exec" ref="directiveExec"/>
     </bean>
+    <bean id="localDictManager" class="com.github.landyking.link.LocalDictManager"/>
     <bean id="directiveExec" class="com.github.landyking.link.DirectiveExec"/>
     <bean id="dataSourceManager" class="com.github.landyking.link.DataSourceManager"/>
     <bean id="cacheManager" class="org.springframework.cache.guava.GuavaCacheManager">

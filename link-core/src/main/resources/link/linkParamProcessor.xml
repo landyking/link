@@ -13,5 +13,8 @@
         <property name="cacheManager" ref="cacheManager"/>
         <property name="dataSourceManager" ref="dataSourceManager"/>
     </bean>
+    <bean class="com.github.landyking.link.paramProcessor.DictTranslator">
+        <property name="localDictManager" ref="localDictManager"/>
+    </bean>
     <bean class="com.github.landyking.link.paramProcessor.custom.TestCustom"/>
 </beans>
