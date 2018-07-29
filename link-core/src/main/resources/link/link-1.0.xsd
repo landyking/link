@@ -483,7 +483,7 @@
         <xs:complexContent>
             <xs:extension base="lk:abstractParamProcessorType">
                 <xs:sequence>
-                    <xs:element name="where" type="lk:needTextType" minOccurs="0" maxOccurs="1">
+                    <xs:element name="where" type="lk:lineContentType" minOccurs="0" maxOccurs="1">
                         <xs:annotation>
                             <xs:documentation>额外的过滤条件</xs:documentation>
                         </xs:annotation>

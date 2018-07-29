@@ -8,6 +8,7 @@
             <processors>
                 <QueryTranslator queryDataSource="emp" table="departments"
                                  destField="dept_no" displayField="dept_name">
+                    <!--<where>dept_name not in('Production')</where>-->
                 </QueryTranslator>
             </processors>
         </param>
