@@ -1,7 +1,11 @@
-<?xml version="1.0"?>
-<dicts>
-    <dict name="">
-        <item code="" marker=""></item>
-        <item code="" marker=""></item>
+<?xml version="1.0" encoding="UTF-8"?>
+<dicts xmlns="http://www.github.com/landyking/dict"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.github.com/landyking/dict http://www.github.com/landyking/link/dict-1.0.xsd">
+    <dict name="hello" desc="测试">
+        <item code="2">你好</item>
+        <item code="21">我也好</item>
+    </dict>
+    <dict name="hello2">
     </dict>
 </dicts>

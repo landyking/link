@@ -1,27 +1,63 @@
 <?xml version="1.0"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-           targetNamespace="http://www.github.com/landyking/link"
+           targetNamespace="http://www.github.com/landyking/dict"
+           xmlns:dict="http://www.github.com/landyking/dict"
            elementFormDefault="qualified"
            attributeFormDefault="unqualified">
     <xs:element name="dicts">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="dict">
+                <xs:element name="dict" maxOccurs="unbounded">
                     <xs:complexType>
                         <xs:sequence>
-                            <xs:element name="item">
+                            <xs:element name="desc" type="xs:string" minOccurs="0" maxOccurs="1"/>
+                            <xs:element name="item" minOccurs="0" maxOccurs="unbounded">
                                 <xs:complexType>
-                                    <xs:complexContent>
-                                        <xs:extension base="xs:string"/>
-                                    </xs:complexContent>
-                                    <xs:attribute name="code" type="xs:string" use="required"/>
+                                    <xs:simpleContent>
+                                        <xs:extension base="xs:string">
+                                            <xs:attribute name="code" type="dict:needTextType" use="required"/>
+                                            <xs:attribute name="marker" type="dict:needTextType"/>
+                                        </xs:extension>
+                                    </xs:simpleContent>
                                 </xs:complexType>
                             </xs:element>
                         </xs:sequence>
-                        <xs:attribute name="name" type="xs:string" use="required"/>
+                        <xs:attribute name="name" type="dict:needTextType" use="required"/>
+                        <xs:attribute name="desc" type="xs:string"/>
                     </xs:complexType>
+                    <xs:unique name="dictItemCodeUnique">
+                        <xs:annotation>
+                            <xs:documentation><![CDATA[字典项编码必须]]></xs:documentation>
+                        </xs:annotation>
+                        <xs:selector xpath="dict:item"/>
+                        <xs:field xpath="@code"/>
+                    </xs:unique>
                 </xs:element>
             </xs:sequence>
         </xs:complexType>
+        <xs:unique name="dictNameUnique">
+            <xs:annotation>
+                <xs:documentation><![CDATA[字典名称必须]]></xs:documentation>
+            </xs:annotation>
+            <xs:selector xpath="dict:dict"/>
+            <xs:field xpath="@name"/>
+        </xs:unique>
     </xs:element>
+    <xs:simpleType name="lineContentType">
+        <xs:annotation>
+            <xs:documentation><![CDATA[有内容的文本。且内容两边的空白会被移除，内部多个空白以及换行会被替换成一个空格。]]></xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:whiteSpace value="collapse"/>
+            <xs:minLength value="1"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="needTextType">
+        <xs:annotation>
+            <xs:documentation><![CDATA[文本，不能为空]]></xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="\S+"/>
+        </xs:restriction>
+    </xs:simpleType>
 </xs:schema>
