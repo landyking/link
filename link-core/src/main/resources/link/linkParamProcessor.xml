@@ -16,5 +16,9 @@
     <bean class="com.github.landyking.link.paramProcessor.DictTranslator">
         <property name="localDictManager" ref="localDictManager"/>
     </bean>
+    <bean class="com.github.landyking.link.paramProcessor.ExistCheck">
+        <property name="dataSourceManager" ref="dataSourceManager"/>
+        <property name="localDictManager" ref="localDictManager"/>
+    </bean>
     <bean class="com.github.landyking.link.paramProcessor.custom.TestCustom"/>
 </beans>

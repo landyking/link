@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<directive xmlns="http://www.github.com/landyking/link"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.github.com/landyking/link http://www.github.com/landyking/link/link-1.0.xsd">
+    <description>dict check test</description>
+    <input>
+        <param name="type" desc="类型">
+            <processors>
+                <ExistCheck>
+                    <localDict name="hello"/>
+                </ExistCheck>
+            </processors>
+        </param>
+        <param name="no">
+            <processors>
+                <ExistCheck>
+                    <countQuery dataSource="emp">
+                        select count(0) from employees where emp_no=:no
+                    </countQuery>
+                </ExistCheck>
+            </processors>
+        </param>
+    </input>
+    <execution>
+        <custom id="default" className="com.github.landyking.link.execution.custom.InputGotoOutput"/>
+    </execution>
+    <executionEnding/>
+    <output>
+        <param name="name"/>
+        <param name="type"/>
+    </output>
+    <resultRender/>
+    <dependencys></dependencys>
+</directive>

@@ -141,6 +141,7 @@
         </xs:annotation>
         <xs:sequence>
             <xs:choice minOccurs="1" maxOccurs="unbounded">
+                <xs:element name="ExistCheck" type="lk:ExistCheckType"/>
                 <xs:element name="GUIDGenerator" type="lk:GUIDGeneratorType"/>
                 <xs:element name="DateTimeGenerator" type="lk:DateTimeGeneratorType"/>
                 <xs:element name="AllToString" type="lk:AllToStringType"/>
@@ -455,6 +456,28 @@
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="ExistCheckType">
+        <xs:complexContent>
+            <xs:extension base="lk:abstractParamProcessorType">
+                <xs:choice>
+                    <xs:element name="localDict">
+                        <xs:complexType>
+                            <xs:attribute name="name" use="required" type="lk:needTextType"/>
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="countQuery">
+                        <xs:complexType>
+                            <xs:simpleContent>
+                                <xs:extension base="lk:lineContentType">
+                                    <xs:attribute name="dataSource" use="required" type="lk:needTextType"/>
+                                </xs:extension>
+                            </xs:simpleContent>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:choice>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
