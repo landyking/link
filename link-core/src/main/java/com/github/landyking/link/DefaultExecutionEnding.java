@@ -11,8 +11,9 @@ public class DefaultExecutionEnding implements ExecutionEnding {
     @Override
     public ExecutionEndingData process(DirectiveMojo mojo) throws LinkException {
         Map<String, ExecuteResult> erm = mojo.getExecuteResultMap();
-        if (erm.size() == 1) {
-            return erm.values().iterator().next();
+        ExecuteResult def = erm.get("default");
+        if (def != null) {
+            return def;
         } else {
             throw new LinkException("不支持的结果数据");
         }

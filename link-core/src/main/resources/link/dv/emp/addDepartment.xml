@@ -14,7 +14,7 @@
             <table>departments</table>
         </dbInsert>
     </execution>
-    <executionEnding/>
+    <executionEnding type="com.github.landyking.link.DefaultExecutionEnding"/>
     <output>
     </output>
     <resultRender/>
