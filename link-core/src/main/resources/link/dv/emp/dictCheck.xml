@@ -11,11 +11,11 @@
                 </ExistCheck>
             </processors>
         </param>
-        <param name="no">
+        <param name="no" desc="员工编号">
             <processors>
                 <ExistCheck>
                     <countQuery dataSource="emp">
-                        select count(0) from employees where emp_no=:no
+                        select count(0) from employees where emp_no=:this
                     </countQuery>
                 </ExistCheck>
             </processors>
@@ -26,7 +26,7 @@
     </execution>
     <executionEnding/>
     <output>
-        <param name="name"/>
+        <param name="no"/>
         <param name="type"/>
     </output>
     <resultRender/>

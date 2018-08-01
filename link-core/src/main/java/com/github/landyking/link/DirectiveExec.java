@@ -147,7 +147,7 @@ public class DirectiveExec implements ApplicationContextAware {
             throw new LinkException("executionEnding处理异常", e);
         }
     }
-
+    @SuppressWarnings("unchecked")
     private void processResultRender(DirectiveMojo mojo) throws LinkException {
         Element resultRender = mojo.getParser().getResultRender();
         String type = resultRender.getAttribute("type");
@@ -195,6 +195,11 @@ public class DirectiveExec implements ApplicationContextAware {
                 }
             }
             mojo.setProcessedInputParam(name, in);
+
+        }
+        for (Element param : inputParams) {
+            String name = param.getAttribute("name");
+            String desc = param.getAttribute("desc");
             List<Element> processorList = mojo.getParser().getParamProcessorList(param);
             for (Element process : processorList) {
                 AbstractParamProcessor pps = getParamProcessor(process);
