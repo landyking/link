@@ -174,7 +174,7 @@
                             <classifier>dev</classifier>
                             <excludes>
                                 <exclude>*.properties</exclude>
-                                <exclude>link/linkJdbc.xml</exclude>
+                                <exclude>link/link_jdbc.xml</exclude>
                                 <exclude>link/dict/**/*</exclude>
                                 <exclude>link/dv/**/*</exclude>
                             </excludes>
