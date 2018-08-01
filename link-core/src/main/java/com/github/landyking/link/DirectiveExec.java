@@ -35,6 +35,9 @@ public class DirectiveExec implements ApplicationContextAware {
             processExecutionEnding(mojo);
             logger.info("处理输出参数");
             processOutputParam(mojo);
+        } catch (NullPointerException e) {
+            logger.error("空指针", e);
+            mojo.setException(e);
         } catch (Exception e) {
             mojo.setException(e);
         }

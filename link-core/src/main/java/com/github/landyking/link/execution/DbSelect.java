@@ -16,6 +16,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 import org.w3c.dom.Element;
 
 import javax.annotation.Resource;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -221,7 +222,7 @@ public class DbSelect implements AbstractExecutionFactory {
         NamedParameterJdbcTemplate jdbc = dataSourceManager.getNamedParameterJdbcTemplate(dataSourceId);
         Map<String, Object> paramMap = mojo.getProcessedInputParamMap();
         int total;
-        List<Map<String, Object>> dataList = null;
+        List<Map<String, Object>> dataList = Collections.emptyList();
         boolean countQuery = Texts.hasText(countSql);
         if (countQuery) {
             total = jdbc.queryForObject(countSql, paramMap, Number.class).intValue();
