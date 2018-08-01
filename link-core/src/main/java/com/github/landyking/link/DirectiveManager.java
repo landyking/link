@@ -36,7 +36,7 @@ public class DirectiveManager implements ApplicationContextAware {
     }
 
     private DirectiveParser loadDirectiveXml(String code) throws LinkException {
-        logger.info("加载指令xml文件，编码为: {}", code);
+        logger.debug("加载指令xml文件，编码为: {}", code);
         String path = code.replaceAll("\\.", "/");
         String location = "classpath:/link/dv/" + path + ".xml";
         Resource resource = applicationContext.getResource(location);
