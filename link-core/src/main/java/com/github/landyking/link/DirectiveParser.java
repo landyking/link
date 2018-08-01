@@ -78,7 +78,7 @@ public class DirectiveParser {
 
     public DirectiveParser(Resource resource, DirectiveManager directiveManager) throws Exception {
         this.directiveManager = directiveManager;
-        logger.info("开始解析文件: {}", resource.getURL().toString());
+        logger.debug("开始解析文件: {}", resource.getURL().toString());
 //        DefaultDocumentLoader documentLoader = new DefaultDocumentLoader();
         DefaultHandler errorHandler = new DefaultHandler();
         EntityResolver entityResolver = new EntityResolver() {

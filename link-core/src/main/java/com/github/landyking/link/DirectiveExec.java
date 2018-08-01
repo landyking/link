@@ -25,15 +25,15 @@ public class DirectiveExec implements ApplicationContextAware {
     private ApplicationContext application;
 
     public void execute(DirectiveMojo mojo) throws LinkException {
-        logger.info("执行指令: {}", mojo.getDirectiveCode());
+        logger.debug("执行指令: {}", mojo.getDirectiveCode());
         try {
-            logger.info("处理输入参数");
+            logger.debug("处理输入参数");
             processInputParam(mojo);
-            logger.info("执行指令内容");
+            logger.debug("执行指令内容");
             processExecution(mojo);
-            logger.info("指令执行收尾");
+            logger.debug("指令执行收尾");
             processExecutionEnding(mojo);
-            logger.info("处理输出参数");
+            logger.debug("处理输出参数");
             processOutputParam(mojo);
         } catch (NullPointerException e) {
             logger.error("空指针", e);
@@ -41,7 +41,7 @@ public class DirectiveExec implements ApplicationContextAware {
         } catch (Exception e) {
             mojo.setException(e);
         }
-        logger.info("处理结果渲染");
+        logger.debug("处理结果渲染");
         processResultRender(mojo);
     }
 
