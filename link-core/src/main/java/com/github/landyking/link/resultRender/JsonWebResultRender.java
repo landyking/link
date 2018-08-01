@@ -46,7 +46,7 @@ public class JsonWebResultRender extends WebResultRender {
     protected void output(HttpServletResponse response, ObjectNode rst) throws IOException {
         response.setContentType(JsonUtils.DEFAULT_CONTENT_TYPE);
         response.setCharacterEncoding("UTF-8");
-        response.getOutputStream().print(JsonUtils.toStr(rst));
+        response.getWriter().print(JsonUtils.toStr(rst));
     }
 
     @Override
