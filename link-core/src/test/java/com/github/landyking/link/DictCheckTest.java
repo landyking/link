@@ -21,7 +21,7 @@ public class DictCheckTest {
     @Test
     public void test1() throws Exception {
         EmptyInputPot pot = new EmptyInputPot();
-        pot.put("type", "21");
+        pot.put("type", "212");
         pot.put("no", "10003");
         dm.callDirective("emp.dictCheck", pot);
 

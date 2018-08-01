@@ -158,6 +158,30 @@
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.6</version>
+                <executions>
+                    <execution>
+                        <id>interface</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <configuration>
+                            <!-- 添加classifier修饰以区别于war，保证上传成功 -->
+                            <classifier>dev</classifier>
+                            <excludes>
+                                <exclude>*.properties</exclude>
+                                <exclude>link/linkJdbc.xml</exclude>
+                                <exclude>link/dict/**/*</exclude>
+                                <exclude>link/dv/**/*</exclude>
+                            </excludes>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 </project>

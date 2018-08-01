@@ -2,11 +2,7 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-    <import resource="classpath:/link/linkJdbc.xml"/>
-    <import resource="classpath:/link/linkParamProcessor.xml"/>
-    <import resource="classpath:/link/linkExecution.xml"/>
-    <import resource="classpath:/link/linkExecutionEnding.xml"/>
-    <import resource="classpath:/link/linkResultRender.xml"/>
+    <import resource="classpath*:/link/link_*.xml"/>
     <bean id="directiveManager" class="com.github.landyking.link.DirectiveManager">
         <property name="exec" ref="directiveExec"/>
     </bean>

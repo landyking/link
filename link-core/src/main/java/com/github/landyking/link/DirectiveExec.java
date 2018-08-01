@@ -201,6 +201,8 @@ public class DirectiveExec implements ApplicationContextAware {
                 try {
                     Object val = pps.processInput(process, param, mojo, mojo.getProcessedInputParam(name));
                     mojo.setProcessedInputParam(name, val);
+                } catch (LinkException e) {
+                    throw e;
                 } catch (Exception e) {
                     throw new LinkException("处理入参[" + name + ":" + desc + "]异常", e);
                 }
