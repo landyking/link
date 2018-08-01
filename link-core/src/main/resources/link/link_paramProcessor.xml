@@ -10,15 +10,15 @@
     <bean class="com.github.landyking.link.paramProcessor.GUIDGenerator"/>
     <bean class="com.github.landyking.link.paramProcessor.TextToList"/>
     <bean class="com.github.landyking.link.paramProcessor.QueryTranslator">
-        <property name="cacheManager" ref="cacheManager"/>
-        <property name="dataSourceManager" ref="dataSourceManager"/>
+        <property name="cacheManager" ref="linkCacheManager"/>
+        <property name="dataSourceManager" ref="linkDataSourceManager"/>
     </bean>
     <bean class="com.github.landyking.link.paramProcessor.DictTranslator">
-        <property name="localDictManager" ref="localDictManager"/>
+        <property name="localDictManager" ref="linkLocalDictManager"/>
     </bean>
     <bean class="com.github.landyking.link.paramProcessor.ExistCheck">
-        <property name="dataSourceManager" ref="dataSourceManager"/>
-        <property name="localDictManager" ref="localDictManager"/>
+        <property name="dataSourceManager" ref="linkDataSourceManager"/>
+        <property name="localDictManager" ref="linkLocalDictManager"/>
     </bean>
     <bean class="com.github.landyking.link.paramProcessor.custom.TestCustom"/>
 </beans>

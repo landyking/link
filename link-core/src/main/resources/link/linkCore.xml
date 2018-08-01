@@ -3,13 +3,13 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
     <import resource="classpath*:/link/link_*.xml"/>
-    <bean id="directiveManager" class="com.github.landyking.link.DirectiveManager">
-        <property name="exec" ref="directiveExec"/>
+    <bean id="linkDirectiveManager" class="com.github.landyking.link.DirectiveManager">
+        <property name="exec" ref="linkDirectiveExec"/>
     </bean>
-    <bean id="localDictManager" class="com.github.landyking.link.LocalDictManager"/>
-    <bean id="directiveExec" class="com.github.landyking.link.DirectiveExec"/>
-    <bean id="dataSourceManager" class="com.github.landyking.link.DataSourceManager"/>
-    <bean id="cacheManager" class="org.springframework.cache.guava.GuavaCacheManager">
+    <bean id="linkLocalDictManager" class="com.github.landyking.link.LocalDictManager"/>
+    <bean id="linkDirectiveExec" class="com.github.landyking.link.DirectiveExec"/>
+    <bean id="linkDataSourceManager" class="com.github.landyking.link.DataSourceManager"/>
+    <bean id="linkCacheManager" class="org.springframework.cache.guava.GuavaCacheManager">
         <property name="cacheSpecification" value="maximumSize=1000,expireAfterWrite=60s"/>
     </bean>
 </beans>
