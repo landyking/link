@@ -13,17 +13,22 @@ import java.util.Map;
 /**
  * Created by landy on 2018/7/13.
  */
-public class GUIDGenerator extends AbstractParamProcessor {
+public class GUIDGenerator extends OutputOneByOneProcessor {
     public static final String SNOWFLAKE = "snowflake";
     public static final String UUID = "uuid";
 
     @Override
-    public void processOutput(Element config, Element param, DirectiveMojo mojo, String name, List<Map<String, ValueBag>> outList) {
-
+    protected void processOutputOne(DirectiveMojo mojo, Element param, Element config, Map<String, ValueBag> one, String name, ValueBag item) {
+        Object val = genValue(config, mojo);
+        item.setModifyValue(val);
     }
 
     @Override
     public Object processInput(Element config, Element param, DirectiveMojo mojo, Object in) throws Exception {
+        return genValue(config, mojo);
+    }
+
+    private Object genValue(Element config, DirectiveMojo mojo) {
         String type = mojo.getParser().getParam(config, "type");
         if (type.equalsIgnoreCase(SNOWFLAKE)) {
             return GUIDUtil.nextId();

@@ -25,6 +25,18 @@
     <output>
         <param name="no"/>
         <param name="gender"/>
+        <param name="genTime">
+            <processors>
+                <DateTimeGenerator type="long"/>
+                <DateTimeConverter srcType="auto" destType="long"/>
+            </processors>
+        </param>
+        <param name="genTime2">
+            <processors>
+                <DateTimeGenerator type="date"/>
+                <DateTimeConverter srcType="auto" destType="string" destFmt="yyyy年MM月dd日 HH时mm分ss秒"/>
+            </processors>
+        </param>
     </output>
     <resultRender/>
     <dependencys></dependencys>

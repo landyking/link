@@ -19,8 +19,9 @@ public class CustomParamProcessor extends AbstractParamProcessor implements Appl
     private ApplicationContext application;
 
     @Override
-    public void processOutput(Element config, Element param, DirectiveMojo mojo, String name, List<Map<String, ValueBag>> outList) {
-
+    public void processOutput(Element config, Element param, DirectiveMojo mojo, String name, List<Map<String, ValueBag>> outList) throws Exception {
+        AbstractParamProcessor pps = getAbstractParamProcessor(config);
+        pps.processOutput(config, param, mojo, name, outList);
     }
 
     @Override
@@ -29,11 +30,17 @@ public class CustomParamProcessor extends AbstractParamProcessor implements Appl
     }
 
     @Override
+
     public Object processInput(Element config, Element param, DirectiveMojo mojo, Object in) throws Exception {
+        AbstractParamProcessor pps = getAbstractParamProcessor(config);
+        return pps.processInput(config, param, mojo, in);
+    }
+
+    private AbstractParamProcessor getAbstractParamProcessor(Element config) throws ClassNotFoundException {
         String className = config.getAttribute("className");
         Assert.hasText(className, "自定义参数处理器类不能为空");
-        Object pps = application.getBean(Class.forName(className));
-        return ((AbstractParamProcessor) pps).processInput(config, param, mojo, in);
+        Class<AbstractParamProcessor> requiredType = (Class<AbstractParamProcessor>) Class.forName(className);
+        return application.getBean(requiredType);
     }
 
     @Override

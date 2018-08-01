@@ -17,14 +17,20 @@ import java.util.Map;
 /**
  * Created by landy on 2018/7/13.
  */
-public class DateTimeConverter extends AbstractParamProcessor {
-    @Override
-    public void processOutput(Element config, Element param, DirectiveMojo mojo, String name, List<Map<String, ValueBag>> outList) {
+public class DateTimeConverter extends OutputOneByOneProcessor {
 
+    @Override
+    protected void processOutputOne(DirectiveMojo mojo, Element param, Element config, Map<String, ValueBag> one, String name, ValueBag item) throws LinkException {
+        Object val = genValue(config, mojo, item.getFinalValue());
+        item.setModifyValue(val);
     }
 
     @Override
     public Object processInput(Element config, Element param, DirectiveMojo mojo, Object obj) throws Exception {
+        return genValue(config, mojo, obj);
+    }
+
+    private Object genValue(Element config, DirectiveMojo mojo, Object obj) throws LinkException {
         if (obj == null) {
             return null;
         }

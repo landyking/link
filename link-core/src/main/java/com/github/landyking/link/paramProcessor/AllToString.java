@@ -12,10 +12,11 @@ import java.util.Map;
 /**
  * Created by landy on 2018/7/11.
  */
-public class AllToString extends AbstractParamProcessor {
-    @Override
-    public void processOutput(Element config, Element param, DirectiveMojo mojo, String name, List<Map<String, ValueBag>> outList) {
+public class AllToString extends OutputOneByOneProcessor {
 
+    @Override
+    protected void processOutputOne(DirectiveMojo mojo, Element param, Element config, Map<String, ValueBag> one, String name, ValueBag item) {
+        item.setModifyValue(Texts.toStr(item.getFinalValue()));
     }
 
     @Override
