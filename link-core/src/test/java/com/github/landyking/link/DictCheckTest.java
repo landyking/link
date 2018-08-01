@@ -26,4 +26,19 @@ public class DictCheckTest {
         dm.callDirective("emp.dictCheck", pot);
 
     }
+    @Test
+    public void test2() throws Exception {
+        EmptyInputPot pot = new EmptyInputPot();
+        pot.put("type", "21");
+        pot.put("no", "1000311");
+        dm.callDirective("emp.dictCheck2", pot);
+
+    }
+    @Test
+    public void test22() throws Exception {
+        EmptyInputPot pot = new EmptyInputPot();
+        pot.put("gender", "21");
+        pot.put("no", "1000311");
+        dm.callDirective("emp.dictCheck2", pot);
+    }
 }

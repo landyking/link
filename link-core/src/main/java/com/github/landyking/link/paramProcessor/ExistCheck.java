@@ -1,6 +1,7 @@
 package com.github.landyking.link.paramProcessor;
 
 import com.github.landyking.link.*;
+import com.github.landyking.link.beetl.BeetlTool;
 import com.github.landyking.link.exception.LinkException;
 import com.github.landyking.link.util.Texts;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -60,7 +61,8 @@ public class ExistCheck extends AbstractParamProcessor {
                 paramMap.put("this", in);
             }
             NamedParameterJdbcTemplate jdbc = dataSourceManager.getNamedParameterJdbcTemplate(dataSource);
-            int count = jdbc.queryForObject(textContent, paramMap, Number.class).intValue();
+            String sql = BeetlTool.renderBeetl(mojo, textContent);
+            int count = jdbc.queryForObject(sql, paramMap, Number.class).intValue();
             if (count <= 0) {
                 throw new LinkException("处理入参[" + paramDesc + "]异常，查询不到指定信息");
             }

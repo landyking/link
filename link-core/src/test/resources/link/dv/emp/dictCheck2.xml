@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<directive xmlns="http://www.github.com/landyking/link"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.github.com/landyking/link http://www.github.com/landyking/link/link-1.0.xsd">
+    <description>dict check test</description>
+    <input>
+        <param name="no" desc="员工编号">
+            <processors>
+                <DuplicateCheck>
+                    <countQuery dataSource="emp">
+                        <![CDATA[
+                        select count(0) from employees where emp_no=:this
+                        <#param attr='gender'>and gender != :gender</#param>
+                        ]]>
+                    </countQuery>
+                </DuplicateCheck>
+            </processors>
+        </param>
+        <param name="gender" notEmpty="false"/>
+    </input>
+    <execution>
+        <custom id="default" className="com.github.landyking.link.execution.custom.InputGotoOutput"/>
+    </execution>
+    <executionEnding/>
+    <output>
+        <param name="no"/>
+        <param name="gender"/>
+    </output>
+    <resultRender/>
+    <dependencys></dependencys>
+</directive>

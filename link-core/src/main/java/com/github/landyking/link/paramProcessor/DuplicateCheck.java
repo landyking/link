@@ -4,6 +4,7 @@ import com.github.landyking.link.AbstractParamProcessor;
 import com.github.landyking.link.DataSourceManager;
 import com.github.landyking.link.DirectiveMojo;
 import com.github.landyking.link.ValueBag;
+import com.github.landyking.link.beetl.BeetlTool;
 import com.github.landyking.link.exception.LinkException;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.util.Assert;
@@ -41,7 +42,8 @@ public class DuplicateCheck extends AbstractParamProcessor {
             paramMap.put("this", in);
         }
         NamedParameterJdbcTemplate jdbc = dataSourceManager.getNamedParameterJdbcTemplate(dataSource);
-        int count = jdbc.queryForObject(textContent, paramMap, Number.class).intValue();
+        String sql = BeetlTool.renderBeetl(mojo, textContent);
+        int count = jdbc.queryForObject(sql, paramMap, Number.class).intValue();
         if (count > 0) {
             throw new LinkException("处理入参[" + paramDesc + "]异常，指定信息已存在" + count + "条");
         }
