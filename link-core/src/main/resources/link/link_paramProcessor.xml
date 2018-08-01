@@ -20,5 +20,8 @@
         <property name="dataSourceManager" ref="linkDataSourceManager"/>
         <property name="localDictManager" ref="linkLocalDictManager"/>
     </bean>
+    <bean class="com.github.landyking.link.paramProcessor.DuplicateCheck">
+        <property name="dataSourceManager" ref="linkDataSourceManager"/>
+    </bean>
     <bean class="com.github.landyking.link.paramProcessor.custom.TestCustom"/>
 </beans>

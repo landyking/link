@@ -22,7 +22,7 @@ public class DictCheckTest {
     public void test1() throws Exception {
         EmptyInputPot pot = new EmptyInputPot();
         pot.put("type", "21");
-        pot.put("no", "100031");
+        pot.put("no", "1000311");
         dm.callDirective("emp.dictCheck", pot);
 
     }

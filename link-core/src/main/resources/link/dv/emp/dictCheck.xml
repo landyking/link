@@ -13,11 +13,11 @@
         </param>
         <param name="no" desc="员工编号">
             <processors>
-                <ExistCheck>
+                <DuplicateCheck>
                     <countQuery dataSource="emp">
-                        select count(0) from employees where emp_no=:this
+                        select count(0) from employees where emp_no=:this and gender != :type
                     </countQuery>
-                </ExistCheck>
+                </DuplicateCheck>
             </processors>
         </param>
     </input>
