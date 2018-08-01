@@ -9,6 +9,7 @@ public class ValueBag {
     private Object originValue;
     private Object modifyValue;
     private final boolean internal;
+    private volatile boolean modify = false;
 
     public ValueBag(boolean internal) {
         this.internal = internal;
@@ -33,7 +34,12 @@ public class ValueBag {
 
     public ValueBag setModifyValue(Object modifyValue) {
         this.modifyValue = modifyValue;
+        this.modify = true;
         return this;
+    }
+
+    public boolean isModify() {
+        return modify;
     }
 
     public Object getFinalValue() {
