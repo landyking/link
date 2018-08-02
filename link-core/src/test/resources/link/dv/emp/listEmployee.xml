@@ -55,7 +55,8 @@
         </param>
         <param name="test" default="2" desc="test">
             <processors>
-                <DateTimeGenerator type="string" format="yyyy-MM-dd HH:mm:ss"/>
+                <DateTimeGenerator/>
+                <DateTimeConverter srcType="auto" destType="string" destFmt="yyyy年MM月dd日"/>
             </processors>
         </param>
     </output>
