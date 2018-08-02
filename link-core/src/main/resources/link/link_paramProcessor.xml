@@ -5,7 +5,9 @@
     <bean class="com.github.landyking.link.paramProcessor.AgeCalc"/>
     <bean class="com.github.landyking.link.paramProcessor.AllToString"/>
     <bean class="com.github.landyking.link.paramProcessor.CustomParamProcessor"/>
-    <bean class="com.github.landyking.link.paramProcessor.DateTimeConverter"/>
+    <bean class="com.github.landyking.link.paramProcessor.DateTimeConverter">
+        <property name="conversionService" ref="linkConversionService"/>
+    </bean>
     <bean class="com.github.landyking.link.paramProcessor.DateTimeGenerator"/>
     <bean class="com.github.landyking.link.paramProcessor.GUIDGenerator"/>
     <bean class="com.github.landyking.link.paramProcessor.TextToList"/>

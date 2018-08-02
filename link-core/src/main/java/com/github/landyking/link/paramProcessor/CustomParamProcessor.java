@@ -35,7 +35,7 @@ public class CustomParamProcessor extends AbstractParamProcessor implements Appl
         AbstractParamProcessor pps = getAbstractParamProcessor(config);
         return pps.processInput(config, param, mojo, in);
     }
-
+    @SuppressWarnings("unchecked")
     private AbstractParamProcessor getAbstractParamProcessor(Element config) throws ClassNotFoundException {
         String className = config.getAttribute("className");
         Assert.hasText(className, "自定义参数处理器类不能为空");

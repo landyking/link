@@ -48,6 +48,11 @@
     <output>
         <param name="hello" from="last_name" desc="姓"/>
         <param name="first_name" desc="名"/>
+        <param name="birthDate">
+            <processors>
+                <DateTimeConverter srcType="auto" destType="string" destFmt="yyyy年MM月dd日"/>
+            </processors>
+        </param>
         <param name="test" default="2" desc="test">
             <processors>
                 <DateTimeGenerator type="string" format="yyyy-MM-dd HH:mm:ss"/>

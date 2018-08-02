@@ -132,7 +132,7 @@ public class DirectiveExec implements ApplicationContextAware {
         finalData.clear();
         mojo.setAfterOutput(tmpDataList);
     }
-
+    @SuppressWarnings("unchecked")
     private void processExecutionEnding(DirectiveMojo mojo) throws LinkException {
         Element executionEnding = mojo.getParser().getExecutionEnding();
         String type = executionEnding.getAttribute("type");

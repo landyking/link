@@ -12,4 +12,11 @@
     <bean id="linkCacheManager" class="org.springframework.cache.guava.GuavaCacheManager">
         <property name="cacheSpecification" value="maximumSize=1000,expireAfterWrite=60s"/>
     </bean>
+    <bean id="linkConversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
+        <property name="converters">
+            <set>
+                <bean class="com.github.landyking.link.converter.DatePackConverter"/>
+            </set>
+        </property>
+    </bean>
 </beans>
