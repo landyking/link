@@ -80,10 +80,11 @@ public class DirectiveExec implements ApplicationContextAware {
                 List<Element> list = mojo.getParser().nodeList2ElementList(opnode.getChildNodes());
                 for (Element e : list) {
                     Object subVal = processOutputSubNode(mojo, e, exp, ctx);
+                    String name = e.getAttribute("name");
                     if (subVal instanceof Collection) {
-                        childs.put(e.getAttribute("name"), (Collection<Object>) subVal);
+                        childs.put(name, (Collection<Object>) subVal);
                     } else {
-                        String path = mojo.getParser().getFullPath(e);
+                        String path = mojo.getParser().getFullPath(e, true);
                         throw new LinkException(path + "的表达式求值结果不是列表");
                     }
                 }
@@ -107,7 +108,7 @@ public class DirectiveExec implements ApplicationContextAware {
         } else if (opnode.getNodeName().equals("param")) {
             return processNodeParam(mojo, opnode, exp, ctx);
         } else {
-            throw new LinkException("不支持的结点" + mojo.getParser().getFullPath(opnode));
+            throw new LinkException("不支持的结点" + mojo.getParser().getFullPath(opnode, true));
         }
     }
 
@@ -115,8 +116,10 @@ public class DirectiveExec implements ApplicationContextAware {
         String name = param.getAttribute("name");
         String desc = param.getAttribute("desc");
         String from = param.getAttribute("from");
-        if (!Texts.hasText(from)) {
-            from = name;
+        if (Texts.hasText(from)) {
+            if (from.equals("#")) {
+                from = "[exec][default].data.![#this[" + name + "]]";
+            }
         }
         String fixed = null;
         boolean isFixed = param.hasAttribute("fixed");
@@ -130,11 +133,13 @@ public class DirectiveExec implements ApplicationContextAware {
         }
         List<Map<String, ValueBag>> valueBagList = Lists.newArrayList();
         Object value = null;
-        try {
-            value = exp.parseExpression(from).getValue(ctx);
-        } catch (Exception e) {
-            String fullPath = mojo.getParser().getFullPath(param);
-            throw new LinkException("节点" + fullPath + "的from表达式" + from + "处理异常", e);
+        if (Texts.hasText(from)) {
+            try {
+                value = exp.parseExpression(from).getValue(ctx);
+            } catch (Exception e) {
+                String fullPath = mojo.getParser().getFullPath(param, true);
+                throw new LinkException("节点" + fullPath + "的from表达式" + from + "处理异常", e);
+            }
         }
         boolean single;
         if (value instanceof Collection) {
@@ -219,7 +224,7 @@ public class DirectiveExec implements ApplicationContextAware {
             }
         }
         if (!pass) {
-            String fullPath = mojo.getParser().getFullPath(opnode);
+            String fullPath = mojo.getParser().getFullPath(opnode,true);
             throw new LinkException(fullPath + "下属结点值列表长度不一致:" + keySize.toString());
         }
         return tmp;

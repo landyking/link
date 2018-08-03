@@ -287,8 +287,11 @@ public class DirectiveParser {
         return rst;
     }
 
-    public String getFullPath(Node e) {
+    public String getFullPath(Node e, boolean withName) {
         StringBuilder sb = new StringBuilder();
+        if (withName) {
+            sb.append("[name=" + ((Element) e).getAttribute("name") + "]");
+        }
         while (e != null && e != document) {
             sb.insert(0, "/" + e.getNodeName());
             e = e.getParentNode();

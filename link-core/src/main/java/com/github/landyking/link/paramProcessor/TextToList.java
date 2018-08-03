@@ -1,8 +1,8 @@
 package com.github.landyking.link.paramProcessor;
 
-import com.github.landyking.link.AbstractParamProcessor;
 import com.github.landyking.link.DirectiveMojo;
 import com.github.landyking.link.ValueBag;
+import com.github.landyking.link.exception.LinkException;
 import com.github.landyking.link.util.Texts;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
@@ -17,14 +17,20 @@ import java.util.Map;
 /**
  * Created by landy on 2018/7/13.
  */
-public class TextToList extends AbstractParamProcessor {
-    @Override
-    public void processOutput(Element config, Element param, DirectiveMojo mojo, String name, List<Map<String, ValueBag>> outList) {
+public class TextToList extends OutputOneByOneProcessor {
 
+    @Override
+    protected void processOutputOne(DirectiveMojo mojo, Element param, Element config, Map<String, ValueBag> one, String name, ValueBag item) throws LinkException {
+        Object o = doWork(config, mojo, item.getFinalValue());
+        item.setModifyValue(o);
     }
 
     @Override
     public Object processInput(Element config, Element param, DirectiveMojo mojo, Object in) throws Exception {
+        return doWork(config, mojo, in);
+    }
+
+    private Object doWork(Element config, DirectiveMojo mojo, Object in) {
         if (in == null || !Texts.hasText(in)) {
             return in;
         }

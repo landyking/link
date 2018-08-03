@@ -7,6 +7,11 @@
         <param name="name" default="刘二"/>
         <param name="age" default="22"/>
         <param name="address" default="东大街18号"/>
+        <param name="hello" default="world">
+            <processors>
+                <TextToList/>
+            </processors>
+        </param>
     </input>
     <execution>
         <custom id="default" className="com.github.landyking.link.execution.custom.InputGotoOutput"/>
@@ -14,8 +19,11 @@
     <executionEnding/>
     <output>
         <list name="root">
-            <map name="one">
-            </map>
+            <param name="name" from="#"/>
+            <param name="age" from="#"/>
+            <param name="address" from="[exec][default].data.![#this[address]]"/>
+            <param name="hello" from="#"/>
+            <param name="hello2" from="[exec][default].data.![#this[hello]][0]"/>
         </list>
     </output>
     <resultRender/>
