@@ -42,23 +42,25 @@
     </execution>
     <executionEnding/>
     <output>
-        <param name="hello" from="last_name" desc="姓"/>
-        <param name="firstName" from="first_name" desc="名"/>
-        <param name="test" default="2" desc="test">
-            <processors>
-                <DateTimeGenerator/>
-                <DateTimeConverter srcType="auto" destType="string" destFmt="yyyy-MM-dd HH:mm:ss"/>
-            </processors>
-        </param>
-        <param name="deptNo"/>
-        <param name="deptName" from="deptNo">
-            <processors>
-                <QueryTranslator queryDataSource="emp" table="departments"
-                                 destField="dept_no" displayField="dept_name">
-                    <where>1=1</where>
-                </QueryTranslator>
-            </processors>
-        </param>
+        <list name="root">
+            <param name="lastName" from="[exec][default].data.![#this[last_name]]" desc="姓"/>
+            <param name="firstName" from="[exec][default].data.![#this[first_name]]" desc="名"/>
+            <param name="test" from="new java.util.ArrayList([exec][default].data)" default="2" desc="test">
+                <processors>
+                    <DateTimeGenerator/>
+                    <DateTimeConverter srcType="auto" destType="string" destFmt="yyyy-MM-dd HH:mm:ss"/>
+                </processors>
+            </param>
+            <!--<param name="deptNo" from="#"/>-->
+            <param name="deptName" from="[exec][default].data.![#this[deptNo]]">
+                <processors>
+                    <QueryTranslator queryDataSource="emp" table="departments"
+                                     destField="dept_no" displayField="dept_name">
+                        <where>1=1</where>
+                    </QueryTranslator>
+                </processors>
+            </param>
+        </list>
     </output>
     <resultRender/>
     <dependencys></dependencys>

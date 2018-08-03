@@ -31,11 +31,6 @@ public class DefaultResultRender implements ResultRender {
             Object afterOutput = mojo.getAfterOutput();
             if (afterOutput == null) {
                 logger.info("输出处理后数据为null");
-            } else if (afterOutput instanceof Iterable) {
-                logger.info("输出处理后数据列表如下");
-                for (Object o : ((Iterable) afterOutput)) {
-                    logger.info("\t{}", Texts.toStr(o));
-                }
             } else {
                 logger.info("输出处理后数据为: {}", Texts.toStr(afterOutput));
             }

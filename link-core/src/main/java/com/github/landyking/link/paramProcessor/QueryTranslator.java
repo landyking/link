@@ -46,9 +46,9 @@ public class QueryTranslator extends AbstractParamProcessor {
     public void processOutput(Element config, Element param, DirectiveMojo ctx, String name, List<Map<String, ValueBag>> outList) throws Exception {
         String tableName = getTableName(ctx, config);
         String srcFieldName = getSrcFieldName(ctx, config);
-        if (!Texts.hasText(srcFieldName)) {
-            srcFieldName = Texts.firstHasText(param.getAttribute("from"), name);
-        }
+//        if (!Texts.hasText(srcFieldName)) {
+        srcFieldName = name;//fixme 目前srcFieldName是无效的，会被强制覆盖
+//        }
         String destFieldName = getDestFieldName(ctx, config);
         String whereCondition = getWhereCondition(ctx, config);
         String displayFieldName = getDisplayFieldName(ctx, config);
