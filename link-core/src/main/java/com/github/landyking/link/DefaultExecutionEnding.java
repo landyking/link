@@ -9,13 +9,8 @@ import java.util.Map;
  */
 public class DefaultExecutionEnding implements ExecutionEnding {
     @Override
-    public ExecutionEndingData process(DirectiveMojo mojo) throws LinkException {
+    public Map<String, ExecuteResult> process(DirectiveMojo mojo) throws LinkException {
         Map<String, ExecuteResult> erm = mojo.getExecuteResultMap();
-        ExecuteResult def = erm.get("default");
-        if (def != null) {
-            return def;
-        } else {
-            throw new LinkException("不支持的结果数据");
-        }
+        return erm;
     }
 }

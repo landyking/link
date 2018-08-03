@@ -6,9 +6,7 @@ import java.util.Map;
 /**
  * Created by landy on 2018/4/23.
  */
-public class ExecuteResult implements ExecutionEndingData {
-
-
+public class ExecuteResult {
     /**
      * 操作影响行数
      */
@@ -20,7 +18,7 @@ public class ExecuteResult implements ExecutionEndingData {
     /**
      * 查询操作返回的数据
      */
-    private List<Map<String,Object>> data;
+    private List<Map<String, Object>> data;
     /**
      * 查询操作查到的数据总数
      */
@@ -46,7 +44,7 @@ public class ExecuteResult implements ExecutionEndingData {
         return data;
     }
 
-    public void setData(List<Map<String,Object>> data) {
+    public void setData(List<Map<String, Object>> data) {
         this.data = data;
     }
 
@@ -66,11 +64,6 @@ public class ExecuteResult implements ExecutionEndingData {
                 ", data=" + data +
                 ", totalCount=" + totalCount +
                 '}';
-    }
-
-    @Override
-    public List<Map<String,Object>> forOutput() {
-        return data;
     }
 
 }

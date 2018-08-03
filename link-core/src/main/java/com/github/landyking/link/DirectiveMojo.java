@@ -2,6 +2,7 @@ package com.github.landyking.link;
 
 import com.google.common.collect.Maps;
 import org.springframework.util.Assert;
+import org.w3c.dom.Element;
 
 import java.util.List;
 import java.util.Map;
@@ -20,7 +21,7 @@ public class DirectiveMojo {
     /**
      * execution执行结束，然后对执行参数的数据进行处理后得到的数据
      */
-    private transient ExecutionEndingData endingData;
+    private transient Map<String, ExecuteResult> endingData;
     /**
      * 指令执行过程中参数的异常，不包括渲染
      */
@@ -28,7 +29,7 @@ public class DirectiveMojo {
     /**
      * 经过output节点处理之后的数据
      */
-    private List<Map<String, ValueBag>> afterOutput;
+    private Object afterOutput;
 
     public DirectiveMojo(String code, InputPot pot, DirectiveParser parser) {
         this.code = code;
@@ -70,11 +71,11 @@ public class DirectiveMojo {
         return executeResultMap;
     }
 
-    public void setEndingData(ExecutionEndingData endingData) {
+    public void setEndingData(Map<String, ExecuteResult> endingData) {
         this.endingData = endingData;
     }
 
-    public ExecutionEndingData getEndingData() {
+    public Map<String, ExecuteResult> getEndingData() {
         return endingData;
     }
 
@@ -86,11 +87,13 @@ public class DirectiveMojo {
         return exception;
     }
 
-    public List<Map<String, ValueBag>> getAfterOutput() {
+    public Object getAfterOutput() {
         return afterOutput;
     }
 
-    public void setAfterOutput(List<Map<String, ValueBag>> afterOutput) {
+    public void setAfterOutput(Object afterOutput) {
         this.afterOutput = afterOutput;
     }
+
+
 }

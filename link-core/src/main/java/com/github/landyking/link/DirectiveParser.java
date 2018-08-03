@@ -3,12 +3,8 @@ package com.github.landyking.link;
 import com.github.landyking.link.exception.LinkException;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.io.Resource;
 import org.springframework.util.LinkedCaseInsensitiveMap;
 import org.w3c.dom.Document;
@@ -35,6 +31,7 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import java.io.IOException;
+import java.util.Deque;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -75,6 +72,7 @@ public class DirectiveParser {
 
     private String directiveCode;
     private final Document document;
+    private final List<Element> outputParamList;
 
     public DirectiveParser(Resource resource, DirectiveManager directiveManager) throws Exception {
         this.directiveManager = directiveManager;
@@ -99,6 +97,23 @@ public class DirectiveParser {
         Schema schema = schemaFactory.newSchema(getClass().getResource(XSD_LOCATION));
         Validator validator = schema.newValidator();
         validator.validate(new DOMSource(document));
+        outputParamList = initOutputParam();
+    }
+
+    private List<Element> initOutputParam() throws LinkException {
+        List<Element> rst = Lists.newLinkedList();
+        Element ele = getSubElement(document, "/lk:directive/lk:output");
+        Deque<Element> stack = Lists.newLinkedList();
+        stack.push(ele);
+        while (!stack.isEmpty()) {
+            Element poll = stack.poll();
+            rst.add(poll);
+            List<Element> tmpList = reverseOutputChildList(poll);
+            for (Element e : tmpList) {
+                stack.push(e);
+            }
+        }
+        return rst;
     }
 
     /**
@@ -155,11 +170,12 @@ public class DirectiveParser {
     public List<Element> getInputParamList() throws LinkException {
         return getSubElementList(document, "/lk:directive/lk:input/lk:param");
     }
+
     public List<Element> getOutputParamList() throws LinkException {
         return getSubElementList(document, "/lk:directive/lk:output/lk:param");
     }
 
-    private List<Element> nodeList2ElementList(NodeList params) {
+    public List<Element> nodeList2ElementList(NodeList params) {
         List<Element> rst = Lists.newLinkedList();
         for (int j = 0; j < params.getLength(); j++) {
             Node p = params.item(j);
@@ -247,5 +263,36 @@ public class DirectiveParser {
 
     public Element getResultRender() throws LinkException {
         return getSubElement(document, "/lk:directive/lk:resultRender");
+    }
+
+    public Iterable<Element> getOutputIterator() throws LinkException {
+        return outputParamList;
+    }
+
+    public Element getOutputNode() throws LinkException {
+        return getSubElement(document, "/lk:directive/lk:output");
+    }
+
+
+    public List<Element> reverseOutputChildList(Element ele) {
+        List<Element> rst = Lists.newLinkedList();
+        NodeList nodes = ele.getChildNodes();
+        for (int i = nodes.getLength(); i > 0; i--) {
+            Node item = nodes.item(i - 1);
+            String nodeName = item.getNodeName();
+            if (nodeName.equals("list") || nodeName.equals("map") || nodeName.equals("param")) {
+                rst.add((Element) item);
+            }
+        }
+        return rst;
+    }
+
+    public String getFullPath(Node e) {
+        StringBuilder sb = new StringBuilder();
+        while (e != null && e != document) {
+            sb.insert(0, "/" + e.getNodeName());
+            e = e.getParentNode();
+        }
+        return sb.toString();
     }
 }

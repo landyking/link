@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<directive xmlns="http://www.github.com/landyking/link"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.github.com/landyking/link http://www.github.com/landyking/link/link-1.0.xsd">
+    <description>QueryTranslatorTest</description>
+    <input>
+        <param name="name" default="刘二"/>
+        <param name="age" default="22"/>
+        <param name="address" default="东大街18号"/>
+    </input>
+    <execution>
+        <custom id="default" className="com.github.landyking.link.execution.custom.InputGotoOutput"/>
+    </execution>
+    <executionEnding/>
+    <output>
+        <list name="root">
+            <map name="one">
+            </map>
+        </list>
+    </output>
+    <resultRender/>
+    <dependencys></dependencys>
+</directive>

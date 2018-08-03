@@ -46,19 +46,21 @@
     </execution>
     <executionEnding/>
     <output>
-        <param name="hello" from="last_name" desc="姓"/>
-        <param name="first_name" desc="名"/>
-        <param name="birthDate">
-            <processors>
-                <DateTimeConverter srcType="auto" destType="string" destFmt="yyyy年MM月dd日"/>
-            </processors>
-        </param>
-        <param name="test" default="2" desc="test">
-            <processors>
-                <DateTimeGenerator/>
-                <DateTimeConverter srcType="auto" destType="string" destFmt="yyyy年MM月dd日"/>
-            </processors>
-        </param>
+        <map name="root">
+            <param name="hello" from="[exec][default].data.![#this[last_name]]" desc="姓"/>
+            <param name="first_name" desc="名" from="[exec][default].data.![#this[first_name]]"/>
+            <param name="birthDate"  from="[exec][default].data.![#this[birthDate]]">
+                <processors>
+                    <DateTimeConverter srcType="auto" destType="string" destFmt="yyyy年MM月dd日"/>
+                </processors>
+            </param>
+            <param name="test" default="2" desc="test">
+                <processors>
+                    <DateTimeGenerator/>
+                    <DateTimeConverter srcType="auto" destType="string" destFmt="yyyy年MM月dd日"/>
+                </processors>
+            </param>
+        </map>
     </output>
     <resultRender/>
     <dependencys></dependencys>

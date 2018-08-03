@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
+import java.util.Map;
 
 /**
  * Created by landy on 2018/7/19.
@@ -20,12 +21,12 @@ public class DefaultResultRender implements ResultRender {
         if (mojo.getException() != null) {
             logger.error("指令" + mojo.getDirectiveCode() + "执行异常", mojo.getException());
         } else {
-            Object extra = mojo.getEndingData();
-            if (extra instanceof ExecuteResult) {
-                ExecuteResult rst = (ExecuteResult) extra;
-                logger.info("影响行数: {}", rst.getEffectCount());
-                logger.info("查询总数量: {}", rst.getTotalCount());
-                logger.info("主键值: {}", rst.getPrimaryKeyValue());
+            Map<String, ExecuteResult> endingData = mojo.getEndingData();
+            for (String one : endingData.keySet()) {
+                ExecuteResult rst = endingData.get(one);
+                logger.info("{} 影响行数: {}", one, rst.getEffectCount());
+                logger.info("{} 查询总数量: {}", one, rst.getTotalCount());
+                logger.info("{} 主键值: {}", one, rst.getPrimaryKeyValue());
             }
             Object afterOutput = mojo.getAfterOutput();
             if (afterOutput == null) {

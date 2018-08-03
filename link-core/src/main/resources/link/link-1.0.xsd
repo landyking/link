@@ -52,9 +52,10 @@
                         <xs:documentation><![CDATA[]]></xs:documentation>
                     </xs:annotation>
                     <xs:complexType>
-                        <xs:sequence>
-                            <xs:element name="param" type="lk:outputParamType" minOccurs="0" maxOccurs="unbounded"/>
-                        </xs:sequence>
+                        <xs:choice>
+                            <xs:element name="map" type="lk:outputCollectionType"/>
+                            <xs:element name="list" type="lk:outputCollectionType"/>
+                        </xs:choice>
                         <xs:attribute name="custom" type="xs:boolean" default="false"/>
                         <xs:attribute name="dataType" default="list">
                             <xs:simpleType>
@@ -671,5 +672,17 @@
             <xs:extension base="lk:abstractExecutionType">
             </xs:extension>
         </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="outputCollectionType">
+        <xs:sequence>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="param" type="lk:outputParamType"/>
+                <xs:element name="map" type="lk:outputCollectionType"/>
+                <xs:element name="list" type="lk:outputCollectionType"/>
+            </xs:choice>
+        </xs:sequence>
+        <xs:attribute name="name" type="lk:needTextType" use="required"/>
+        <xs:attribute name="from" type="lk:needTextType"/>
+        <xs:attribute name="desc" type="lk:needTextType"/>
     </xs:complexType>
 </xs:schema>
