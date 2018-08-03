@@ -39,6 +39,7 @@ public class DirectiveDbSelectTest {
     public void listQtTest() throws Exception {
         EmptyInputPot pot = new EmptyInputPot();
         pot.put("deptName", "d004");
+        pot.put("deptName", "d003");
         dm.callDirective("emp.qtTest1", pot);
     }
 }

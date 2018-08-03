@@ -19,12 +19,14 @@
     </execution>
     <executionEnding/>
     <output>
-        <param name="deptName"/>
-        <param name="ld">
-            <processors>
-                <DictTranslator dict="hello"/>
-            </processors>
-        </param>
+        <map name="root">
+            <param name="deptName" from="[exec][default].data.![#this[deptName]][0]"/>
+            <param name="ld" from="[exec][default].data.![#this[deptName]][0]">
+                <processors>
+                    <DictTranslator dict="hello"/>
+                </processors>
+            </param>
+        </map>
     </output>
     <resultRender/>
     <dependencys></dependencys>

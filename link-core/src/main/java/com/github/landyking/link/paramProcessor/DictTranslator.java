@@ -28,9 +28,9 @@ public class DictTranslator extends AbstractParamProcessor {
     public void processOutput(Element config, Element param, DirectiveMojo ctx, String name, List<Map<String, ValueBag>> outList) throws Exception {
         String dictName = getDictName(ctx, config);
         String srcFieldName = getSrcFieldName(ctx, config);
-        if (!Texts.hasText(srcFieldName)) {
-            srcFieldName = Texts.firstHasText(param.getAttribute("from"), name);
-        }
+//        if (!Texts.hasText(srcFieldName)) {
+        srcFieldName = name;//fixme 同QueryTranslator
+//        }
         String whereCondition = getWhereCondition(ctx, config);
         Boolean failUseOriginal = getFailUseOriginal(ctx, config);
 
