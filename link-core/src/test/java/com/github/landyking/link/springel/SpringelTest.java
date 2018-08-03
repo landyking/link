@@ -32,4 +32,14 @@ public class SpringelTest {
         Object rst = exp.parseExpression("[exec][default].data.![#this[hello]]").getValue(ctx);
         System.out.println(rst);
     }
+
+    @Test
+    public void test2() throws Exception {
+        ExpressionParser exp = new SpelExpressionParser();
+        HashMap<String, Object> expRoot = Maps.newHashMap();
+        expRoot.put("data", Arrays.asList(Collections.singletonMap("age", Arrays.asList(11, 12, 13))));
+        StandardEvaluationContext ctx = new StandardEvaluationContext(expRoot);
+        Object rst = exp.parseExpression("[data].![#this[age]][0]").getValue(ctx);
+        System.out.println(rst);
+    }
 }

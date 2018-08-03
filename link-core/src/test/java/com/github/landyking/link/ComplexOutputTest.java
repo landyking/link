@@ -23,4 +23,11 @@ public class ComplexOutputTest {
         EmptyInputPot pot = new EmptyInputPot();
         dm.callDirective("emp.complexOutputList", pot);
     }
+
+    @Test
+    public void opMap() throws Exception {
+
+        EmptyInputPot pot = new EmptyInputPot();
+        dm.callDirective("emp.complexOutputMap", pot);
+    }
 }

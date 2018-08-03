@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<directive xmlns="http://www.github.com/landyking/link"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.github.com/landyking/link http://www.github.com/landyking/link/link-1.0.xsd">
+    <description>QueryTranslatorTest</description>
+    <input>
+        <param name="name" default="刘二,六三">
+            <processors>
+                <TextToList/>
+            </processors>
+        </param>
+        <param name="age" default="22,33">
+            <processors>
+                <TextToList/>
+            </processors>
+        </param>
+        <param name="address" default="东大街18号,西大街22好">
+            <processors>
+                <TextToList/>
+            </processors>
+        </param>
+    </input>
+    <execution>
+        <custom id="default" className="com.github.landyking.link.execution.custom.InputGotoOutput"/>
+    </execution>
+    <executionEnding/>
+    <output>
+        <map name="root">
+            <param name="total" from="[exec][default].totalCount"/>
+            <param name="effectCount" from="[exec][default].effectCount"/>
+            <list name="rows">
+                <param name="realname" from="[exec][default].data.![#this[name]]"/>
+                <param name="age" from="#"/>
+                <param name="address" from="#"/>
+            </list>
+            <list name="rows2">
+                <param name="realname" from="[exec][default].data.![#this[name]][0]"/>
+                <param name="age" from="[exec][default].data.![#this[age]][0]"/>
+                <param name="address" from="[exec][default].data.![#this[address]][0]"/>
+            </list>
+        </map>
+    </output>
+    <resultRender/>
+    <dependencys></dependencys>
+</directive>
