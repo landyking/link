@@ -144,7 +144,19 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.46</version>
-            <scope>runtime</scope>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.190</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>4.0.3</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
     <build>
@@ -158,7 +170,7 @@
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
-            <plugin>
+            <!--<plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>2.6</version>
@@ -170,7 +182,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-                            <!-- 添加classifier修饰以区别于war，保证上传成功 -->
+                            &lt;!&ndash; 添加classifier修饰以区别于war，保证上传成功 &ndash;&gt;
                             <classifier>dev</classifier>
                             <excludes>
                                 <exclude>*.properties</exclude>
@@ -181,7 +193,7 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin>-->
         </plugins>
     </build>
 </project>

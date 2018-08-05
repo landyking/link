@@ -14,7 +14,6 @@ import org.springframework.jdbc.support.MetaDataAccessException;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.transaction.support.TransactionTemplate;
-import org.springframework.util.StringUtils;
 
 import javax.sql.DataSource;
 import java.sql.DatabaseMetaData;
@@ -40,6 +39,10 @@ public class DataSourceManager implements ApplicationContextAware, InitializingB
         return dataSourceMap.containsKey(dataSourceId);
     }
 
+    public DataSource getDataSource(String dataSourceId) {
+        return dataSourceMap.get(dataSourceId);
+    }
+
     @Override
     public void afterPropertiesSet() throws Exception {
         dataSourceMap = application.getBeansOfType(DataSource.class);
@@ -55,6 +58,8 @@ public class DataSourceManager implements ApplicationContextAware, InitializingB
                         return DBType.Mysql;
                     } else if (databaseProductName.toUpperCase().contains("HIVE")) {
                         return DBType.ApacheHive;
+                    } else if (databaseProductName.toUpperCase().contains("H2")) {
+                        return DBType.H2Database;
                     } else {
                         throw new RuntimeException("不支持的数据库类型:" + databaseProductName);
                     }
