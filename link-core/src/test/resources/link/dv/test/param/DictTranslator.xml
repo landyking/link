@@ -4,19 +4,12 @@
            xsi:schemaLocation="http://www.github.com/landyking/link http://www.github.com/landyking/link/link-1.0.xsd">
     <description>QueryTranslatorTest</description>
     <input>
-        <param name="notName" notEmpty="false"/>
-        <param name="deptNo">
+        <param name="dict1">
             <processors>
-                <QueryTranslator queryDataSource="test" table="departments"
-                                 destField="dept_no" displayField="dept_name">
-                    <where><![CDATA[
-                    <#param attr="notName">
-                    dept_name not in(:notName)
-                    </#param>]]></where>
-                </QueryTranslator>
+                <DictTranslator dict="hello"/>
             </processors>
         </param>
-        <param name="dict" desc="本地字典翻译测试"/>
+        <param name="dict2"/>
     </input>
     <execution>
         <custom id="default" className="com.github.landyking.link.execution.custom.InputGotoOutput"/>
@@ -24,10 +17,10 @@
     <executionEnding/>
     <output>
         <map name="root">
-            <param name="deptName" from="[exec][default].data[0][deptNo]"/>
-            <param name="dict" from="[exec][default].data[0][dict]">
+            <param name="dict1" from="#"/>
+            <param name="dict2" from="#">
                 <processors>
-                    <DictTranslator dict="hello"/>
+                    <DictTranslator dict="world"/>
                 </processors>
             </param>
         </map>

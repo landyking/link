@@ -191,6 +191,8 @@ public class QueryTranslator extends AbstractParamProcessor {
         LOG.debug("用于获取翻译值的SQL为: {}", query);
         NamedParameterJdbcTemplate jdbc = dataSourceManager.getNamedParameterJdbcTemplate(queryDataSource);
         MapSqlParameterSource msps = new MapSqlParameterSource();
+        Map<String, Object> tmpMap = ctx.getProcessedInputParamMap();
+        msps.addValues(tmpMap);
         msps.addValue("inSet", inSet);
         List<Map<String, Object>> mapList = jdbc.queryForList(query, msps);
         inSet.clear();//清理

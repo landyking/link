@@ -5,8 +5,10 @@
     <dict name="hello" desc="测试">
         <item code="2">你好</item>
         <item code="21">我也好</item>
-        <item code="22">我也好</item>
+        <item code="22">我也好2</item>
     </dict>
-    <dict name="hello2">
+    <dict name="world">
+        <item code="a">大写A</item>
+        <item code="b">大写B</item>
     </dict>
 </dicts>
