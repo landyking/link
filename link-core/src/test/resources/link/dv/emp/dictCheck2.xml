@@ -7,7 +7,7 @@
         <param name="no" desc="员工编号">
             <processors>
                 <DuplicateCheck>
-                    <countQuery dataSource="emp">
+                    <countQuery dataSource="test">
                         <![CDATA[
                         select count(0) from employees where emp_no=:this
                         <#param attr='gender'>and gender != :gender</#param>
@@ -23,20 +23,22 @@
     </execution>
     <executionEnding/>
     <output>
-        <param name="no"/>
-        <param name="gender"/>
-        <param name="genTime">
-            <processors>
-                <DateTimeGenerator/>
-                <DateTimeConverter srcType="auto" destType="long"/>
-            </processors>
-        </param>
-        <param name="genTime2">
-            <processors>
-                <DateTimeGenerator/>
-                <DateTimeConverter srcType="auto" destType="string" destFmt="yyyy年MM月dd日 HH时mm分ss秒"/>
-            </processors>
-        </param>
+        <list name="root">
+            <param name="no" from="#"/>
+            <param name="gender" from="#"/>
+            <param name="genTime" from="#newList([exec][default].data.size())">
+                <processors>
+                    <DateTimeGenerator/>
+                    <DateTimeConverter srcType="auto" destType="long"/>
+                </processors>
+            </param>
+            <param name="genTime2" from="#newList([exec][default].data.size())">
+                <processors>
+                    <DateTimeGenerator/>
+                    <DateTimeConverter srcType="auto" destType="string" destFmt="yyyy年MM月dd日 HH时mm分ss秒"/>
+                </processors>
+            </param>
+        </list>
     </output>
     <resultRender/>
     <dependencys></dependencys>

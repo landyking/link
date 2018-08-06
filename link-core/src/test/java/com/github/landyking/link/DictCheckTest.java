@@ -12,25 +12,22 @@ import javax.annotation.Resource;
  * @author: landy
  * @date: 2018-07-30 23:09
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath*:/link/linkCore.xml")
-public class DictCheckTest {
-    @Resource
-    private DirectiveManager dm;
+public class DictCheckTest extends TestH2Database {
+
 
     @Test
     public void test1() throws Exception {
         EmptyInputPot pot = new EmptyInputPot();
         pot.put("type", "21");
         pot.put("no", "1000311");
-        dm.callDirective("emp.dictCheck", pot);
+        getDm().callDirective("emp.dictCheck", pot);
     }
     @Test
     public void test2() throws Exception {
         EmptyInputPot pot = new EmptyInputPot();
         pot.put("type", "21");
         pot.put("no", "1000311");
-        dm.callDirective("emp.dictCheck2", pot);
+        getDm().callDirective("emp.dictCheck2", pot);
 
     }
     @Test
@@ -38,6 +35,6 @@ public class DictCheckTest {
         EmptyInputPot pot = new EmptyInputPot();
         pot.put("gender", "21");
         pot.put("no", "1000311");
-        dm.callDirective("emp.dictCheck2", pot);
+        getDm().callDirective("emp.dictCheck2", pot);
     }
 }

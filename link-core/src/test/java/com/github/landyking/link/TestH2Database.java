@@ -1,8 +1,11 @@
 package com.github.landyking.link;
 
 import org.flywaydb.core.Flyway;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -13,14 +16,15 @@ import java.io.File;
  * @author: landy
  * @date: 2018-08-05 22:37
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath*:/link/linkCore.xml")
 public class TestH2Database {
-    @Resource
-    private DataSourceManager dataSourceManager;
+    private static DataSourceManager dataSourceManager;
+    private static ClassPathXmlApplicationContext app;
+    private static DirectiveManager dm;
 
-    @Test
-    public void test11() throws Exception {
+    @BeforeClass
+    public static void initH2Database() throws Exception {
+        app = new ClassPathXmlApplicationContext("classpath*:/link/linkCore.xml");
+        dataSourceManager = app.getBean(DataSourceManager.class);
         // Create the Flyway instance
         Flyway flyway = new Flyway();
 
@@ -28,6 +32,18 @@ public class TestH2Database {
         flyway.setDataSource(dataSourceManager.getDataSource("test"));
         // Start the migration
         flyway.migrate();
+        dm = app.getBean(DirectiveManager.class);
+    }
 
+    public static DataSourceManager getDataSourceManager() {
+        return dataSourceManager;
+    }
+
+    public static ClassPathXmlApplicationContext getApp() {
+        return app;
+    }
+
+    public static DirectiveManager getDm() {
+        return dm;
     }
 }

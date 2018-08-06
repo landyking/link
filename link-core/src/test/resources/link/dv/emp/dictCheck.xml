@@ -14,7 +14,7 @@
         <param name="no" desc="员工编号">
             <processors>
                 <DuplicateCheck>
-                    <countQuery dataSource="emp">
+                    <countQuery dataSource="test">
                         select count(0) from employees where emp_no=:this and gender != :type
                     </countQuery>
                 </DuplicateCheck>
@@ -26,8 +26,10 @@
     </execution>
     <executionEnding/>
     <output>
-        <param name="no"/>
-        <param name="type"/>
+        <list name="root">
+            <param name="no" from="#"/>
+            <param name="type" from="#"/>
+        </list>
     </output>
     <resultRender/>
     <dependencys></dependencys>

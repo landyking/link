@@ -14,6 +14,7 @@ import org.springframework.jdbc.support.MetaDataAccessException;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.transaction.support.TransactionTemplate;
+import org.springframework.util.Assert;
 
 import javax.sql.DataSource;
 import java.sql.DatabaseMetaData;
@@ -103,6 +104,7 @@ public class DataSourceManager implements ApplicationContextAware, InitializingB
         NamedParameterJdbcTemplate jdbcTemplate = namedParameterJdbcTemplateMap.get(dataSourceId);
         if (jdbcTemplate == null) {
             DataSource dataSource = dataSourceMap.get(dataSourceId);
+            Assert.notNull(dataSource, "数据源" + dataSourceId + "为空");
             jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
             namedParameterJdbcTemplateMap.put(dataSourceId, jdbcTemplate);
         }

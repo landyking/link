@@ -1,6 +1,7 @@
 package com.github.landyking.link;
 
 import com.github.landyking.link.exception.LinkException;
+import com.github.landyking.link.spel.SpelTool;
 import com.github.landyking.link.util.LkTools;
 import com.github.landyking.link.util.Texts;
 import com.google.common.collect.Lists;
@@ -52,6 +53,11 @@ public class DirectiveExec implements ApplicationContextAware {
         expRoot.put("mojo", mojo);
         expRoot.put("exec", mojo.getEndingData());
         StandardEvaluationContext ctx = new StandardEvaluationContext(expRoot);
+        try {
+            ctx.registerFunction("newList", SpelTool.class.getDeclaredMethod("newList", Integer.class));
+        } catch (Exception e) {
+            throw new LinkException("注册spel函数异常", e);
+        }
         Element opnode = mojo.getParser().getOutputNode();
         Object rst = processOutputSubNode(mojo, mojo.getParser().reverseOutputChildList(opnode).iterator().next(), exp, ctx);
         mojo.setAfterOutput(rst);
@@ -224,7 +230,7 @@ public class DirectiveExec implements ApplicationContextAware {
             }
         }
         if (!pass) {
-            String fullPath = mojo.getParser().getFullPath(opnode,true);
+            String fullPath = mojo.getParser().getFullPath(opnode, true);
             throw new LinkException(fullPath + "下属结点值列表长度不一致:" + keySize.toString());
         }
         return tmp;
