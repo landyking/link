@@ -4,6 +4,7 @@ import com.github.landyking.link.AbstractParamProcessor;
 import com.github.landyking.link.DataSourceManager;
 import com.github.landyking.link.DirectiveMojo;
 import com.github.landyking.link.ValueBag;
+import com.github.landyking.link.beetl.BeetlTool;
 import com.github.landyking.link.exception.LinkException;
 import com.github.landyking.link.util.LkTools;
 import com.github.landyking.link.util.Texts;
@@ -219,8 +220,12 @@ public class QueryTranslator extends AbstractParamProcessor {
         return mojo.getParser().getParam(config, "displayField");
     }
 
-    protected String getWhereCondition(DirectiveMojo mojo, Element config) {
-        return mojo.getParser().getParam(config, "where");
+    protected String getWhereCondition(DirectiveMojo mojo, Element config) throws LinkException {
+        String where = mojo.getParser().getParam(config, "where");
+        if (Texts.hasText(where)) {
+            where = BeetlTool.renderBeetl(mojo, where);
+        }
+        return where;
     }
 
     protected String getDestFieldName(DirectiveMojo mojo, Element config) {
