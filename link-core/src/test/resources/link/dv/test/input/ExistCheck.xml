@@ -11,15 +11,6 @@
                 </ExistCheck>
             </processors>
         </param>
-        <param name="no" desc="员工编号">
-            <processors>
-                <DuplicateCheck>
-                    <countQuery dataSource="test">
-                        select count(0) from employees where emp_no=:this and gender != :type
-                    </countQuery>
-                </DuplicateCheck>
-            </processors>
-        </param>
     </input>
     <execution>
         <custom id="default" className="com.github.landyking.link.execution.custom.InputGotoOutput"/>
@@ -27,7 +18,6 @@
     <executionEnding/>
     <output>
         <list name="root">
-            <param name="no" from="#"/>
             <param name="type" from="#"/>
         </list>
     </output>

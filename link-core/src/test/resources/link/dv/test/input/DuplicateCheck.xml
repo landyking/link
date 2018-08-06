@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<directive xmlns="http://www.github.com/landyking/link"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.github.com/landyking/link http://www.github.com/landyking/link/link-1.0.xsd">
+    <description>test</description>
+    <input>
+        <param name="no" desc="员工编号">
+            <processors>
+                <DuplicateCheck>
+                    <countQuery dataSource="test">
+                        select count(0) from employees where emp_no=:this
+                    </countQuery>
+                </DuplicateCheck>
+            </processors>
+        </param>
+    </input>
+    <execution>
+        <custom id="default" className="com.github.landyking.link.execution.custom.InputGotoOutput"/>
+    </execution>
+    <executionEnding/>
+    <output>
+        <list name="root">
+            <param name="no" from="#"/>
+        </list>
+    </output>
+    <resultRender/>
+    <dependencys></dependencys>
+</directive>

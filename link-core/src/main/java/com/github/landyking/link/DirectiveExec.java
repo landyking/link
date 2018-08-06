@@ -124,7 +124,12 @@ public class DirectiveExec implements ApplicationContextAware {
         String from = param.getAttribute("from");
         if (Texts.hasText(from)) {
             if (from.equals("#")) {
-                from = "[exec][default].data.![#this[" + name + "]]";
+                String pnode = param.getParentNode().getNodeName();
+                if (pnode.equals("list")) {
+                    from = "[exec][default].data.![#this[" + name + "]]";
+                } else if (pnode.equals("map")) {
+                    from = "[exec][default].data[0][" + name + "]";
+                }
             }
         }
         String fixed = null;

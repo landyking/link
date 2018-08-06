@@ -1,8 +1,13 @@
 package com.github.landyking.link.spel;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import org.springframework.expression.ExpressionParser;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
+import org.springframework.expression.spel.support.StandardEvaluationContext;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -18,5 +23,10 @@ public class SpelTool {
             objects.add(i);
         }
         return objects;
+    }
+
+    public static Object getValueFromExpress(Object root, String express) {
+        ExpressionParser exp = new SpelExpressionParser();
+        return exp.parseExpression(express).getValue(root);
     }
 }

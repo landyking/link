@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<directive xmlns="http://www.github.com/landyking/link"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.github.com/landyking/link http://www.github.com/landyking/link/link-1.0.xsd">
+    <description>dict check test</description>
+    <input>
+        <param name="time1"/>
+        <param name="time2"/>
+    </input>
+    <execution>
+        <custom id="default" className="com.github.landyking.link.execution.custom.InputGotoOutput"/>
+    </execution>
+    <executionEnding/>
+    <output>
+        <map name="root">
+            <param name="time1" from="#"/>
+            <param name="time2" from="#">
+                <processors>
+                    <DateTimeGenerator/>
+                </processors>
+            </param>
+        </map>
+    </output>
+    <resultRender/>
+    <dependencys></dependencys>
+</directive>
