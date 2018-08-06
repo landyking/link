@@ -23,7 +23,7 @@ public class DateTimeGeneratorTest extends TestH2Database {
         String value = DateTimeTool.fullText(before);
         pot.put("time1", value);
         pot.put("time2", "empty");
-        DirectiveMojo mojo = getDm().callDirective("test.input.DateTimeGenerator", pot);
+        DirectiveMojo mojo = getDm().callDirective("test.param.DateTimeGenerator", pot);
         Date after = new Date();
         Assert.assertEquals(value, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[time1].finalValue"));
         Date gen = (Date) SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[time2].finalValue.toDate()");
