@@ -3,8 +3,11 @@ package com.github.landyking.link.execution;
 import com.github.landyking.link.*;
 import com.github.landyking.link.beetl.BeetlTool;
 import com.github.landyking.link.exception.LinkException;
+import com.github.landyking.link.spel.SpelMapSqlParameterSource;
+import com.github.landyking.link.spel.SpelUtils;
 import com.github.landyking.link.util.LkTools;
 import com.github.landyking.link.util.Texts;
+import com.google.common.base.Throwables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -102,7 +105,11 @@ public class DbUpdate implements AbstractExecutionFactory {
                         transactionTemplate.execute(new TransactionCallbackWithoutResult() {
                             @Override
                             protected void doInTransactionWithoutResult(TransactionStatus status) {
-                                doUpdate(executionId, dataSourceId, mojo, updateSql);
+                                try {
+                                    doUpdate(executionId, dataSourceId, mojo, updateSql);
+                                } catch (LinkException e) {
+                                    Throwables.propagate(e);
+                                }
                             }
                         });
                     } else {
@@ -116,9 +123,9 @@ public class DbUpdate implements AbstractExecutionFactory {
         };
     }
 
-    private void doUpdate(String executionId, String dataSourceId, DirectiveMojo mojo, String updateSql) {
+    private void doUpdate(String executionId, String dataSourceId, DirectiveMojo mojo, String updateSql) throws LinkException {
         NamedParameterJdbcTemplate jdbc = dataSourceManager.getNamedParameterJdbcTemplate(dataSourceId);
-        Map<String, Object> paramMap = mojo.getProcessedInputParamMap();
+        SpelMapSqlParameterSource paramMap = new SpelMapSqlParameterSource(mojo.getProcessedInputParamMap(), SpelUtils.getSpelPair(mojo));
         int updateCount = jdbc.update(updateSql, paramMap);
         ExecuteResult rst = new ExecuteResult();
         rst.setEffectCount(updateCount);

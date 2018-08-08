@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<directive xmlns="http://www.github.com/landyking/link"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.github.com/landyking/link http://www.github.com/landyking/link/link-1.0.xsd">
+    <description>删除部门</description>
+    <input>
+        <param name="deptNo" desc="部门编号"/>
+    </input>
+    <execution>
+        <dbDelete id="default" dataSource="test">
+            <table>departments</table>
+            <where>
+                dept_no=:{#root[input][deptNo]}
+            </where>
+        </dbDelete>
+    </execution>
+    <executionEnding/>
+    <output>
+        <map name="root">
+            <param name="success" from="[exec][default].effectCount>0"/>
+        </map>
+    </output>
+    <resultRender/>
+    <dependencys></dependencys>
+</directive>
