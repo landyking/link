@@ -51,4 +51,15 @@ public class SpringelTest {
         Object rst = exp.parseExpression("new java.util.ArrayList([data].size())").getValue(ctx);
         System.out.println(rst);
     }
+    @Test
+    public void test4() throws Exception {
+        ExpressionParser exp = new SpelExpressionParser();
+        HashMap<String, Object> expRoot = Maps.newHashMap();
+        expRoot.put("data", Arrays.asList(11, 12, 13));
+        StandardEvaluationContext ctx = new StandardEvaluationContext(expRoot);
+        Object rst = exp.parseExpression("#root?.get('data')").getValue(ctx);
+        System.out.println(rst);
+        rst = exp.parseExpression("#root?.get('data2')?.get('test')").getValue(ctx);
+        System.out.println(rst);
+    }
 }

@@ -3,10 +3,13 @@ package com.github.landyking.link.execution;
 import com.github.landyking.link.*;
 import com.github.landyking.link.beetl.BeetlTool;
 import com.github.landyking.link.exception.LinkException;
+import com.github.landyking.link.spel.SpelMapSqlParameterSource;
+import com.github.landyking.link.spel.SpelUtils;
 import com.github.landyking.link.util.DBType;
 import com.github.landyking.link.util.LkTools;
 import com.github.landyking.link.util.SqlPageHelper;
 import com.github.landyking.link.util.Texts;
+import com.google.common.base.Throwables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -101,7 +104,11 @@ public class DbSelect implements AbstractExecutionFactory {
                         transactionTemplate.execute(new TransactionCallbackWithoutResult() {
                             @Override
                             protected void doInTransactionWithoutResult(TransactionStatus status) {
-                                doSelect(executionId, dataSourceId, mojo, finalSelectSql, finalCountSql);
+                                try {
+                                    doSelect(executionId, dataSourceId, mojo, finalSelectSql, finalCountSql);
+                                } catch (LinkException e) {
+                                    Throwables.propagate(e);
+                                }
                             }
                         });
                     } else {
@@ -218,9 +225,10 @@ public class DbSelect implements AbstractExecutionFactory {
     }
 
 
-    private void doSelect(String executionId, String dataSourceId, DirectiveMojo mojo, String selectSql, String countSql) {
+    private void doSelect(String executionId, String dataSourceId, DirectiveMojo mojo, String selectSql, String countSql) throws LinkException {
         NamedParameterJdbcTemplate jdbc = dataSourceManager.getNamedParameterJdbcTemplate(dataSourceId);
-        Map<String, Object> paramMap = mojo.getProcessedInputParamMap();
+        SpelMapSqlParameterSource paramMap = new SpelMapSqlParameterSource(mojo.getProcessedInputParamMap(), SpelUtils.getSpelPair(mojo));
+
         int total;
         List<Map<String, Object>> dataList = Collections.emptyList();
         boolean countQuery = Texts.hasText(countSql);

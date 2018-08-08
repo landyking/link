@@ -22,13 +22,16 @@ public class DbSelectTest extends TestH2Database {
         EmptyInputPot pot = new EmptyInputPot();
         pot.put("deptNo", "d005");
         DirectiveMojo mojo = getDm().callDirective("test.execution.dbSelect", pot);
-        Assert.assertEquals("Development", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[0]"));
+        Assert.assertEquals("Development", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst1].finalValue"));
+        Assert.assertEquals("Development", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst2].finalValue"));
     }
+
     @Test
     public void testFailure() throws Exception {
         EmptyInputPot pot = new EmptyInputPot();
         pot.put("deptNo", "d0051");
         DirectiveMojo mojo = getDm().callDirective("test.execution.dbSelect", pot);
-        Assert.assertEquals(0, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root.size()"));
+        Assert.assertEquals(null, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst1].finalValue"));
+        Assert.assertEquals(null, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst2].finalValue"));
     }
 }

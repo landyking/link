@@ -1,7 +1,9 @@
 package com.github.landyking.link;
 
 import com.github.landyking.link.exception.LinkException;
+import com.github.landyking.link.spel.SpelPair;
 import com.github.landyking.link.spel.SpelTool;
+import com.github.landyking.link.spel.SpelUtils;
 import com.github.landyking.link.util.LkTools;
 import com.github.landyking.link.util.Texts;
 import com.google.common.collect.Lists;
@@ -48,44 +50,35 @@ public class DirectiveExec implements ApplicationContextAware {
     }
 
     private void processOutputParam(DirectiveMojo mojo) throws LinkException {
-        ExpressionParser exp = new SpelExpressionParser();
-        HashMap<String, Object> expRoot = Maps.newHashMap();
-        expRoot.put("mojo", mojo);
-        expRoot.put("exec", mojo.getEndingData());
-        StandardEvaluationContext ctx = new StandardEvaluationContext(expRoot);
-        try {
-            ctx.registerFunction("newList", SpelTool.class.getDeclaredMethod("newList", Integer.class));
-        } catch (Exception e) {
-            throw new LinkException("注册spel函数异常", e);
-        }
+        SpelPair spelPair = SpelUtils.getSpelPair(mojo);
         Element opnode = mojo.getParser().getOutputNode();
-        Object rst = processOutputSubNode(mojo, mojo.getParser().reverseOutputChildList(opnode).iterator().next(), exp, ctx);
+        Object rst = processOutputSubNode(mojo, mojo.getParser().reverseOutputChildList(opnode).iterator().next(), spelPair);
         mojo.setAfterOutput(rst);
     }
 
     @SuppressWarnings("unchecked")
-    private Object processOutputSubNode(DirectiveMojo mojo, Element opnode, ExpressionParser exp, StandardEvaluationContext ctx) throws LinkException {
+    private Object processOutputSubNode(DirectiveMojo mojo, Element opnode, SpelPair spelPair) throws LinkException {
         if (opnode.getNodeName().equals("map")) {
             String from = opnode.getAttribute("from");
             if (Texts.hasText(from)) {
-                return exp.parseExpression(from).getValue(ctx);//fixme 原始值，不是ValueBag
+                return spelPair.getExp().parseExpression(from).getValue(spelPair.getCtx());//fixme 原始值，不是ValueBag
             } else {
                 Map<String, Object> rst = Maps.newHashMap();
                 List<Element> list = mojo.getParser().nodeList2ElementList(opnode.getChildNodes());
                 for (Element e : list) {
-                    rst.put(e.getAttribute("name"), processOutputSubNode(mojo, e, exp, ctx));
+                    rst.put(e.getAttribute("name"), processOutputSubNode(mojo, e, spelPair));
                 }
                 return rst;
             }
         } else if (opnode.getNodeName().equals("list")) {
             String from = opnode.getAttribute("from");
             if (Texts.hasText(from)) {
-                return exp.parseExpression(from).getValue(ctx);//fixme 原始值，不是ValueBag
+                return spelPair.getExp().parseExpression(from).getValue(spelPair.getCtx());//fixme 原始值，不是ValueBag
             } else {
                 Map<String, Collection<Object>> childs = Maps.newHashMap();
                 List<Element> list = mojo.getParser().nodeList2ElementList(opnode.getChildNodes());
                 for (Element e : list) {
-                    Object subVal = processOutputSubNode(mojo, e, exp, ctx);
+                    Object subVal = processOutputSubNode(mojo, e, spelPair);
                     String name = e.getAttribute("name");
                     if (subVal instanceof Collection) {
                         childs.put(name, (Collection<Object>) subVal);
@@ -112,13 +105,13 @@ public class DirectiveExec implements ApplicationContextAware {
                 return rst;
             }
         } else if (opnode.getNodeName().equals("param")) {
-            return processNodeParam(mojo, opnode, exp, ctx);
+            return processNodeParam(mojo, opnode, spelPair);
         } else {
             throw new LinkException("不支持的结点" + mojo.getParser().getFullPath(opnode, true));
         }
     }
 
-    private Object processNodeParam(DirectiveMojo mojo, Element param, ExpressionParser exp, StandardEvaluationContext ctx) throws LinkException {
+    private Object processNodeParam(DirectiveMojo mojo, Element param, SpelPair spelPair) throws LinkException {
         String name = param.getAttribute("name");
         String desc = param.getAttribute("desc");
         String from = param.getAttribute("from");
@@ -146,7 +139,7 @@ public class DirectiveExec implements ApplicationContextAware {
         Object value = null;
         if (Texts.hasText(from)) {
             try {
-                value = exp.parseExpression(from).getValue(ctx);
+                value = spelPair.getExp().parseExpression(from).getValue(spelPair.getCtx());
             } catch (Exception e) {
                 String fullPath = mojo.getParser().getFullPath(param, true);
                 throw new LinkException("节点" + fullPath + "的from表达式" + from + "处理异常", e);

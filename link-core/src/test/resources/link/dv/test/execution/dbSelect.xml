@@ -7,8 +7,8 @@
         <param name="deptNo"/>
     </input>
     <execution>
-        <dbSelect id="default" dataSource="test" pagination="false">
-            <field column="dept_name"/>
+        <dbSelect id="first" dataSource="test" pagination="false">
+            <field column="dept_no"/>
             <from>
                 <base table="departments"/>
             </from>
@@ -16,10 +16,41 @@
                 dept_no = :deptNo
             </where>
         </dbSelect>
+        <dbSelect id="default1" dataSource="test" pagination="false">
+            <field column="dept_name"/>
+            <from>
+                <base table="departments"/>
+            </from>
+            <where>
+                dept_no = :{#root[exec][first].data.^[true]?.get('dept_no')}
+            </where>
+        </dbSelect>
+
+        <dbSelect id="second" dataSource="test" pagination="false">
+            <field column="dept_no"/>
+            <from>
+                <base table="departments"/>
+            </from>
+            <where>
+                dept_no = :{#root[input][deptNo]}
+            </where>
+        </dbSelect>
+        <dbSelect id="default2" dataSource="test" pagination="false">
+            <field column="dept_name"/>
+            <from>
+                <base table="departments"/>
+            </from>
+            <where>
+                dept_no = :{#root[exec][second].data.^[true]?.get('dept_no')}
+            </where>
+        </dbSelect>
     </execution>
     <executionEnding/>
     <output>
-        <list name="root" from="[exec][default].data.![#this[dept_name]]"/>
+        <map name="root">
+            <param name="rst1" from="[exec][default1].data?.^[true]?.get('dept_name')"/>
+            <param name="rst2" from="[exec][default2].data?.^[true]?.get('dept_name')"/>
+        </map>
     </output>
     <resultRender/>
     <dependencys></dependencys>
