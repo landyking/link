@@ -16,13 +16,13 @@
                 dept_no = :deptNo
             </where>
         </dbSelect>
-        <dbSelect id="default1" dataSource="test" pagination="false">
+        <dbSelect test="#root[exec][first].data.size()>0" id="default1" dataSource="test" pagination="false">
             <field column="dept_name"/>
             <from>
                 <base table="departments"/>
             </from>
             <where>
-                dept_no = :{#root[exec][first].data.^[true]?.get('dept_no')}
+                dept_no = :{#root[exec][first].data[0][dept_no]}
             </where>
         </dbSelect>
 
@@ -35,13 +35,13 @@
                 dept_no = :{#root[input][deptNo]}
             </where>
         </dbSelect>
-        <dbSelect id="default2" dataSource="test" pagination="false">
+        <dbSelect id="default2" test="#root[exec][second].data.size()>0" dataSource="test" pagination="false">
             <field column="dept_name"/>
             <from>
                 <base table="departments"/>
             </from>
             <where>
-                dept_no = :{#root[exec][second].data.^[true]?.get('dept_no')}
+                dept_no = :{#root[exec][second].data[0][dept_no]}
             </where>
         </dbSelect>
     </execution>

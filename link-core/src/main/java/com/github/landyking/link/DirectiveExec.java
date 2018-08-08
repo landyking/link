@@ -2,7 +2,6 @@ package com.github.landyking.link;
 
 import com.github.landyking.link.exception.LinkException;
 import com.github.landyking.link.spel.SpelPair;
-import com.github.landyking.link.spel.SpelTool;
 import com.github.landyking.link.spel.SpelUtils;
 import com.github.landyking.link.util.LkTools;
 import com.github.landyking.link.util.Texts;
@@ -13,12 +12,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.expression.ExpressionParser;
-import org.springframework.expression.spel.standard.SpelExpressionParser;
-import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.w3c.dom.Element;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by landy on 2018/7/5.
@@ -270,7 +269,19 @@ public class DirectiveExec implements ApplicationContextAware {
         String transaction = execution.getAttribute("transaction");
         List<AbstractExecution> execList = mojo.getParser().getExecutionList(execution);
         for (AbstractExecution one : execList) {
-            one.execute(mojo);
+            String test = one.getElement().getAttribute("test");
+            if (Texts.hasText(test)) {
+                SpelPair spelPair = SpelUtils.getSpelPair(mojo);
+                Boolean needExec = spelPair.getExp().parseExpression(test).getValue(spelPair.getCtx(), Boolean.class);
+                if (needExec) {
+                    one.execute(mojo);
+                } else {
+                    String id = one.getElement().getAttribute("id");
+                    mojo.getExecuteResultMap().put(id, new ExecuteResult());
+                }
+            } else {
+                one.execute(mojo);
+            }
         }
     }
 

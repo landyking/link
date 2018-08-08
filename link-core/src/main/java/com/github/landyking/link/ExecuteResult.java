@@ -1,5 +1,6 @@
 package com.github.landyking.link;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -18,7 +19,7 @@ public class ExecuteResult {
     /**
      * 查询操作返回的数据
      */
-    private List<Map<String, Object>> data;
+    private List<Map<String, Object>> data = Collections.emptyList();
     /**
      * 查询操作查到的数据总数
      */

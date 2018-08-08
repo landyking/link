@@ -17,5 +17,9 @@ public abstract class AbstractExecution {
         return getClass().getSimpleName();
     }
 
+    public Element getElement() {
+        return element;
+    }
+
     public abstract void execute(DirectiveMojo mojo) throws LinkException;
 }

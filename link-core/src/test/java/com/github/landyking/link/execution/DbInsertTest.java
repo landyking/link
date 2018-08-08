@@ -23,6 +23,5 @@ public class DbInsertTest extends TestH2Database {
         Assert.assertEquals(true, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[success].finalValue"));
         mojo = getDm().callDirective("test.execution.dbSelect", pot);
         Assert.assertEquals("helloworld", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst1].finalValue"));
-
     }
 }

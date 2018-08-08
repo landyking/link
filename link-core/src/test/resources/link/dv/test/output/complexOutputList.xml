@@ -4,10 +4,10 @@
            xsi:schemaLocation="http://www.github.com/landyking/link http://www.github.com/landyking/link/link-1.0.xsd">
     <description>QueryTranslatorTest</description>
     <input>
-        <param name="name" default="刘二"/>
-        <param name="age" default="22"/>
-        <param name="address" default="东大街18号"/>
-        <param name="hello" default="world">
+        <param name="name"/>
+        <param name="age"/>
+        <param name="address"/>
+        <param name="hello">
             <processors>
                 <TextToList/>
             </processors>
@@ -23,7 +23,7 @@
             <param name="age" from="#"/>
             <param name="address" from="[exec][default].data.![#this[address]]"/>
             <param name="hello" from="#"/>
-            <param name="hello2" from="[exec][default].data.![#this[hello]][0]"/>
+            <param name="hello2" from="[exec][default].data.![#this[hello]]"/>
         </list>
     </output>
     <resultRender/>
