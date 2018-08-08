@@ -2,22 +2,25 @@
 <directive xmlns="http://www.github.com/landyking/link"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://www.github.com/landyking/link http://www.github.com/landyking/link/link-1.0.xsd">
-    <description>测试指令</description>
+    <description>列出单位信息</description>
     <input>
-        <param name="name"/>
+        <param name="deptNo"/>
     </input>
     <execution>
-        <dbSelect id="" dataSource="">
-            <field></field>
+        <dbSelect id="default" dataSource="test" pagination="false">
+            <field column="dept_name"/>
             <from>
-                <base table=""/>
+                <base table="departments"/>
             </from>
+            <where>
+                dept_no = :deptNo
+            </where>
         </dbSelect>
     </execution>
+    <executionEnding/>
     <output>
-        <map name="rot">
-            <param name="out"/>
-        </map>
+        <list name="root" from="[exec][default].data.![#this[dept_name]]"/>
     </output>
+    <resultRender/>
     <dependencys></dependencys>
 </directive>

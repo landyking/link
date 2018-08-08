@@ -68,7 +68,7 @@ public class DirectiveExec implements ApplicationContextAware {
         if (opnode.getNodeName().equals("map")) {
             String from = opnode.getAttribute("from");
             if (Texts.hasText(from)) {
-                return exp.parseExpression(from).getValue(ctx);
+                return exp.parseExpression(from).getValue(ctx);//fixme 原始值，不是ValueBag
             } else {
                 Map<String, Object> rst = Maps.newHashMap();
                 List<Element> list = mojo.getParser().nodeList2ElementList(opnode.getChildNodes());
@@ -80,7 +80,7 @@ public class DirectiveExec implements ApplicationContextAware {
         } else if (opnode.getNodeName().equals("list")) {
             String from = opnode.getAttribute("from");
             if (Texts.hasText(from)) {
-                return exp.parseExpression(from).getValue(ctx);
+                return exp.parseExpression(from).getValue(ctx);//fixme 原始值，不是ValueBag
             } else {
                 Map<String, Collection<Object>> childs = Maps.newHashMap();
                 List<Element> list = mojo.getParser().nodeList2ElementList(opnode.getChildNodes());
