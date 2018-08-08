@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<directive xmlns="http://www.github.com/landyking/link"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.github.com/landyking/link http://www.github.com/landyking/link/link-1.0.xsd">
+    <description>新增部门</description>
+    <input>
+        <param name="deptNo" desc="部门编号"/>
+        <param name="deptName" desc="部门编号"/>
+    </input>
+    <execution>
+        <dbInsert id="default" dataSource="test">
+            <field column="dept_no" from="deptNo"/>
+            <field column="dept_name" from="deptName"/>
+            <table>departments</table>
+        </dbInsert>
+    </execution>
+    <executionEnding/>
+    <output>
+        <map name="root">
+            <param name="success" from="[exec][default].effectCount>0"/>
+        </map>
+    </output>
+    <resultRender/>
+    <dependencys></dependencys>
+</directive>
