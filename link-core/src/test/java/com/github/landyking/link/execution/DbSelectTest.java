@@ -39,4 +39,14 @@ public class DbSelectTest extends TestH2Database {
         Assert.assertEquals(null, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst1].finalValue"));
         Assert.assertEquals(null, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst2].finalValue"));
     }
+    @Test
+    public void testListEmployee2() throws Exception {
+        EmptyInputPot pot = new EmptyInputPot();
+        pot.put("firstName", "Guoxiang");
+        DirectiveMojo mojo = getDm().callDirective("test.execution.listEmployee2", pot);
+        Assert.assertEquals("Ramsay", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[0][lastName].finalValue"));
+        Assert.assertEquals("Guoxiang", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[0][firstName].finalValue"));
+        Assert.assertEquals("Development", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[0][deptName].finalValue"));
+        Assert.assertEquals("d005", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[0][deptNo].finalValue"));
+    }
 }

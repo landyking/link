@@ -11,29 +11,27 @@
         </param>
     </input>
     <execution>
-        <custom id="cst" className="com.github.landyking.link.execution.custom.HelloCustom">
-            <prop name="name">你好</prop>
-        </custom>
-        <dbSelect id="default" dataSource="emp">
+        <dbSelect id="default" dataSource="test">
             <field tableAlias="ep" column="emp_no" columnAlias="empNo" desc="员工序号"/>
             <field column="birth_date" columnAlias="birthDate" tableAlias="ep" desc="生日"/>
             <field column="first_name" tableAlias="ep"/>
             <field column="last_name"/>
             <field tableAlias="ep" column="gender"/>
             <field tableAlias="de" column="dept_no" columnAlias="deptNo"/>
+            <field tableAlias="dp" column="dept_name"/>
             <from>
-                <base table="employees" prefix="employees" alias="ep"/>
+                <base table="employees" alias="ep"/>
                 <join type="left" table="dept_emp" alias="de">
                     <on>ep.emp_no=de.emp_no</on>
                 </join>
+                <join type="left" table="departments" alias="dp">
+                    <on>de.dept_no=dp.dept_no</on>
+                </join>
             </from>
             <where>
-                1=1
-                <!--<![CDATA[-->
-                <!--<#trim>-->
-                <!--and ep.first_name in (:firstName)-->
-                <!--</#trim>-->
-                <!--]]>-->
+                <![CDATA[
+                ep.first_name in (:{#root[input][firstName]})
+                ]]>
             </where>
             <other>
                 order by ep.emp_no asc
@@ -45,21 +43,8 @@
         <list name="root">
             <param name="lastName" from="[exec][default].data.![#this[last_name]]" desc="姓"/>
             <param name="firstName" from="[exec][default].data.![#this[first_name]]" desc="名"/>
-            <param name="test" from="new java.util.ArrayList([exec][default].data)" default="2" desc="test">
-                <processors>
-                    <DateTimeGenerator/>
-                    <DateTimeConverter srcType="auto" destType="string" destFmt="yyyy-MM-dd HH:mm:ss"/>
-                </processors>
-            </param>
-            <!--<param name="deptNo" from="#"/>-->
-            <param name="deptName" from="[exec][default].data.![#this[deptNo]]">
-                <processors>
-                    <QueryTranslator queryDataSource="emp" table="departments"
-                                     destField="dept_no" displayField="dept_name">
-                        <where>1=1</where>
-                    </QueryTranslator>
-                </processors>
-            </param>
+            <param name="deptName" from="[exec][default].data.![#this[dept_name]]" desc="单位"/>
+            <param name="deptNo" from="[exec][default].data.![#this[deptNo]]" desc="单位"/>
         </list>
     </output>
     <resultRender/>
