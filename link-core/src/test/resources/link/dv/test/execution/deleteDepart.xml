@@ -2,17 +2,17 @@
 <directive xmlns="http://www.github.com/landyking/link"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://www.github.com/landyking/link http://www.github.com/landyking/link/link-1.0.xsd">
-    <description>新增部门</description>
+    <description>删除部门</description>
     <input>
         <param name="deptNo" desc="部门编号"/>
-        <param name="deptName" desc="部门姓名"/>
     </input>
     <execution>
-        <dbInsert id="default" dataSource="test">
-            <field column="dept_no" from="[input][deptNo]" />
-            <field column="dept_name" from="#root[input][deptName]"/>
+        <dbDelete id="default" dataSource="test">
             <table>departments</table>
-        </dbInsert>
+            <where>
+                dept_no=:{#root[input][deptNo]}
+            </where>
+        </dbDelete>
     </execution>
     <executionEnding/>
     <output>

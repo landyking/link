@@ -9,6 +9,7 @@ import com.github.landyking.link.spel.SpelUtils;
 import com.github.landyking.link.util.LkTools;
 import com.github.landyking.link.util.Texts;
 import com.google.common.base.Throwables;
+import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -48,18 +49,19 @@ public class DbInsert implements AbstractExecutionFactory {
                     Element tableEle = mojo.getParser().getSubElement(element, "lk:table");
                     logger.debug("解析要插入的字段");
                     List<Element> fields = mojo.getParser().getSubElementList(element, "lk:field");
-                    final Map<String, Object> paramMap = mojo.getProcessedInputParamMap();
+                    final Map<String, Object> paramMap = Maps.newHashMap();
                     StringBuilder sql = new StringBuilder("insert into ");
                     sql.append(tableEle.getTextContent());
                     sql.append(" (");
                     StringBuilder valuesSql = new StringBuilder(") values (");
                     String pkName = null;
+                    SpelPair sp = SpelUtils.getSpelPair(mojo);
                     for (Element f : fields) {
                         String column = f.getAttribute("column");
                         String from = f.getAttribute("from");
                         if (!Texts.hasText(from)) {
                             //默认from与column相同
-                            from = column;
+                            from = "#root[input][" + column + "]";
                         }
                         String desc = f.getAttribute("desc");
                         String ignoreNull = f.getAttribute("ignoreNull");
@@ -68,23 +70,20 @@ public class DbInsert implements AbstractExecutionFactory {
 
                         if (!Texts.hasText(subSql)) {
                             if (LkTools.isTrue(pk)) {
-                                pkName = from;
+                                pkName = column;
                             }
-                            if (!paramMap.containsKey(from) && paramMap.get(from) == null) {
-                                if (LkTools.isTrue(ignoreNull)) {
-                                    //空值忽略不插入
-                                    continue;
-                                } else {
-                                    //要插入该字段，但是入参没有这个参数名字
-                                    paramMap.put(from, null);
-                                }
+
+                            Object value = sp.getExp().parseExpression(from).getValue(sp.getCtx());
+                            if (value == null && LkTools.isTrue(ignoreNull)) {
+                                continue;
                             }
+                            paramMap.put(column, value);
                         }
                         sql.append(column);
                         if (Texts.hasText(subSql)) {
                             valuesSql.append('(' + subSql + ')');
                         } else {
-                            valuesSql.append(":" + from);
+                            valuesSql.append(":" + column);
                         }
                         sql.append(",");
                         valuesSql.append(",");
@@ -107,14 +106,14 @@ public class DbInsert implements AbstractExecutionFactory {
                             @Override
                             protected void doInTransactionWithoutResult(TransactionStatus status) {
                                 try {
-                                    doInsert(executionId, dataSourceId, mojo, insertSql, finalPkName);
+                                    doInsert(executionId, dataSourceId, mojo, insertSql, finalPkName, paramMap);
                                 } catch (LinkException e) {
                                     Throwables.propagate(e);
                                 }
                             }
                         });
                     } else {
-                        doInsert(executionId, dataSourceId, mojo, insertSql, pkName);
+                        doInsert(executionId, dataSourceId, mojo, insertSql, pkName, paramMap);
                     }
 
                 } else {
@@ -124,9 +123,9 @@ public class DbInsert implements AbstractExecutionFactory {
         };
     }
 
-    private void doInsert(String executionId, String dataSourceId, DirectiveMojo mojo, String insertSql, String pkName) throws LinkException {
+    private void doInsert(String executionId, String dataSourceId, DirectiveMojo mojo, String insertSql, String pkName, Map<String, Object> pm) throws LinkException {
         NamedParameterJdbcTemplate jdbc = dataSourceManager.getNamedParameterJdbcTemplate(dataSourceId);
-        SpelMapSqlParameterSource paramMap = new SpelMapSqlParameterSource(mojo.getProcessedInputParamMap(), SpelUtils.getSpelPair(mojo));
+        SpelMapSqlParameterSource paramMap = new SpelMapSqlParameterSource(pm, SpelUtils.getSpelPair(mojo));
         Object pkValue = null;
         if (Texts.hasText(pkName)) {
             pkValue = paramMap.getValue(pkName);

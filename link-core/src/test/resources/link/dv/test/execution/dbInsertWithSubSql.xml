@@ -9,8 +9,12 @@
     </input>
     <execution>
         <dbInsert id="default" dataSource="test">
-            <field column="dept_no" from="[input][deptNo]" />
-            <field column="dept_name" from="#root[input][deptName]"/>
+            <field column="dept_no" from="[input][deptNo]"/>
+            <field column="dept_name">
+                <subSql>
+                    select CONCAT('name', count(0)) from employees
+                </subSql>
+            </field>
             <table>departments</table>
         </dbInsert>
     </execution>
