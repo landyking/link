@@ -63,6 +63,7 @@ public class DbInsertTest extends TestH2Database {
         pot.put("hireDate", "1978-01-22");
         DirectiveMojo mojo = getDm().callDirective("test.execution.addEmployee", pot);
         Assert.assertEquals(true, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst1].finalValue"));
+        mojo = getDm().callDirective("test.execution.deleteEmployee", pot);
         Assert.assertEquals(true, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst2].finalValue"));
     }
 }

@@ -2,7 +2,7 @@
 <directive xmlns="http://www.github.com/landyking/link"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://www.github.com/landyking/link http://www.github.com/landyking/link/link-1.0.xsd">
-    <description>删除雇员信息</description>
+    <description>删除雇员信息byName</description>
     <input>
         <param name="firstName" desc="名">
             <processors>
@@ -11,13 +11,16 @@
         </param>
     </input>
     <execution>
-        <dbDelete id="default" dataSource="emp">
+        <dbDelete id="default" dataSource="test">
             <table>employees</table>
-            <where>first_name in (:firstName)</where>
+            <where>first_name in (:{#root[input][firstName]})</where>
         </dbDelete>
     </execution>
     <executionEnding/>
     <output>
+        <map name="root">
+            <param name="success" from="[end][default].effectCount>0"/>
+        </map>
     </output>
     <resultRender/>
     <dependencys></dependencys>

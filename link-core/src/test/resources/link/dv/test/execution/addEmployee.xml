@@ -29,18 +29,11 @@
             <field column="hire_date" from="[input][hireDate]"/>
             <table>employees</table>
         </dbInsert>
-        <dbDelete id="del" dataSource="test">
-            <table>employees</table>
-            <where>
-                emp_no = :{#root[input][empNo]}
-            </where>
-        </dbDelete>
     </execution>
     <executionEnding/>
     <output>
         <map name="root">
             <param name="rst1" from="[end][add].effectCount>0"/>
-            <param name="rst2" from="[end][del].effectCount>0"/>
         </map>
     </output>
     <resultRender/>
