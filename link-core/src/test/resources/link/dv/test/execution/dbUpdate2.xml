@@ -14,13 +14,16 @@
     </input>
     <execution>
         <dbUpdate id="default" dataSource="test">
-            <field column="dept_name" from="deptName"/>
+            <field column="dept_name" from="#root[input][deptName]"/>
             <table>departments</table>
             <where>
                 <![CDATA[
-                dept_no in (:deptNo)
+                dept_no in (:{#root[input][deptNo]})
+                <#param attr="#root[input][notIn]">
+                    and dept_no != :{#root[input][notIn]}
+                </#param>
                 <#param attr="notIn">
-                    and dept_no != :notIn
+                    and dept_no != :{#root[input][notIn]}
                 </#param>
                 ]]>
             </where>

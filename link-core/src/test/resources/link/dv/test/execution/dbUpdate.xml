@@ -9,10 +9,10 @@
     </input>
     <execution>
         <dbUpdate id="default" dataSource="test">
-            <field column="dept_name" from="deptName" />
+            <field column="dept_name" from="#root[input][deptName]"/>
             <table>departments</table>
             <where>
-                dept_no=:deptNo
+                dept_no=:{#root[input][deptNo]}
             </where>
         </dbUpdate>
     </execution>

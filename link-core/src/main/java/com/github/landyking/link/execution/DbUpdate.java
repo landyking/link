@@ -4,10 +4,12 @@ import com.github.landyking.link.*;
 import com.github.landyking.link.beetl.BeetlTool;
 import com.github.landyking.link.exception.LinkException;
 import com.github.landyking.link.spel.SpelMapSqlParameterSource;
+import com.github.landyking.link.spel.SpelPair;
 import com.github.landyking.link.spel.SpelUtils;
 import com.github.landyking.link.util.LkTools;
 import com.github.landyking.link.util.Texts;
 import com.google.common.base.Throwables;
+import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -47,39 +49,35 @@ public class DbUpdate implements AbstractExecutionFactory {
                     String where = mojo.getParser().getSubElement(element, "lk:where").getTextContent();
                     logger.debug("解析要更新的字段");
                     List<Element> fields = mojo.getParser().getSubElementList(element, "lk:field");
-                    final Map<String, Object> paramMap = mojo.getProcessedInputParamMap();
+                    final Map<String, Object> paramMap = Maps.newHashMap();
                     StringBuilder sql = new StringBuilder("update ");
                     sql.append(table);
                     sql.append(" set ");
+                    SpelPair sp = SpelUtils.getSpelPair(mojo);
                     for (Element f : fields) {
                         String column = f.getAttribute("column");
                         String from = f.getAttribute("from");
                         if (!Texts.hasText(from)) {
                             //默认from与column相同
-                            from = column;
+                            from = "#root[input][" + column + "]";
                         }
                         String desc = f.getAttribute("desc");
                         String ignoreNull = f.getAttribute("ignoreNull");
                         String subSql = mojo.getParser().getParamText(f, "subSql");
 
-
                         if (!Texts.hasText(subSql)) {
-                            if (!paramMap.containsKey(from) && paramMap.get(from) == null) {
-                                if (LkTools.isTrue(ignoreNull)) {
-                                    //空值忽略不插入
-                                    continue;
-                                } else {
-                                    //要插入该字段，但是入参没有这个参数名字
-                                    paramMap.put(from, null);
-                                }
+                            Object value = sp.getExp().parseExpression(from).getValue(sp.getCtx());
+                            if (value == null && LkTools.isTrue(ignoreNull)) {
+                                continue;
                             }
+                            paramMap.put(column, value);
                         }
                         sql.append(column);
                         sql.append("=");
                         if (Texts.hasText(subSql)) {
                             sql.append('(' + subSql + ')');
                         } else {
-                            sql.append(":" + from);
+                            sql.append(":" + column);
                         }
                         sql.append(",");
                     }
@@ -98,14 +96,14 @@ public class DbUpdate implements AbstractExecutionFactory {
                             @Override
                             protected void doInTransactionWithoutResult(TransactionStatus status) {
                                 try {
-                                    doUpdate(executionId, dataSourceId, mojo, updateSql);
+                                    doUpdate(executionId, dataSourceId, mojo, updateSql, paramMap);
                                 } catch (LinkException e) {
                                     Throwables.propagate(e);
                                 }
                             }
                         });
                     } else {
-                        doUpdate(executionId, dataSourceId, mojo, updateSql);
+                        doUpdate(executionId, dataSourceId, mojo, updateSql, paramMap);
                     }
 
                 } else {
@@ -115,9 +113,9 @@ public class DbUpdate implements AbstractExecutionFactory {
         };
     }
 
-    private void doUpdate(String executionId, String dataSourceId, DirectiveMojo mojo, String updateSql) throws LinkException {
+    private void doUpdate(String executionId, String dataSourceId, DirectiveMojo mojo, String updateSql, Map<String, Object> pm) throws LinkException {
         NamedParameterJdbcTemplate jdbc = dataSourceManager.getNamedParameterJdbcTemplate(dataSourceId);
-        SpelMapSqlParameterSource paramMap = new SpelMapSqlParameterSource(mojo.getProcessedInputParamMap(), SpelUtils.getSpelPair(mojo));
+        SpelMapSqlParameterSource paramMap = new SpelMapSqlParameterSource(pm, SpelUtils.getSpelPair(mojo));
         int updateCount = jdbc.update(updateSql, paramMap);
         ExecuteResult rst = new ExecuteResult();
         rst.setEffectCount(updateCount);
