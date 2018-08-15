@@ -16,6 +16,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 import org.w3c.dom.Element;
 
 import javax.annotation.Resource;
+import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -43,16 +44,13 @@ public class DbDelete implements AbstractExecutionFactory {
                     String table = mojo.getParser().getSubElement(element, "lk:table").getTextContent();
                     logger.debug("解析删除过滤条件");
                     String where = mojo.getParser().getSubElement(element, "lk:where").getTextContent();
-                    final Map<String, Object> paramMap = mojo.getProcessedInputParamMap();
                     StringBuilder sql = new StringBuilder("delete from ");
                     sql.append(table);
                     final String updateSql = sql.toString() + " where " + BeetlTool.renderBeetl(mojo, where);
                     logger.debug("解析事务配置");
                     String transaction = element.getAttribute("transaction");
                     System.out.println(transaction);
-                    logger.debug("组织sql语句和参数");
-                    System.out.println(updateSql);
-                    System.out.println(paramMap);
+                    logger.debug("组织sql语句: {}", updateSql);
                     logger.debug("根据情况开启事务");
                     if (LkTools.isTrue(transaction)) {
                         TransactionTemplate transactionTemplate = dataSourceManager.getTransactionTemplate(dataSourceId, null);
@@ -79,7 +77,7 @@ public class DbDelete implements AbstractExecutionFactory {
 
     private void doDelete(String executionId, String dataSourceId, DirectiveMojo mojo, String deleteSql) throws LinkException {
         NamedParameterJdbcTemplate jdbc = dataSourceManager.getNamedParameterJdbcTemplate(dataSourceId);
-        SpelMapSqlParameterSource paramMap = new SpelMapSqlParameterSource(mojo.getProcessedInputParamMap(), SpelUtils.getSpelPair(mojo));
+        SpelMapSqlParameterSource paramMap = new SpelMapSqlParameterSource(Collections.EMPTY_MAP, SpelUtils.getSpelPair(mojo));
         int updateCount = jdbc.update(deleteSql, paramMap);
         ExecuteResult rst = new ExecuteResult();
         rst.setEffectCount(updateCount);
