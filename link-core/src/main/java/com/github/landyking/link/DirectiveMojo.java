@@ -17,7 +17,7 @@ public class DirectiveMojo {
     private final String code;
     private final Map<String, Object> processedInputParam = Maps.newHashMap();
 
-    private final transient Map<String, ExecuteResult> executeResultMap = Maps.newHashMap();
+    private final transient Map<String, ExecuteResult> executeResultMap = Maps.newLinkedHashMap();
     /**
      * execution执行结束，然后对执行参数的数据进行处理后得到的数据
      */
@@ -35,6 +35,7 @@ public class DirectiveMojo {
         this.code = code;
         this.pot = pot;
         this.parser = parser;
+        this.parser.setDirectiveMojo(this);
     }
 
     public DirectiveParser getParser() {

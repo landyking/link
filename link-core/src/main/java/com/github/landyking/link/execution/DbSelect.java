@@ -228,7 +228,6 @@ public class DbSelect implements AbstractExecutionFactory {
     private void doSelect(String executionId, String dataSourceId, DirectiveMojo mojo, String selectSql, String countSql) throws LinkException {
         NamedParameterJdbcTemplate jdbc = dataSourceManager.getNamedParameterJdbcTemplate(dataSourceId);
         SpelMapSqlParameterSource paramMap = new SpelMapSqlParameterSource(mojo.getProcessedInputParamMap(), SpelUtils.getSpelPair(mojo));
-
         int total;
         List<Map<String, Object>> dataList = Collections.emptyList();
         boolean countQuery = Texts.hasText(countSql);

@@ -1,13 +1,12 @@
 package com.github.landyking.link.paramProcessor;
 
-import com.github.landyking.link.AbstractParamProcessor;
 import com.github.landyking.link.DirectiveMojo;
 import com.github.landyking.link.ValueBag;
+import com.github.landyking.link.exception.LinkException;
 import com.github.landyking.link.util.GUIDUtil;
 import com.github.landyking.link.util.Texts;
 import org.w3c.dom.Element;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -18,7 +17,7 @@ public class GUIDGenerator extends OutputOneByOneProcessor {
     public static final String UUID = "uuid";
 
     @Override
-    protected void processOutputOne(DirectiveMojo mojo, Element param, Element config, Map<String, ValueBag> one, String name, ValueBag item) {
+    protected void processOutputOne(DirectiveMojo mojo, Element param, Element config, Map<String, ValueBag> one, String name, ValueBag item) throws LinkException {
         Object val = genValue(config, mojo);
         item.setModifyValue(val);
     }
@@ -28,8 +27,8 @@ public class GUIDGenerator extends OutputOneByOneProcessor {
         return genValue(config, mojo);
     }
 
-    private Object genValue(Element config, DirectiveMojo mojo) {
-        String type = mojo.getParser().getParam(config, "type");
+    private Object genValue(Element config, DirectiveMojo mojo) throws LinkException {
+        String type = mojo.getParser().getParamText(config, "type");
         if (type.equalsIgnoreCase(SNOWFLAKE)) {
             return GUIDUtil.nextId();
         } else if (type.equalsIgnoreCase(UUID)) {

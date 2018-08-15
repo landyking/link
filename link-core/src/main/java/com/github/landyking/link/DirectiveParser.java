@@ -1,6 +1,10 @@
 package com.github.landyking.link;
 
 import com.github.landyking.link.exception.LinkException;
+import com.github.landyking.link.spel.SpelPair;
+import com.github.landyking.link.spel.SpelUtils;
+import com.github.landyking.link.util.LkTools;
+import com.github.landyking.link.util.Texts;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import org.slf4j.Logger;
@@ -45,7 +49,12 @@ public class DirectiveParser {
     public static final String XSD_LOCATION = "/link/link-1.0.xsd";
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private final XPath xPath = initXPath();
+    private transient DirectiveMojo directiveMojo;
     private final DirectiveManager directiveManager;
+
+    public void setDirectiveMojo(DirectiveMojo directiveMojo) {
+        this.directiveMojo = directiveMojo;
+    }
 
     private XPath initXPath() {
         XPath xPath = XPathFactory.newInstance().newXPath();
@@ -194,8 +203,11 @@ public class DirectiveParser {
         return getSubElement(document, "/lk:directive/lk:execution");
     }
 
+    public String getParamText(Element config, String pname) throws LinkException {
+        return Texts.toStr(getParam(config, pname));
+    }
 
-    public String getParam(Element config, String pname) {
+    public Object getParam(Element config, String pname) throws LinkException {
         if (config.hasAttribute(pname)) {
             //首先从尝试从属性中解析该参数
             return config.getAttribute(pname);
@@ -215,7 +227,13 @@ public class DirectiveParser {
                     Element tmp = (Element) item;
                     String name = tmp.getAttribute("name");
                     if (name.equals(pname)) {
-                        return tmp.getTextContent();
+                        Boolean useExp = LkTools.isTrue(tmp.getAttribute("useExp"));
+                        if (useExp) {
+                            SpelPair sp = SpelUtils.getSpelPair(directiveMojo);
+                            return sp.getExp().parseExpression(tmp.getTextContent()).getValue(sp.getCtx());
+                        } else {
+                            return tmp.getTextContent();
+                        }
                     }
                 }
             }

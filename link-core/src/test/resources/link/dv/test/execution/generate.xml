@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<directive xmlns="http://www.github.com/landyking/link"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.github.com/landyking/link http://www.github.com/landyking/link/link-1.0.xsd">
+    <description>自定义处理类</description>
+    <input>
+        <param name="name" desc="名称"/>
+        <param name="now" desc="现在时间"/>
+    </input>
+    <execution>
+        <generate id="var1">
+            <var name="createTime">
+                <processors>
+                    <DateTimeGenerator/>
+                </processors>
+            </var>
+            <var name="now" from="[input][now]">
+                <processors>
+                    <DateTimeConverter srcType="auto" destType="string" destFmt="yyyy-MM-dd HH:mm:ss"/>
+                </processors>
+            </var>
+        </generate>
+        <generate id="var2">
+            <var name="name" from="[input][name]">
+                <processors>
+                    <TextToList/>
+                </processors>
+            </var>
+        </generate>
+    </execution>
+    <executionEnding/>
+    <output>
+        <map name="root">
+            <param name="createTime" from="[end][var1].map[createTime]"/>
+            <param name="now" from="[end][var1].map[now]"/>
+            <param name="name" from="[end][var2].first"/>
+        </map>
+    </output>
+    <resultRender/>
+    <dependencys></dependencys>
+</directive>

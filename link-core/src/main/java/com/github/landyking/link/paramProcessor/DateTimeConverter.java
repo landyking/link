@@ -45,10 +45,10 @@ public class DateTimeConverter extends OutputOneByOneProcessor {
             //空字符串不转换
             return obj;
         }
-        String srcType = mojo.getParser().getParam(config, "srcType");
-        String srcFmt = mojo.getParser().getParam(config, "srcFmt");
-        String destType = mojo.getParser().getParam(config, "destType");
-        String destFmt = mojo.getParser().getParam(config, "destFmt");
+        String srcType = mojo.getParser().getParamText(config, "srcType");
+        String srcFmt = mojo.getParser().getParamText(config, "srcFmt");
+        String destType = mojo.getParser().getParamText(config, "destType");
+        String destFmt = mojo.getParser().getParamText(config, "destFmt");
         return conversionService.convert(new DatePack(obj, srcType, srcFmt, destType, destFmt), Object.class);
     }
 }

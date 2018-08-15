@@ -8,7 +8,7 @@
         <param name="departmentName" desc="部门名称"/>
     </input>
     <execution>
-        <dbInsert id="default" dataSource="emp" transaction="true">
+        <dbInsert  id="default" dataSource="emp" transaction="true">
             <field column="dept_no" from="departmentNo"/>
             <field column="dept_name" from="departmentName"/>
             <table>departments</table>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<directive xmlns="http://www.github.com/landyking/link"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.github.com/landyking/link http://www.github.com/landyking/link/link-1.0.xsd">
+    <description>自定义处理类</description>
+    <input>
+        <param name="time"/>
+    </input>
+    <execution>
+        <generate id="var">
+            <var name="time2" from="[input][time]">
+                <processors>
+                    <DateTimeConverter srcType="auto" destType="string" destFmt="yyyy年MM月dd日"/>
+                </processors>
+            </var>
+        </generate>
+        <custom id="default" className="com.github.landyking.link.execution.MyCustomExecution">
+            <prop name="param" useExp="true">#root[exec][var].first</prop>
+        </custom>
+    </execution>
+    <executionEnding/>
+    <output>
+        <map name="root">
+            <param name="result" from="[end][default].first"/>
+        </map>
+    </output>
+    <resultRender/>
+    <dependencys></dependencys>
+</directive>

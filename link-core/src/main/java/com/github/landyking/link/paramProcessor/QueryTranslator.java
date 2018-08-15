@@ -117,8 +117,8 @@ public class QueryTranslator extends AbstractParamProcessor {
         }
     }
 
-    private Boolean getFailUseOriginal(DirectiveMojo mojo, Element config) {
-        return LkTools.isTrue(mojo.getParser().getParam(config, "failUseOriginal"));
+    private Boolean getFailUseOriginal(DirectiveMojo mojo, Element config) throws LinkException {
+        return LkTools.isTrue(mojo.getParser().getParamText(config, "failUseOriginal"));
     }
 
     protected String getCacheName(String tableName, String destFieldName, String displayFieldName, String whereCondition) {
@@ -209,37 +209,37 @@ public class QueryTranslator extends AbstractParamProcessor {
         return transMap;
     }
 
-    private String getQueryDataSource(DirectiveMojo ctx, Element config) {
-        return ctx.getParser().getParam(config, "queryDataSource");
+    private String getQueryDataSource(DirectiveMojo ctx, Element config) throws LinkException {
+        return ctx.getParser().getParamText(config, "queryDataSource");
     }
 
-    private String getDestFileType(DirectiveMojo mojo, Element config) {
-        return mojo.getParser().getParam(config, "destFieldType");
+    private String getDestFileType(DirectiveMojo mojo, Element config) throws LinkException {
+        return mojo.getParser().getParamText(config, "destFieldType");
     }
 
 
-    protected String getDisplayFieldName(DirectiveMojo mojo, Element config) {
-        return mojo.getParser().getParam(config, "displayField");
+    protected String getDisplayFieldName(DirectiveMojo mojo, Element config) throws LinkException {
+        return mojo.getParser().getParamText(config, "displayField");
     }
 
     protected String getWhereCondition(DirectiveMojo mojo, Element config) throws LinkException {
-        String where = mojo.getParser().getParam(config, "where");
+        String where = mojo.getParser().getParamText(config, "where");
         if (Texts.hasText(where)) {
             where = BeetlTool.renderBeetl(mojo, where);
         }
         return where;
     }
 
-    protected String getDestFieldName(DirectiveMojo mojo, Element config) {
-        return mojo.getParser().getParam(config, "destField");
+    protected String getDestFieldName(DirectiveMojo mojo, Element config) throws LinkException {
+        return mojo.getParser().getParamText(config, "destField");
     }
 
-    protected String getSrcFieldName(DirectiveMojo mojo, Element config) {
-        return mojo.getParser().getParam(config, "srcField");
+    protected String getSrcFieldName(DirectiveMojo mojo, Element config) throws LinkException {
+        return mojo.getParser().getParamText(config, "srcField");
     }
 
-    protected String getTableName(DirectiveMojo mojo, Element config) {
-        return mojo.getParser().getParam(config, "table");
+    protected String getTableName(DirectiveMojo mojo, Element config) throws LinkException {
+        return mojo.getParser().getParamText(config, "table");
     }
 
     @Override

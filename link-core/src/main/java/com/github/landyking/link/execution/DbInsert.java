@@ -2,8 +2,13 @@ package com.github.landyking.link.execution;
 
 import com.github.landyking.link.*;
 import com.github.landyking.link.exception.LinkException;
+import com.github.landyking.link.spel.SpelMapSqlParameterSource;
+import com.github.landyking.link.spel.SpelPair;
+import com.github.landyking.link.spel.SpelTool;
+import com.github.landyking.link.spel.SpelUtils;
 import com.github.landyking.link.util.LkTools;
 import com.github.landyking.link.util.Texts;
+import com.google.common.base.Throwables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -61,7 +66,7 @@ public class DbInsert implements AbstractExecutionFactory {
                         String fixed = f.getAttribute("fixed");
                         String ignoreNull = f.getAttribute("ignoreNull");
                         String pk = f.getAttribute("pk");
-                        String subSql = mojo.getParser().getParam(f, "subSql");
+                        String subSql = mojo.getParser().getParamText(f, "subSql");
 
                         if (Texts.hasText(fixed)) {
                             paramMap.put(from, fixed);
@@ -110,7 +115,11 @@ public class DbInsert implements AbstractExecutionFactory {
                         transactionTemplate.execute(new TransactionCallbackWithoutResult() {
                             @Override
                             protected void doInTransactionWithoutResult(TransactionStatus status) {
-                                doInsert(executionId, dataSourceId, mojo, insertSql, finalPkName);
+                                try {
+                                    doInsert(executionId, dataSourceId, mojo, insertSql, finalPkName);
+                                } catch (LinkException e) {
+                                    Throwables.propagate(e);
+                                }
                             }
                         });
                     } else {
@@ -124,19 +133,19 @@ public class DbInsert implements AbstractExecutionFactory {
         };
     }
 
-    private void doInsert(String executionId, String dataSourceId, DirectiveMojo mojo, String insertSql, String pkName) {
+    private void doInsert(String executionId, String dataSourceId, DirectiveMojo mojo, String insertSql, String pkName) throws LinkException {
         NamedParameterJdbcTemplate jdbc = dataSourceManager.getNamedParameterJdbcTemplate(dataSourceId);
-        Map<String, Object> paramMap = mojo.getProcessedInputParamMap();
+        SpelMapSqlParameterSource paramMap = new SpelMapSqlParameterSource(mojo.getProcessedInputParamMap(), SpelUtils.getSpelPair(mojo));
         Object pkValue = null;
         if (Texts.hasText(pkName)) {
-            pkValue = paramMap.get(pkName);
+            pkValue = paramMap.getValue(pkName);
         }
         int updateCount;
         if (pkValue != null) {
             updateCount = jdbc.update(insertSql, paramMap);
         } else {
             GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
-            updateCount = jdbc.update(insertSql, new MapSqlParameterSource(paramMap), generatedKeyHolder);
+            updateCount = jdbc.update(insertSql, paramMap, generatedKeyHolder);
             pkValue = generatedKeyHolder.getKey();
         }
         ExecuteResult rst = new ExecuteResult();

@@ -9,6 +9,10 @@ import org.w3c.dom.Element;
 public abstract class AbstractExecution {
     protected final Element element;
 
+    public String executionId() {
+        return element.getAttribute("id");
+    }
+
     public AbstractExecution(Element element) {
         this.element = element;
     }

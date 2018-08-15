@@ -30,12 +30,12 @@ public class TextToList extends OutputOneByOneProcessor {
         return doWork(config, mojo, in);
     }
 
-    private Object doWork(Element config, DirectiveMojo mojo, Object in) {
+    private Object doWork(Element config, DirectiveMojo mojo, Object in) throws LinkException {
         if (in == null || !Texts.hasText(in)) {
             return in;
         }
-        String delimiter = mojo.getParser().getParam(config, "delimiter");
-        String destType = mojo.getParser().getParam(config, "destType");
+        String delimiter = mojo.getParser().getParamText(config, "delimiter");
+        String destType = mojo.getParser().getParamText(config, "destType");
         Iterable<String> arr = Splitter.on(delimiter).omitEmptyStrings().split(Texts.toStr(in, ""));
         List<Object> rst = Lists.newLinkedList();
         for (String a : arr) {

@@ -62,7 +62,7 @@ public class DbUpdate implements AbstractExecutionFactory {
                         String defVal = f.getAttribute("default");
                         String fixed = f.getAttribute("fixed");
                         String ignoreNull = f.getAttribute("ignoreNull");
-                        String subSql = mojo.getParser().getParam(f, "subSql");
+                        String subSql = mojo.getParser().getParamText(f, "subSql");
 
                         if (Texts.hasText(fixed)) {
                             paramMap.put(from, fixed);

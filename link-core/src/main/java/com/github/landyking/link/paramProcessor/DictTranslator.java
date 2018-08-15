@@ -4,6 +4,7 @@ import com.github.landyking.link.AbstractParamProcessor;
 import com.github.landyking.link.DirectiveMojo;
 import com.github.landyking.link.LocalDictManager;
 import com.github.landyking.link.ValueBag;
+import com.github.landyking.link.exception.LinkException;
 import com.github.landyking.link.util.LkTools;
 import com.github.landyking.link.util.Texts;
 import com.google.common.collect.Maps;
@@ -54,22 +55,22 @@ public class DictTranslator extends AbstractParamProcessor {
         }
     }
 
-    private Boolean getFailUseOriginal(DirectiveMojo mojo, Element config) {
-        return LkTools.isTrue(mojo.getParser().getParam(config, "failUseOriginal"));
+    private Boolean getFailUseOriginal(DirectiveMojo mojo, Element config) throws LinkException {
+        return LkTools.isTrue(mojo.getParser().getParamText(config, "failUseOriginal"));
     }
 
 
-    protected String getWhereCondition(DirectiveMojo mojo, Element config) {
-        return mojo.getParser().getParam(config, "where");
+    protected String getWhereCondition(DirectiveMojo mojo, Element config) throws LinkException {
+        return mojo.getParser().getParamText(config, "where");
     }
 
 
-    protected String getSrcFieldName(DirectiveMojo mojo, Element config) {
-        return mojo.getParser().getParam(config, "srcField");
+    protected String getSrcFieldName(DirectiveMojo mojo, Element config) throws LinkException {
+        return mojo.getParser().getParamText(config, "srcField");
     }
 
-    protected String getDictName(DirectiveMojo mojo, Element config) {
-        return mojo.getParser().getParam(config, "dict");
+    protected String getDictName(DirectiveMojo mojo, Element config) throws LinkException {
+        return mojo.getParser().getParamText(config, "dict");
     }
 
     @Override

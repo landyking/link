@@ -183,6 +183,15 @@
         </xs:annotation>
         <xs:sequence>
             <xs:choice minOccurs="1" maxOccurs="unbounded">
+                <xs:element name="generate" type="lk:executionGenerateType">
+                    <xs:unique name="executionGenerateVarNameUnique">
+                        <xs:annotation>
+                            <xs:documentation><![CDATA[变量名字必须唯一]]></xs:documentation>
+                        </xs:annotation>
+                        <xs:selector xpath="lk:var"/>
+                        <xs:field xpath="@name"/>
+                    </xs:unique>
+                </xs:element>
                 <xs:element name="custom" type="lk:executionCustomClassType">
                     <xs:unique name="customExecutionClassPropNameUnique">
                         <xs:annotation>
@@ -403,6 +412,34 @@
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
+    <xs:complexType name="executionGenerateType">
+        <xs:annotation>
+            <xs:documentation>变量生成</xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="lk:abstractExecutionType">
+                <xs:sequence>
+                    <xs:element name="var" maxOccurs="unbounded" minOccurs="0">
+                        <xs:complexType>
+                            <xs:sequence minOccurs="0">
+                                <xs:element name="processors" type="lk:paramProcessorsType"></xs:element>
+                            </xs:sequence>
+                            <xs:attribute name="name" use="required" type="lk:needTextType">
+                                <xs:annotation>
+                                    <xs:documentation><![CDATA[变量名，非空，唯一。]]></xs:documentation>
+                                </xs:annotation>
+                            </xs:attribute>
+                            <xs:attribute name="from" type="lk:needTextType">
+                                <xs:annotation>
+                                    <xs:documentation><![CDATA[赋值表达式]]></xs:documentation>
+                                </xs:annotation>
+                            </xs:attribute>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
     <xs:attributeGroup name="pageAttributeGroup">
         <xs:attribute name="pagination" type="xs:boolean" default="true"/>
         <xs:attribute name="countQuery" type="xs:boolean" default="true"/>
@@ -419,6 +456,7 @@
         <xs:simpleContent>
             <xs:extension base="xs:string">
                 <xs:attribute name="name" type="lk:needTextType" use="required"/>
+                <xs:attribute name="useExp" type="xs:boolean" default="false"/>
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>

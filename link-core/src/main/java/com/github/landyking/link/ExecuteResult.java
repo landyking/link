@@ -1,5 +1,7 @@
 package com.github.landyking.link;
 
+import com.google.common.collect.Iterables;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +27,15 @@ public class ExecuteResult {
      */
     private int totalCount;
 
+    public Map<String, Object> getMap() {
+        return Iterables.getFirst(data, Collections.<String, Object>emptyMap());
+    }
+
+    public Object getFirst() {
+        Map<String, Object> map = getMap();
+        return Iterables.getFirst(map.values(), null);
+    }
+
     public int getEffectCount() {
         return effectCount;
     }
@@ -41,7 +52,7 @@ public class ExecuteResult {
         this.primaryKeyValue = primaryKeyValue;
     }
 
-    public Object getData() {
+    public List<Map<String, Object>> getData() {
         return data;
     }
 
