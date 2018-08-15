@@ -2,6 +2,7 @@ package com.github.landyking.link.execution;
 
 import com.github.landyking.link.DirectiveMojo;
 import com.github.landyking.link.TestH2Database;
+import com.github.landyking.link.exception.LinkException;
 import com.github.landyking.link.pot.EmptyInputPot;
 import com.github.landyking.link.spel.SpelTool;
 import com.github.landyking.link.util.Texts;
@@ -49,5 +50,19 @@ public class DbInsertTest extends TestH2Database {
         Assert.assertTrue(s.startsWith("name"));
         mojo = getDm().callDirective("test.execution.deleteDepart", pot);
         Assert.assertEquals(true, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[success].finalValue"));
+    }
+
+    @Test
+    public void testAddEmployee() throws LinkException {
+        EmptyInputPot pot = new EmptyInputPot();
+        pot.put("empNo", "99999");
+        pot.put("firstName", "Landy");
+        pot.put("lastName","King" );
+        pot.put("gender","F");
+        pot.put("birthDate","1978-01-22" );
+        pot.put("hireDate", "1978-01-22");
+        DirectiveMojo mojo = getDm().callDirective("test.execution.addEmployee", pot);
+        Assert.assertEquals(true, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst1].finalValue"));
+        Assert.assertEquals(true, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst2].finalValue"));
     }
 }

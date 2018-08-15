@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<directive xmlns="http://www.github.com/landyking/link"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.github.com/landyking/link http://www.github.com/landyking/link/link-1.0.xsd">
+    <description>新增雇员信息</description>
+    <input>
+        <param name="empNo" default="雇员编号"/>
+        <param name="birthDate" desc="生日">
+            <processors>
+                <DateTimeConverter srcType="auto" destType="date"/>
+            </processors>
+        </param>
+        <param name="firstName" desc="名"/>
+        <param name="lastName" desc="姓"/>
+        <param name="gender" desc="性别"/>
+        <param name="hireDate" desc="雇佣时间">
+            <processors>
+                <DateTimeConverter srcType="auto" destType="date"/>
+            </processors>
+        </param>
+    </input>
+    <execution>
+        <dbInsert id="add" dataSource="test" transaction="true">
+            <field column="emp_no" from="[input][empNo]" pk="true"/>
+            <field column="birth_date" from="[input][birthDate]"/>
+            <field column="first_name" from="[input][firstName]"/>
+            <field column="last_name" from="[input][lastName]"/>
+            <field column="gender" from="[input][gender]"/>
+            <field column="hire_date" from="[input][hireDate]"/>
+            <table>employees</table>
+        </dbInsert>
+        <dbDelete id="del" dataSource="test">
+            <table>employees</table>
+            <where>
+                emp_no = :{#root[input][empNo]}
+            </where>
+        </dbDelete>
+    </execution>
+    <executionEnding/>
+    <output>
+        <map name="root">
+            <param name="rst1" from="[end][add].effectCount>0"/>
+            <param name="rst2" from="[end][del].effectCount>0"/>
+        </map>
+    </output>
+    <resultRender/>
+    <dependencys></dependencys>
+</directive>

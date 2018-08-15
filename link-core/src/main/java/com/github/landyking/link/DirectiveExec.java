@@ -124,16 +124,6 @@ public class DirectiveExec implements ApplicationContextAware {
                 }
             }
         }
-        String fixed = null;
-        boolean isFixed = param.hasAttribute("fixed");
-        if (isFixed) {
-            fixed = param.getAttribute("fixed");
-        }
-        boolean isDefault = param.hasAttribute("default");
-        String defValue = null;
-        if (isDefault) {
-            defValue = param.getAttribute("default");
-        }
         List<Map<String, ValueBag>> valueBagList = Lists.newArrayList();
         Object value = null;
         if (Texts.hasText(from)) {
@@ -149,13 +139,13 @@ public class DirectiveExec implements ApplicationContextAware {
             single = false;
             for (Object o : ((Collection) value)) {
                 HashMap<String, ValueBag> map = Maps.newHashMap();
-                map.put(name, fillValueBag(isFixed, fixed, isDefault, defValue, o));
+                map.put(name, fillValueBag(o));
                 valueBagList.add(map);
             }
         } else {
             single = true;
             HashMap<String, ValueBag> map = Maps.newHashMap();
-            map.put(name, fillValueBag(isFixed, fixed, isDefault, defValue, value));
+            map.put(name, fillValueBag(value));
             valueBagList.add(map);
         }
 
@@ -182,20 +172,12 @@ public class DirectiveExec implements ApplicationContextAware {
         }
     }
 
-    private ValueBag fillValueBag(boolean isFixed, String fixed, boolean isDefault, String defValue, Object o) {
+    private ValueBag fillValueBag(Object o) {
         ValueBag bag;
-        if (isFixed) {
-            bag = new ValueBag(false).setOriginValue(fixed);
+        if (o != null) {
+            bag = new ValueBag(false).setOriginValue(o);
         } else {
-            if (o != null) {
-                bag = new ValueBag(false).setOriginValue(o);
-            } else {
-                if (isDefault) {
-                    bag = new ValueBag(false).setOriginValue(defValue);
-                } else {
-                    bag = new ValueBag(false).setOriginValue(null);
-                }
-            }
+            bag = new ValueBag(false).setOriginValue(null);
         }
         return bag;
     }
@@ -293,19 +275,15 @@ public class DirectiveExec implements ApplicationContextAware {
             String name = param.getAttribute("name");
             String desc = param.getAttribute("desc");
             String notEmpty = param.getAttribute("notEmpty");
-            if (param.hasAttribute("fixed")) {
-                in = param.getAttribute("fixed");
-            } else {
-                in = mojo.getPot().getInputParamText(name);
-                if (!Texts.hasText(in)) {
-                    //参数为空，进行检测
-                    if (param.hasAttribute("default")) {
-                        in = param.getAttribute("default");
-                    }
-                    if (LkTools.isTrue(notEmpty) && !Texts.hasText(in)) {
-                        //不能为空，但实际为空，抛出异常
-                        throw new LinkException("参数[" + name + ":" + desc + "]不能为空");
-                    }
+            in = mojo.getPot().getInputParamText(name);
+            if (!Texts.hasText(in)) {
+                //参数为空，进行检测
+                if (param.hasAttribute("default")) {
+                    in = param.getAttribute("default");
+                }
+                if (LkTools.isTrue(notEmpty) && !Texts.hasText(in)) {
+                    //不能为空，但实际为空，抛出异常
+                    throw new LinkException("参数[" + name + ":" + desc + "]不能为空");
                 }
             }
             mojo.setProcessedInputParam(name, in);

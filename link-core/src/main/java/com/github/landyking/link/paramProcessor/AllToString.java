@@ -1,12 +1,10 @@
 package com.github.landyking.link.paramProcessor;
 
-import com.github.landyking.link.AbstractParamProcessor;
 import com.github.landyking.link.DirectiveMojo;
 import com.github.landyking.link.ValueBag;
 import com.github.landyking.link.util.Texts;
 import org.w3c.dom.Element;
 
-import java.util.List;
 import java.util.Map;
 
 /**

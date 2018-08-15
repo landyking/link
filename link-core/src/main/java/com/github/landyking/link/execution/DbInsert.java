@@ -41,7 +41,7 @@ public class DbInsert implements AbstractExecutionFactory {
 
             @Override
             public void execute(final DirectiveMojo mojo) throws LinkException {
-                System.out.println("DbInsert.execute");
+//                System.out.println("DbInsert.execute");
                 final String executionId = element.getAttribute("id");
                 final String dataSourceId = element.getAttribute("dataSource");
                 if (dataSourceManager.hasDataSource(dataSourceId)) {

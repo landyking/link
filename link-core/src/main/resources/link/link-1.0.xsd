@@ -17,11 +17,11 @@
                 </xs:element>
                 <xs:element name="input">
                     <xs:annotation>
-                        <xs:documentation><![CDATA[]]></xs:documentation>
+                        <xs:documentation><![CDATA[输入参数]]></xs:documentation>
                     </xs:annotation>
                     <xs:complexType>
                         <xs:sequence>
-                            <xs:element name="param" type="lk:paramType" minOccurs="0" maxOccurs="unbounded"/>
+                            <xs:element name="param" type="lk:inputParamType" minOccurs="0" maxOccurs="unbounded"/>
                         </xs:sequence>
                     </xs:complexType>
                     <xs:unique name="inputParamNameUnique">
@@ -114,22 +114,22 @@
                 <xs:documentation><![CDATA[描述信息]]></xs:documentation>
             </xs:annotation>
         </xs:attribute>
-        <xs:attribute name="notEmpty" type="xs:boolean" default="true">
-            <xs:annotation>
-                <xs:documentation><![CDATA[不允许为空，默认true。]]></xs:documentation>
-            </xs:annotation>
-        </xs:attribute>
-        <xs:attribute name="default" type="lk:needTextType">
-            <xs:annotation>
-                <xs:documentation><![CDATA[默认值。与固定值二选一，固定值优先级高。]]></xs:documentation>
-            </xs:annotation>
-        </xs:attribute>
-        <xs:attribute name="fixed" type="lk:needTextType">
-            <xs:annotation>
-                <xs:documentation><![CDATA[固定值。与默认值二选一，固定值优先级高。]]></xs:documentation>
-            </xs:annotation>
-        </xs:attribute>
-
+    </xs:complexType>
+    <xs:complexType name="inputParamType">
+        <xs:complexContent>
+            <xs:extension base="lk:paramType">
+                <xs:attribute name="default" type="lk:needTextType">
+                    <xs:annotation>
+                        <xs:documentation><![CDATA[默认值。]]></xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="notEmpty" type="xs:boolean" default="true">
+                    <xs:annotation>
+                        <xs:documentation><![CDATA[不允许为空，默认true。]]></xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
     </xs:complexType>
     <xs:complexType name="outputParamType">
         <xs:complexContent>

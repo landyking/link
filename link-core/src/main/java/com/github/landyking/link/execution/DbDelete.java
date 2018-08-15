@@ -36,7 +36,7 @@ public class DbDelete implements AbstractExecutionFactory {
 
             @Override
             public void execute(final DirectiveMojo mojo) throws LinkException {
-                System.out.println("DbDelete.execute");
+//                System.out.println("DbDelete.execute");
                 final String executionId = element.getAttribute("id");
                 final String dataSourceId = element.getAttribute("dataSource");
                 if (dataSourceManager.hasDataSource(dataSourceId)) {
@@ -49,7 +49,7 @@ public class DbDelete implements AbstractExecutionFactory {
                     final String updateSql = sql.toString() + " where " + BeetlTool.renderBeetl(mojo, where);
                     logger.debug("解析事务配置");
                     String transaction = element.getAttribute("transaction");
-                    System.out.println(transaction);
+//                    System.out.println(transaction);
                     logger.debug("组织sql语句: {}", updateSql);
                     logger.debug("根据情况开启事务");
                     if (LkTools.isTrue(transaction)) {
