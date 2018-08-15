@@ -45,6 +45,11 @@
             <param name="firstName" from="[exec][default].data.![#this[first_name]]" desc="名"/>
             <param name="deptName" from="[exec][default].data.![#this[dept_name]]" desc="单位"/>
             <param name="deptNo" from="[exec][default].data.![#this[deptNo]]" desc="单位"/>
+            <param name="birthDate"  from="[exec][default].data.![#this[birthDate]]">
+                <processors>
+                    <DateTimeConverter srcType="auto" destType="string" destFmt="yyyy年MM月dd日"/>
+                </processors>
+            </param>
         </list>
     </output>
     <resultRender/>

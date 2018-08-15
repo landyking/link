@@ -48,5 +48,6 @@ public class DbSelectTest extends TestH2Database {
         Assert.assertEquals("Guoxiang", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[0][firstName].finalValue"));
         Assert.assertEquals("Development", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[0][deptName].finalValue"));
         Assert.assertEquals("d005", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[0][deptNo].finalValue"));
+        Assert.assertEquals("1962年07月14日", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[0][birthDate].finalValue"));
     }
 }
