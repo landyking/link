@@ -62,15 +62,10 @@ public class DbInsert implements AbstractExecutionFactory {
                             from = column;
                         }
                         String desc = f.getAttribute("desc");
-                        String defVal = f.getAttribute("default");
-                        String fixed = f.getAttribute("fixed");
                         String ignoreNull = f.getAttribute("ignoreNull");
                         String pk = f.getAttribute("pk");
                         String subSql = mojo.getParser().getParamText(f, "subSql");
 
-                        if (Texts.hasText(fixed)) {
-                            paramMap.put(from, fixed);
-                        }
                         if (!Texts.hasText(subSql)) {
                             if (LkTools.isTrue(pk)) {
                                 pkName = from;
@@ -81,11 +76,7 @@ public class DbInsert implements AbstractExecutionFactory {
                                     continue;
                                 } else {
                                     //要插入该字段，但是入参没有这个参数名字
-                                    if (Texts.hasText(defVal)) {
-                                        paramMap.put(from, defVal);
-                                    } else {
-                                        paramMap.put(from, null);
-                                    }
+                                    paramMap.put(from, null);
                                 }
                             }
                         }

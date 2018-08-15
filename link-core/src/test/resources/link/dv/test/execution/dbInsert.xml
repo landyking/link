@@ -9,7 +9,7 @@
     </input>
     <execution>
         <dbInsert id="default" dataSource="test">
-            <field column="dept_no" from="deptNo"/>
+            <field column="dept_no" from="deptNo" />
             <field column="dept_name" from="{#root[input][deptName]}"/>
             <table>departments</table>
         </dbInsert>

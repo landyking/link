@@ -265,16 +265,6 @@
             <xs:extension base="lk:dbFieldType">
                 <xs:attribute name="from" type="lk:needTextType"/>
                 <xs:attribute name="ignoreNull" type="xs:boolean" default="false"/>
-                <xs:attribute name="default" type="lk:needTextType">
-                    <xs:annotation>
-                        <xs:documentation><![CDATA[默认值。与固定值二选一，固定值优先级高。]]></xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
-                <xs:attribute name="fixed" type="lk:needTextType">
-                    <xs:annotation>
-                        <xs:documentation><![CDATA[固定值。与默认值二选一，固定值优先级高。]]></xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
