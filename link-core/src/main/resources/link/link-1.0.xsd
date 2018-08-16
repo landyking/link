@@ -373,7 +373,6 @@
                     </xs:element>
                     <xs:element name="other" type="lk:lineContentType" minOccurs="0" maxOccurs="1"/>
                 </xs:sequence>
-                <xs:attribute name="singleRow" type="xs:boolean" default="false"/>
                 <xs:attributeGroup ref="lk:pageAttributeGroup"/>
             </xs:extension>
         </xs:complexContent>
@@ -384,7 +383,6 @@
         </xs:annotation>
         <xs:complexContent>
             <xs:extension base="lk:abstractDbExecutionType">
-                <xs:attribute name="singleRow" type="xs:boolean" default="false"/>
                 <xs:attributeGroup ref="lk:pageAttributeGroup"/>
             </xs:extension>
         </xs:complexContent>
