@@ -16,6 +16,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
+import org.springframework.util.Assert;
 import org.w3c.dom.Element;
 
 import javax.annotation.Resource;
@@ -208,14 +209,32 @@ public class DbSelect implements AbstractExecutionFactory {
                     String columnAlias = f.getAttribute("columnAlias");
                     String tableAlias = f.getAttribute("tableAlias");
                     String desc = f.getAttribute("desc");
-                    if (Texts.hasText(tableAlias)) {
-                        sql.append(tableAlias);
-                        sql.append(".");
-                    }
-                    sql.append(column);
-                    if (Texts.hasText(columnAlias)) {
+                    String subSql = mojo.getParser().getParamText(f, "subSql");
+                    if (Texts.hasText(subSql)) {
+                        sql.append('(');
+                        sql.append(subSql);
+                        sql.append(')');
+                        sql.append(' ');
+                        String alias = null;
+                        if (Texts.hasText(column)) {
+                            alias = column;
+                        }
+                        if (Texts.hasText(columnAlias)) {
+                            alias = columnAlias;
+                        }
+                        Assert.hasText(alias, "子查询别名为空");
                         sql.append(" as ");
-                        sql.append(columnAlias);
+                        sql.append(alias);
+                    } else {
+                        if (Texts.hasText(tableAlias)) {
+                            sql.append(tableAlias);
+                            sql.append(".");
+                        }
+                        sql.append(column);
+                        if (Texts.hasText(columnAlias)) {
+                            sql.append(" as ");
+                            sql.append(columnAlias);
+                        }
                     }
                     sql.append(",");
                 }

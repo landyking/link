@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<directive xmlns="http://www.github.com/landyking/link"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.github.com/landyking/link http://www.github.com/landyking/link/link-1.0.xsd">
+    <description>列出单位信息</description>
+    <input>
+        <param name="deptNo"/>
+    </input>
+    <execution>
+        <dbSelect id="default" dataSource="test" pagination="false">
+            <field column="dept_no"/>
+            <field column="dept_name"/>
+            <field column="employeeCount">
+                <subSql>select count(0) from dept_emp where dept_no=dp.dept_no</subSql>
+            </field>
+            <from>
+                <base table="departments" alias="dp"/>
+            </from>
+            <where>
+                dp.dept_no = :deptNo
+            </where>
+        </dbSelect>
+    </execution>
+    <executionEnding/>
+    <output>
+        <map name="root">
+            <param name="dept_no" from="#"/>
+            <param name="dept_name" from="#"/>
+            <param name="employeeCount" from="#"/>
+        </map>
+    </output>
+    <resultRender/>
+    <dependencys></dependencys>
+</directive>
