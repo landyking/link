@@ -134,7 +134,7 @@
     <xs:complexType name="outputParamType">
         <xs:complexContent>
             <xs:extension base="lk:paramType">
-                <xs:attribute name="from" type="xs:string">
+                <xs:attribute name="from" type="xs:string" use="required">
                     <xs:annotation>
                         <xs:documentation>
                             <![CDATA[输出项的内容来源：特定的数据库列或者表达式。可以为空。不设置时表示与name一直.为空时不取值.]]></xs:documentation>

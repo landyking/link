@@ -14,10 +14,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.w3c.dom.Element;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by landy on 2018/7/5.
@@ -79,7 +76,9 @@ public class DirectiveExec implements ApplicationContextAware {
                 for (Element e : list) {
                     Object subVal = processOutputSubNode(mojo, e, spelPair);
                     String name = e.getAttribute("name");
-                    if (subVal instanceof Collection) {
+                    if (subVal instanceof ValueBag && ((ValueBag) subVal).getFinalValue() == null) {
+                        childs.put(name, Collections.emptyList());
+                    } else if (subVal instanceof Collection) {
                         childs.put(name, (Collection<Object>) subVal);
                     } else {
                         String path = mojo.getParser().getFullPath(e, true);
