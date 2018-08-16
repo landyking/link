@@ -203,6 +203,7 @@
                 </xs:element>
                 <xs:element name="script" type="lk:executionScriptType"/>
                 <xs:element name="dbSql" type="lk:dbSqlType"/>
+                <xs:element name="assertTrue" type="lk:assertTrueType"/>
                 <xs:element name="dbDelete" type="lk:dbDeleteType"/>
                 <xs:element name="dbInsert" type="lk:dbInsertType"/>
                 <xs:element name="dbUpdate" type="lk:dbUpdateType"/>
@@ -313,6 +314,14 @@
                         </xs:annotation>
                     </xs:element>
                 </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="assertTrueType">
+        <xs:complexContent>
+            <xs:extension base="lk:abstractExecutionType">
+                <xs:attribute name="expression" type="lk:needTextType" use="required"/>
+                <xs:attribute name="message" type="xs:string"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>

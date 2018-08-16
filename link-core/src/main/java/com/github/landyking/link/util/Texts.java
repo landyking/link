@@ -23,6 +23,41 @@ public class Texts {
         return null;
     }
 
+    public static boolean notNull(Object one) {
+        return one != null;
+    }
+
+    public static boolean isNull(Object one) {
+        return one == null;
+    }
+
+    public static boolean anyNull(Object... list) {
+        for (Object o : list) {
+            if (o == null) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean anyHasText(Object... list) {
+        for (Object o : list) {
+            if (hasText(o)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean allHasText(Object... list) {
+        for (Object o : list) {
+            if (!hasText(o)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public static boolean hasText(Object one) {
         return one != null && one.toString().trim().length() > 0;
     }
