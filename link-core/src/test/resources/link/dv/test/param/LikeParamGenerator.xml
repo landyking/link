@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<directive xmlns="http://www.github.com/landyking/link"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.github.com/landyking/link http://www.github.com/landyking/link/link-1.0.xsd">
+    <description>dict check test</description>
+    <input>
+        <param name="like">
+            <processors>
+                <LikeParamGenerator/>
+            </processors>
+        </param>
+        <param name="likeEmpty" notEmpty="false">
+            <processors>
+                <LikeParamGenerator/>
+            </processors>
+        </param>
+        <param name="likeLeft">
+            <processors>
+                <LikeParamGenerator position="left"/>
+            </processors>
+        </param>
+        <param name="likeRight">
+            <processors>
+                <LikeParamGenerator position="right"/>
+            </processors>
+        </param>
+        <param name="likeBoth">
+            <processors>
+                <LikeParamGenerator position="both"/>
+            </processors>
+        </param>
+    </input>
+    <execution>
+        <custom id="default" className="com.github.landyking.link.execution.custom.InputGotoOutput"/>
+    </execution>
+    <executionEnding/>
+    <output>
+        <map name="root">
+            <param name="like" from="#"/>
+            <param name="likeEmpty" from="#"/>
+            <param name="likeBoth" from="#"/>
+            <param name="likeRight" from="#"/>
+            <param name="likeLeft" from="#"/>
+        </map>
+    </output>
+    <resultRender/>
+    <dependencys></dependencys>
+</directive>
