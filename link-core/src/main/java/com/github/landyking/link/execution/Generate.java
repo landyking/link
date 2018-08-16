@@ -50,6 +50,7 @@ public class Generate implements AbstractExecutionFactory, ApplicationContextAwa
                         SpelPair sp = SpelUtils.getSpelPair(mojo);
                         value = sp.getExp().parseExpression(from).getValue(sp.getCtx());
                     }
+                    rst.put(name, value);
                     List<Element> processorList = mojo.getParser().getParamProcessorList(one);
                     for (Element process : processorList) {
                         AbstractParamProcessor pps = getParamProcessor(process);
@@ -57,7 +58,7 @@ public class Generate implements AbstractExecutionFactory, ApplicationContextAwa
                             throw new LinkException("无法获取节点" + process.getNodeName() + "对应的参数处理器");
                         }
                         try {
-                            Object val = pps.processInput(process, one, mojo, value);
+                            Object val = pps.processInput(process, one, mojo, rst.get(name));
                             rst.put(name, val);
                         } catch (LinkException e) {
                             throw e;
