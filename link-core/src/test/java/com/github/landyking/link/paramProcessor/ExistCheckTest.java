@@ -17,6 +17,8 @@ public class ExistCheckTest extends TestH2Database{
     public void testExistCheckSuccess() throws Exception {
         EmptyInputPot pot = new EmptyInputPot();
         pot.put("type", "21");
+        pot.put("no", "10121");
+        pot.put("firstName", "10121");
         DirectiveMojo mojo = getDm().callDirective("test.param.ExistCheck", pot);
         Assert.assertEquals("21", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[0][type]?.finalValue"));
         pot.put("type", "22");
@@ -27,6 +29,8 @@ public class ExistCheckTest extends TestH2Database{
     public void testExistCheckError() throws Exception {
         EmptyInputPot pot = new EmptyInputPot();
         pot.put("type", "44");
+        pot.put("no", "10121");
+        pot.put("firstName", "10121");
         DirectiveMojo mojo = getDm().callDirective("test.param.ExistCheck", pot);
         Assert.assertNotNull(mojo.getException());
         Assert.assertEquals("处理入参[type:类型]异常，字典hello中不存在项44", mojo.getException().getMessage());

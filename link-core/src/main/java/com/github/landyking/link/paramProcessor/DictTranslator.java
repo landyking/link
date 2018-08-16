@@ -32,7 +32,7 @@ public class DictTranslator extends AbstractParamProcessor {
 //        if (!Texts.hasText(srcFieldName)) {
         srcFieldName = name;//fixme 同QueryTranslator
 //        }
-        String whereCondition = getWhereCondition(ctx, config);
+//        String whereCondition = getWhereCondition(ctx, config);
         Boolean failUseOriginal = getFailUseOriginal(ctx, config);
 
         //使用最终的map进行翻译
@@ -60,9 +60,9 @@ public class DictTranslator extends AbstractParamProcessor {
     }
 
 
-    protected String getWhereCondition(DirectiveMojo mojo, Element config) throws LinkException {
+   /* protected String getWhereCondition(DirectiveMojo mojo, Element config) throws LinkException {
         return mojo.getParser().getParamText(config, "where");
-    }
+    }*/
 
 
     protected String getSrcFieldName(DirectiveMojo mojo, Element config) throws LinkException {

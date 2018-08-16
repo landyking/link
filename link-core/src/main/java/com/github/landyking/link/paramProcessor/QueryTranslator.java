@@ -6,6 +6,8 @@ import com.github.landyking.link.DirectiveMojo;
 import com.github.landyking.link.ValueBag;
 import com.github.landyking.link.beetl.BeetlTool;
 import com.github.landyking.link.exception.LinkException;
+import com.github.landyking.link.spel.SpelMapSqlParameterSource;
+import com.github.landyking.link.spel.SpelUtils;
 import com.github.landyking.link.util.LkTools;
 import com.github.landyking.link.util.Texts;
 import com.google.common.base.Charsets;
@@ -190,9 +192,7 @@ public class QueryTranslator extends AbstractParamProcessor {
         String query = sql.toString();
         LOG.debug("用于获取翻译值的SQL为: {}", query);
         NamedParameterJdbcTemplate jdbc = dataSourceManager.getNamedParameterJdbcTemplate(queryDataSource);
-        MapSqlParameterSource msps = new MapSqlParameterSource();
-        Map<String, Object> tmpMap = ctx.getProcessedInputParamMap();
-        msps.addValues(tmpMap);
+        MapSqlParameterSource msps = new SpelMapSqlParameterSource(ctx.getProcessedInputParamMap(), SpelUtils.getSpelPair(ctx));
         msps.addValue("inSet", inSet);
         List<Map<String, Object>> mapList = jdbc.queryForList(query, msps);
         inSet.clear();//清理

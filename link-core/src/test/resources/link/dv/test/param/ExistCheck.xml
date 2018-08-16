@@ -4,10 +4,20 @@
            xsi:schemaLocation="http://www.github.com/landyking/link http://www.github.com/landyking/link/link-1.0.xsd">
     <description>dict check test</description>
     <input>
+        <param name="firstName"/>
         <param name="type" desc="类型">
             <processors>
                 <ExistCheck>
                     <localDict name="hello"/>
+                </ExistCheck>
+            </processors>
+        </param>
+        <param name="no" desc="雇员">
+            <processors>
+                <ExistCheck>
+                    <countQuery dataSource="test">
+                        select count(0) from employees where emp_no=:this and first_name != :{#root[input][firstName]}
+                    </countQuery>
                 </ExistCheck>
             </processors>
         </param>

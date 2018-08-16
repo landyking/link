@@ -3,6 +3,8 @@ package com.github.landyking.link.paramProcessor;
 import com.github.landyking.link.*;
 import com.github.landyking.link.beetl.BeetlTool;
 import com.github.landyking.link.exception.LinkException;
+import com.github.landyking.link.spel.SpelMapSqlParameterSource;
+import com.github.landyking.link.spel.SpelUtils;
 import com.github.landyking.link.util.Texts;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.util.Assert;
@@ -56,9 +58,9 @@ public class ExistCheck extends AbstractParamProcessor {
             Assert.notNull(countQuery, "入参[" + paramDesc + "]处理器ExistCheck中的countQuery为空");
             String dataSource = countQuery.getAttribute("dataSource");
             String textContent = countQuery.getTextContent();
-            final Map<String, Object> paramMap = mojo.getProcessedInputParamMap();
-            if (!paramMap.containsKey("this")) {
-                paramMap.put("this", in);
+            final SpelMapSqlParameterSource paramMap = new SpelMapSqlParameterSource(mojo.getProcessedInputParamMap(), SpelUtils.getSpelPair(mojo));
+            if (!paramMap.hasValue("this")) {
+                paramMap.addValue("this", in);
             }
             NamedParameterJdbcTemplate jdbc = dataSourceManager.getNamedParameterJdbcTemplate(dataSource);
             String sql = BeetlTool.renderBeetl(mojo, textContent);

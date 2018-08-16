@@ -4,11 +4,12 @@
            xsi:schemaLocation="http://www.github.com/landyking/link http://www.github.com/landyking/link/link-1.0.xsd">
     <description>test</description>
     <input>
+        <param name="firstName" />
         <param name="no" desc="员工编号">
             <processors>
                 <DuplicateCheck>
                     <countQuery dataSource="test">
-                        select count(0) from employees where emp_no=:this
+                        select count(0) from employees where emp_no=:this and first_name != :{#root[input][firstName]}
                     </countQuery>
                 </DuplicateCheck>
             </processors>
