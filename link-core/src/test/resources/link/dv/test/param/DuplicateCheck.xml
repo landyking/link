@@ -21,7 +21,7 @@
     <executionEnding/>
     <output>
         <list name="root">
-            <param name="no" from="#"/>
+            <param name="no" />
         </list>
     </output>
     <resultRender/>

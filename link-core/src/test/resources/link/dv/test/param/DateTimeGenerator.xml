@@ -13,8 +13,8 @@
     <executionEnding/>
     <output>
         <map name="root">
-            <param name="time1" from="#"/>
-            <param name="time2" from="#">
+            <param name="time1" />
+            <param name="time2">
                 <processors>
                     <DateTimeGenerator/>
                 </processors>

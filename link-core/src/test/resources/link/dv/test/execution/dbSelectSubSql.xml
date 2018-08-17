@@ -24,9 +24,9 @@
     <executionEnding/>
     <output>
         <map name="root">
-            <param name="dept_no" from="#"/>
-            <param name="dept_name" from="#"/>
-            <param name="employeeCount" from="#"/>
+            <param name="dept_no" />
+            <param name="dept_name" />
+            <param name="employeeCount"/>
         </map>
     </output>
     <resultRender/>

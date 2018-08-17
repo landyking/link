@@ -113,25 +113,21 @@ public class DirectiveExec implements ApplicationContextAware {
         String name = param.getAttribute("name");
         String desc = param.getAttribute("desc");
         String from = param.getAttribute("from");
-        if (Texts.hasText(from)) {
-            if (from.equals("#")) {
-                String pnode = param.getParentNode().getNodeName();
-                if (pnode.equals("list")) {
-                    from = "[exec][default].data.![#this[" + name + "]]";
-                } else if (pnode.equals("map")) {
-                    from = "[exec][default].data[0][" + name + "]";
-                }
+        if (!Texts.hasText(from)) {
+            String pnode = param.getParentNode().getNodeName();
+            if (pnode.equals("list")) {
+                from = "[exec][default].data.![#this[" + name + "]]";
+            } else if (pnode.equals("map")) {
+                from = "[exec][default].data[0][" + name + "]";
             }
         }
         List<Map<String, ValueBag>> valueBagList = Lists.newArrayList();
         Object value = null;
-        if (Texts.hasText(from)) {
-            try {
-                value = spelPair.getExp().parseExpression(from).getValue(spelPair.getCtx());
-            } catch (Exception e) {
-                String fullPath = mojo.getParser().getFullPath(param, true);
-                throw new LinkException("节点" + fullPath + "的from表达式" + from + "处理异常", e);
-            }
+        try {
+            value = spelPair.getExp().parseExpression(from).getValue(spelPair.getCtx());
+        } catch (Exception e) {
+            String fullPath = mojo.getParser().getFullPath(param, true);
+            throw new LinkException("节点" + fullPath + "的from表达式" + from + "处理异常", e);
         }
         boolean single;
         if (value instanceof Collection) {

@@ -89,7 +89,7 @@ public class DbInsert implements AbstractExecutionFactory {
                             sql.append(",");
                             valuesSql.append(",");
                         } catch (Exception e) {
-                            throw new LinkException("节点" + mojo.getParser().getFullPath(f, true) + "处理异常，表达式为" + from, e);
+                            throw new LinkException("节点" + mojo.getParser().getFullPath(f, true, "column") + "处理异常，表达式为" + from, e);
                         }
                     }
                     sql.deleteCharAt(sql.length() - 1);

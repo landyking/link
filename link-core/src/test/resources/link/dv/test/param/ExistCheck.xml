@@ -28,7 +28,7 @@
     <executionEnding/>
     <output>
         <list name="root">
-            <param name="type" from="#"/>
+            <param name="type" />
         </list>
     </output>
     <resultRender/>

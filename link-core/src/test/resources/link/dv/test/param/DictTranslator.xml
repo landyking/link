@@ -17,8 +17,8 @@
     <executionEnding/>
     <output>
         <map name="root">
-            <param name="dict1" from="#"/>
-            <param name="dict2" from="#">
+            <param name="dict1" />
+            <param name="dict2">
                 <processors>
                     <DictTranslator dict="world"/>
                 </processors>

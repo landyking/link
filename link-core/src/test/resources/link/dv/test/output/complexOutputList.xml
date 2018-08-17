@@ -19,10 +19,10 @@
     <executionEnding/>
     <output>
         <list name="root">
-            <param name="name" from="#"/>
-            <param name="age" from="#"/>
+            <param name="name" />
+            <param name="age" />
             <param name="address" from="[exec][default].data.![#this[address]]"/>
-            <param name="hello" from="#"/>
+            <param name="hello" />
             <param name="hello2" from="[exec][default].data.![#this[hello]]"/>
         </list>
     </output>

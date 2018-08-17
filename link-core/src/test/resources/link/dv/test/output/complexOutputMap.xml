@@ -30,8 +30,8 @@
             <param name="effectCount" from="[exec][default].effectCount"/>
             <list name="rows">
                 <param name="realname" from="[exec][default].data.![#this[name]]"/>
-                <param name="age" from="#"/>
-                <param name="address" from="#"/>
+                <param name="age" />
+                <param name="address" />
             </list>
             <list name="rows2">
                 <param name="realname" from="[exec][default].data.![#this[name]][0]"/>

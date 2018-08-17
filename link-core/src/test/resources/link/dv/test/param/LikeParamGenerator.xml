@@ -37,13 +37,13 @@
     <executionEnding/>
     <output>
         <map name="root">
-            <param name="like" from="#"/>
-            <param name="likeEmpty" from="#"/>
-            <param name="likeBoth" from="#"/>
+            <param name="like" />
+            <param name="likeEmpty" />
+            <param name="likeBoth" />
             <param name="likeBoth2" from="#contact('%',#root[input][like2],'%')"/>
-            <param name="likeRight" from="#"/>
+            <param name="likeRight" />
             <param name="likeRight2" from="#contact(#root[input][like2],'%')"/>
-            <param name="likeLeft" from="#"/>
+            <param name="likeLeft" />
             <param name="likeLeft2" from="#contact('%',#root[input][like2])"/>
         </map>
     </output>
