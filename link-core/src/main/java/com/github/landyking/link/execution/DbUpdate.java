@@ -48,7 +48,7 @@ public class DbUpdate implements AbstractExecutionFactory {
                     String where = mojo.getParser().getSubElement(element, "lk:where").getTextContent();
                     logger.debug("解析要更新的字段");
                     List<Element> fields = mojo.getParser().getSubElementList(element, "lk:field");
-                    final Map<String, Object> paramMap = Maps.newHashMap();
+                    final Map<String, Object> paramMap = Maps.newHashMap(mojo.getProcessedInputParamMap());
                     StringBuilder sql = new StringBuilder("update ");
                     sql.append(table);
                     sql.append(" set ");

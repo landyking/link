@@ -49,7 +49,7 @@ public class DbInsert implements AbstractExecutionFactory {
                     Element tableEle = mojo.getParser().getSubElement(element, "lk:table");
                     logger.debug("解析要插入的字段");
                     List<Element> fields = mojo.getParser().getSubElementList(element, "lk:field");
-                    final Map<String, Object> paramMap = Maps.newHashMap();
+                    final Map<String, Object> paramMap =Maps.newHashMap(mojo.getProcessedInputParamMap());
                     StringBuilder sql = new StringBuilder("insert into ");
                     sql.append(tableEle.getTextContent());
                     sql.append(" (");

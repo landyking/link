@@ -77,7 +77,7 @@ public class DbDelete implements AbstractExecutionFactory {
 
     private void doDelete(String executionId, String dataSourceId, DirectiveMojo mojo, String deleteSql) throws LinkException {
         NamedParameterJdbcTemplate jdbc = dataSourceManager.getNamedParameterJdbcTemplate(dataSourceId);
-        SpelMapSqlParameterSource paramMap = new SpelMapSqlParameterSource(Collections.EMPTY_MAP, SpelUtils.getSpelPair(mojo));
+        SpelMapSqlParameterSource paramMap = new SpelMapSqlParameterSource(mojo.getProcessedInputParamMap(), SpelUtils.getSpelPair(mojo));
         int updateCount = jdbc.update(deleteSql, paramMap);
         ExecuteResult rst = new ExecuteResult();
         rst.setEffectCount(updateCount);
