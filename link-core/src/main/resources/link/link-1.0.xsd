@@ -134,7 +134,7 @@
     <xs:complexType name="outputParamType">
         <xs:complexContent>
             <xs:extension base="lk:paramType">
-                <xs:attribute name="from" type="xs:string" >
+                <xs:attribute name="from" type="xs:string">
                     <xs:annotation>
                         <xs:documentation>
                             <![CDATA[输出项的内容来源：特定的数据库列或者表达式。可以为空。不设置时表示与name一直.为空时不取值.]]></xs:documentation>
@@ -205,8 +205,24 @@
                 <xs:element name="dbSql" type="lk:dbSqlType"/>
                 <xs:element name="assertTrue" type="lk:assertTrueType"/>
                 <xs:element name="dbDelete" type="lk:dbDeleteType"/>
-                <xs:element name="dbInsert" type="lk:dbInsertType"/>
-                <xs:element name="dbUpdate" type="lk:dbUpdateType"/>
+                <xs:element name="dbInsert" type="lk:dbInsertType">
+                    <xs:unique name="dbInsertColumnNameUnique">
+                        <xs:annotation>
+                            <xs:documentation><![CDATA[自定义类中的参数名字必须唯一]]></xs:documentation>
+                        </xs:annotation>
+                        <xs:selector xpath="lk:field"/>
+                        <xs:field xpath="@column"/>
+                    </xs:unique>
+                </xs:element>
+                <xs:element name="dbUpdate" type="lk:dbUpdateType">
+                    <xs:unique name="dbUpdateColumnNameUnique">
+                        <xs:annotation>
+                            <xs:documentation><![CDATA[自定义类中的参数名字必须唯一]]></xs:documentation>
+                        </xs:annotation>
+                        <xs:selector xpath="lk:field"/>
+                        <xs:field xpath="@column"/>
+                    </xs:unique>
+                </xs:element>
                 <xs:element name="dbSelect" type="lk:dbSelectType"/>
             </xs:choice>
         </xs:sequence>
