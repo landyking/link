@@ -320,7 +320,7 @@
     <xs:complexType name="assertTrueType">
         <xs:complexContent>
             <xs:extension base="lk:abstractExecutionType">
-                <xs:attribute name="expression" type="lk:needTextType" use="required"/>
+                <xs:attribute name="expression" type="lk:lineContentType" use="required"/>
                 <xs:attribute name="message" type="xs:string"/>
             </xs:extension>
         </xs:complexContent>
