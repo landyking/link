@@ -60,32 +60,36 @@ public class DbUpdate implements AbstractExecutionFactory {
                             //默认from与column相同
                             from = "#root[input][" + column + "]";
                         }
-                        String desc = f.getAttribute("desc");
-                        String ignoreNull = f.getAttribute("ignoreNull");
-                        String subSql = mojo.getParser().getParamText(f, "subSql");
+                        try {
+                            String desc = f.getAttribute("desc");
+                            String ignoreNull = f.getAttribute("ignoreNull");
+                            String subSql = mojo.getParser().getParamText(f, "subSql");
 
-                        if (!Texts.hasText(subSql)) {
-                            Object value = sp.getExp().parseExpression(from).getValue(sp.getCtx());
-                            if (value == null && LkTools.isTrue(ignoreNull)) {
-                                continue;
+                            if (!Texts.hasText(subSql)) {
+                                Object value = sp.getExp().parseExpression(from).getValue(sp.getCtx());
+                                if (value == null && LkTools.isTrue(ignoreNull)) {
+                                    continue;
+                                }
+                                paramMap.put(column, value);
                             }
-                            paramMap.put(column, value);
+                            sql.append(column);
+                            sql.append("=");
+                            if (Texts.hasText(subSql)) {
+                                sql.append('(' + subSql + ')');
+                            } else {
+                                sql.append(":" + column);
+                            }
+                            sql.append(",");
+                        } catch (Exception e) {
+                            throw new LinkException("节点" + mojo.getParser().getFullPath(f, true) + "处理异常，表达式为" + from, e);
                         }
-                        sql.append(column);
-                        sql.append("=");
-                        if (Texts.hasText(subSql)) {
-                            sql.append('(' + subSql + ')');
-                        } else {
-                            sql.append(":" + column);
-                        }
-                        sql.append(",");
                     }
                     sql.deleteCharAt(sql.length() - 1);
                     final String updateSql = sql.toString() + " where " + BeetlTool.renderBeetl(mojo, where);
                     logger.debug("解析事务配置");
                     String transaction = element.getAttribute("transaction");
-                    logger.info("更新SQL语句: {}",updateSql);
-                    logger.info("更新参数: {}",paramMap);
+                    logger.info("更新SQL语句: {}", updateSql);
+                    logger.info("更新参数: {}", paramMap);
                     logger.debug("根据情况开启事务");
                     if (LkTools.isTrue(transaction)) {
                         TransactionTemplate transactionTemplate = dataSourceManager.getTransactionTemplate(dataSourceId, null);

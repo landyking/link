@@ -63,30 +63,34 @@ public class DbInsert implements AbstractExecutionFactory {
                             //默认from与column相同
                             from = "#root[input][" + column + "]";
                         }
-                        String desc = f.getAttribute("desc");
-                        String ignoreNull = f.getAttribute("ignoreNull");
-                        String pk = f.getAttribute("pk");
-                        String subSql = mojo.getParser().getParamText(f, "subSql");
+                        try {
+                            String desc = f.getAttribute("desc");
+                            String ignoreNull = f.getAttribute("ignoreNull");
+                            String pk = f.getAttribute("pk");
+                            String subSql = mojo.getParser().getParamText(f, "subSql");
 
-                        if (!Texts.hasText(subSql)) {
-                            if (LkTools.isTrue(pk)) {
-                                pkName = column;
-                            }
+                            if (!Texts.hasText(subSql)) {
+                                if (LkTools.isTrue(pk)) {
+                                    pkName = column;
+                                }
 
-                            Object value = sp.getExp().parseExpression(from).getValue(sp.getCtx());
-                            if (value == null && LkTools.isTrue(ignoreNull)) {
-                                continue;
+                                Object value = sp.getExp().parseExpression(from).getValue(sp.getCtx());
+                                if (value == null && LkTools.isTrue(ignoreNull)) {
+                                    continue;
+                                }
+                                paramMap.put(column, value);
                             }
-                            paramMap.put(column, value);
+                            sql.append(column);
+                            if (Texts.hasText(subSql)) {
+                                valuesSql.append('(' + subSql + ')');
+                            } else {
+                                valuesSql.append(":" + column);
+                            }
+                            sql.append(",");
+                            valuesSql.append(",");
+                        } catch (Exception e) {
+                            throw new LinkException("节点" + mojo.getParser().getFullPath(f, true) + "处理异常，表达式为" + from, e);
                         }
-                        sql.append(column);
-                        if (Texts.hasText(subSql)) {
-                            valuesSql.append('(' + subSql + ')');
-                        } else {
-                            valuesSql.append(":" + column);
-                        }
-                        sql.append(",");
-                        valuesSql.append(",");
                     }
                     sql.deleteCharAt(sql.length() - 1);
                     valuesSql.deleteCharAt(valuesSql.length() - 1);
