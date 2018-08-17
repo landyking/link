@@ -3,6 +3,7 @@ package com.github.landyking.link.execution;
 import com.github.landyking.link.AbstractExecution;
 import com.github.landyking.link.AbstractExecutionFactory;
 import com.github.landyking.link.DirectiveMojo;
+import com.github.landyking.link.exception.ExecutionAssertException;
 import com.github.landyking.link.exception.LinkException;
 import com.github.landyking.link.spel.SpelPair;
 import com.github.landyking.link.spel.SpelUtils;
@@ -33,7 +34,7 @@ public class AssertTrue implements AbstractExecutionFactory {
                     if (!Texts.hasText(message)) {
                         message = id + "断言" + expression + "失败";
                     }
-                    throw new LinkException(message);
+                    throw new ExecutionAssertException(message);
                 }
             }
         };
