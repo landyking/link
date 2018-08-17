@@ -39,7 +39,6 @@ public class DbUpdate implements AbstractExecutionFactory {
 
             @Override
             public void execute(final DirectiveMojo mojo) throws LinkException {
-                System.out.println("DbUpdate.execute");
                 final String executionId = element.getAttribute("id");
                 final String dataSourceId = element.getAttribute("dataSource");
                 if (dataSourceManager.hasDataSource(dataSourceId)) {
