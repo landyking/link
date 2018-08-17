@@ -85,10 +85,8 @@ public class DbUpdate implements AbstractExecutionFactory {
                     final String updateSql = sql.toString() + " where " + BeetlTool.renderBeetl(mojo, where);
                     logger.debug("解析事务配置");
                     String transaction = element.getAttribute("transaction");
-                    System.out.println(transaction);
-                    logger.debug("组织sql语句和参数");
-                    System.out.println(updateSql);
-                    System.out.println(paramMap);
+                    logger.info("更新SQL语句: {}",updateSql);
+                    logger.info("更新参数: {}",paramMap);
                     logger.debug("根据情况开启事务");
                     if (LkTools.isTrue(transaction)) {
                         TransactionTemplate transactionTemplate = dataSourceManager.getTransactionTemplate(dataSourceId, null);
