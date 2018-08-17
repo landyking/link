@@ -30,6 +30,7 @@ public class SpelUtils {
             ctx.registerFunction("anyNull", Texts.class.getDeclaredMethod("anyNull", Object[].class));
             ctx.registerFunction("allHasText", Texts.class.getDeclaredMethod("allHasText", Object[].class));
             ctx.registerFunction("anyHasText", Texts.class.getDeclaredMethod("anyHasText", Object[].class));
+            ctx.registerFunction("contact", Texts.class.getDeclaredMethod("contact", Object[].class));
         } catch (Exception e) {
             throw new LinkException("注册spel函数异常", e);
         }

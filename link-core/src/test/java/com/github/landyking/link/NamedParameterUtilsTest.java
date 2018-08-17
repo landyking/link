@@ -21,4 +21,10 @@ public class NamedParameterUtilsTest {
         ParsedSql psql = NamedParameterUtils.parseSqlStatement(sql);
         System.out.println(psql);
     }
+    @Test
+    public void testHello() throws Exception {
+        String sql = "dept_no = :{#hasText(#root[exec][first].data[0]?.get('dept_no'))}";
+        ParsedSql psql = NamedParameterUtils.parseSqlStatement(sql);
+        System.out.println(psql);
+    }
 }

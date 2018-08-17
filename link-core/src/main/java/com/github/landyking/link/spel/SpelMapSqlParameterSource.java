@@ -22,7 +22,7 @@ public class SpelMapSqlParameterSource extends MapSqlParameterSource {
     public boolean hasValue(String paramName) {
         boolean b = super.hasValue(paramName);
         if (!b) {
-            if (paramName.startsWith("#root")) {
+            if (paramName.startsWith("#")) {
                 try {
                     Object value = spelPair.getExp().parseExpression(paramName).getValue(spelPair.getCtx());
                     addValue(paramName, value);

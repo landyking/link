@@ -49,6 +49,14 @@ public class Texts {
         return false;
     }
 
+    public static String contact(Object... txt) {
+        StringBuilder sb = new StringBuilder();
+        for (Object o : txt) {
+            sb.append(o != null ? o.toString() : "null");
+        }
+        return sb.toString();
+    }
+
     public static boolean allHasText(Object... list) {
         for (Object o : list) {
             if (!hasText(o)) {

@@ -9,6 +9,7 @@
                 <LikeParamGenerator/>
             </processors>
         </param>
+        <param name="like2"/>
         <param name="likeEmpty" notEmpty="false">
             <processors>
                 <LikeParamGenerator/>
@@ -39,8 +40,11 @@
             <param name="like" from="#"/>
             <param name="likeEmpty" from="#"/>
             <param name="likeBoth" from="#"/>
+            <param name="likeBoth2" from="#contact('%',#root[input][like2],'%')"/>
             <param name="likeRight" from="#"/>
+            <param name="likeRight2" from="#contact(#root[input][like2],'%')"/>
             <param name="likeLeft" from="#"/>
+            <param name="likeLeft2" from="#contact('%',#root[input][like2])"/>
         </map>
     </output>
     <resultRender/>
