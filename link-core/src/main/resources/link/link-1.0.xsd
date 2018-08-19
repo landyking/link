@@ -489,7 +489,7 @@
     <xs:complexType name="abstractParamProcessorType" abstract="true">
     </xs:complexType>
     <xs:complexType name="abstractExecutionType" abstract="true">
-        <xs:attribute name="test" type="lk:needTextType"/>
+        <xs:attribute name="test" type="lk:lineContentType"/>
         <xs:attribute name="id" type="lk:needTextType" use="required"/>
     </xs:complexType>
     <xs:complexType name="abstractDbExecutionType" abstract="true">
