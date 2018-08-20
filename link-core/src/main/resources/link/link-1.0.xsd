@@ -226,11 +226,7 @@
                 <xs:element name="dbSelect" type="lk:dbSelectType"/>
             </xs:choice>
         </xs:sequence>
-        <xs:attribute name="transaction" type="xs:boolean" default="false">
-            <xs:annotation>
-                <xs:documentation>是否启用事务</xs:documentation>
-            </xs:annotation>
-        </xs:attribute>
+        <xs:attribute name="transactionDataSource" type="lk:needTextType"/>
     </xs:complexType>
     <xs:simpleType name="lineContentType">
         <xs:annotation>

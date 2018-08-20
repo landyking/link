@@ -5,6 +5,7 @@ import com.github.landyking.link.spel.SpelPair;
 import com.github.landyking.link.spel.SpelUtils;
 import com.github.landyking.link.util.LkTools;
 import com.github.landyking.link.util.Texts;
+import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.slf4j.Logger;
@@ -12,6 +13,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
+import org.springframework.transaction.support.TransactionTemplate;
 import org.w3c.dom.Element;
 
 import java.util.*;
@@ -241,9 +245,28 @@ public class DirectiveExec implements ApplicationContextAware {
         }
     }
 
-    private void processExecution(DirectiveMojo mojo) throws LinkException {
-        Element execution = mojo.getParser().getExecution();
-        String transaction = execution.getAttribute("transaction");
+    private void processExecution(final DirectiveMojo mojo) throws LinkException {
+        final Element execution = mojo.getParser().getExecution();
+        String transaction = execution.getAttribute("transactionDataSource");
+        if (Texts.hasText(transaction)) {
+            DataSourceManager dsm = application.getBean(DataSourceManager.class);
+            TransactionTemplate ttp = dsm.getTransactionTemplate(transaction, null);
+            ttp.execute(new TransactionCallbackWithoutResult() {
+                @Override
+                protected void doInTransactionWithoutResult(TransactionStatus status) {
+                    try {
+                        processExecutionList(mojo, execution);
+                    } catch (LinkException e) {
+                        Throwables.propagate(e);
+                    }
+                }
+            });
+        } else {
+            processExecutionList(mojo, execution);
+        }
+    }
+
+    private void processExecutionList(DirectiveMojo mojo, Element execution) throws LinkException {
         List<AbstractExecution> execList = mojo.getParser().getExecutionList(execution);
         for (AbstractExecution one : execList) {
             String test = one.getElement().getAttribute("test");
