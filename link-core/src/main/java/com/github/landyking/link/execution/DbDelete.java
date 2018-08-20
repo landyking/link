@@ -50,7 +50,7 @@ public class DbDelete implements AbstractExecutionFactory {
                     logger.debug("解析事务配置");
                     String transaction = element.getAttribute("transaction");
 //                    System.out.println(transaction);
-                    logger.debug("组织sql语句: {}", updateSql);
+                    logger.info("删除sql语句: {}", updateSql);
                     logger.debug("根据情况开启事务");
                     if (LkTools.isTrue(transaction)) {
                         TransactionTemplate transactionTemplate = dataSourceManager.getTransactionTemplate(dataSourceId, null);
