@@ -99,6 +99,10 @@ public class DirectiveMojo {
         this.afterOutput = afterOutput;
     }
 
+    public LocalDict localDict(String name) {
+        return localDictManager.getLocalDict(name);
+    }
+
     public LocalDictItem localDictItem(String name) throws LinkException {
         String[] arr = name.split("@");
         Assert.isTrue(arr.length == 2, "表达式需要使用@号分隔");
