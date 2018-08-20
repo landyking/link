@@ -24,6 +24,7 @@ public class SpelUtils {
         StandardEvaluationContext ctx = new StandardEvaluationContext(expRoot);
         try {
             ctx.registerFunction("newList", SpelTool.class.getDeclaredMethod("newList", Integer.class));
+            ctx.registerFunction("toInt", SpelTool.class.getDeclaredMethod("toInt", String.class));
             ctx.registerFunction("hasText", Texts.class.getDeclaredMethod("hasText", Object.class));
             ctx.registerFunction("notNull", Texts.class.getDeclaredMethod("notNull", Object.class));
             ctx.registerFunction("isNull", Texts.class.getDeclaredMethod("isNull", Object.class));

@@ -11,4 +11,8 @@
         <item code="a">大写A</item>
         <item code="b">大写B</item>
     </dict>
+    <dict name="app.marker">
+        <item code="1" marker="first">第一</item>
+        <item code="2" marker="second">第二</item>
+    </dict>
 </dicts>

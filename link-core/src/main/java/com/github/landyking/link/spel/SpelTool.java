@@ -29,4 +29,8 @@ public class SpelTool {
         ExpressionParser exp = new SpelExpressionParser();
         return exp.parseExpression(express).getValue(root);
     }
+
+    public static int toInt(String value) {
+        return Integer.parseInt(value);
+    }
 }

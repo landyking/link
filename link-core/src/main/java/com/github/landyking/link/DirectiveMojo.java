@@ -1,5 +1,6 @@
 package com.github.landyking.link;
 
+import com.github.landyking.link.exception.LinkException;
 import com.google.common.collect.Maps;
 import org.springframework.util.Assert;
 import org.w3c.dom.Element;
@@ -18,6 +19,7 @@ public class DirectiveMojo {
     private final Map<String, Object> processedInputParam = Maps.newHashMap();
 
     private final transient Map<String, ExecuteResult> executeResultMap = Maps.newLinkedHashMap();
+    private final LocalDictManager localDictManager;
     /**
      * execution执行结束，然后对执行参数的数据进行处理后得到的数据
      */
@@ -31,11 +33,12 @@ public class DirectiveMojo {
      */
     private Object afterOutput;
 
-    public DirectiveMojo(String code, InputPot pot, DirectiveParser parser) {
+    public DirectiveMojo(String code, InputPot pot, DirectiveParser parser, LocalDictManager localDictManager) {
         this.code = code;
         this.pot = pot;
         this.parser = parser;
         this.parser.setDirectiveMojo(this);
+        this.localDictManager = localDictManager;
     }
 
     public DirectiveParser getParser() {
@@ -96,5 +99,22 @@ public class DirectiveMojo {
         this.afterOutput = afterOutput;
     }
 
+    public LocalDictItem localDictItem(String name) throws LinkException {
+        String[] arr = name.split("@");
+        Assert.isTrue(arr.length == 2, "表达式需要使用@号分隔");
+        LocalDict localDict = localDictManager.getLocalDict(arr[0]);
+        Assert.notNull(localDict, "本地字典" + arr[0] + "不存在");
+        for (LocalDictItem item : localDict.getItems().values()) {
+            if (arr[1].equals(item.getMarker())) {
+                return item;
+            }
+        }
+        throw new LinkException("字典[" + localDict.getName() + ":" + localDict.getDesc() + "]不包含marker为[" + arr[1] + "]的字典项");
+    }
+
+    public String localDictItemCode(String name) throws LinkException {
+        LocalDictItem item = localDictItem(name);
+        return item.getCode();
+    }
 
 }
