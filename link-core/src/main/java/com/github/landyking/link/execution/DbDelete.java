@@ -6,6 +6,7 @@ import com.github.landyking.link.exception.LinkException;
 import com.github.landyking.link.spel.SpelMapSqlParameterSource;
 import com.github.landyking.link.spel.SpelUtils;
 import com.github.landyking.link.util.LkTools;
+import com.github.landyking.link.util.Texts;
 import com.google.common.base.Throwables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,7 +47,11 @@ public class DbDelete implements AbstractExecutionFactory {
                     String where = mojo.getParser().getSubElement(element, "lk:where").getTextContent();
                     StringBuilder sql = new StringBuilder("delete from ");
                     sql.append(table);
-                    final String updateSql = sql.toString() + " where " + BeetlTool.renderBeetl(mojo, where);
+                    String tmpWhere = BeetlTool.renderBeetl(mojo, where);
+                    if (Texts.hasText(tmpWhere)) {
+                        sql.append(" where " + tmpWhere);
+                    }
+                    final String updateSql = sql.toString();
                     logger.debug("解析事务配置");
                     String transaction = element.getAttribute("transaction");
 //                    System.out.println(transaction);

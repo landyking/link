@@ -54,8 +54,11 @@ public class DbSelect implements AbstractExecutionFactory {
                     logger.debug("解析where");
                     Element whereEle = mojo.getParser().getSubElement(element, "lk:where");
                     if (whereEle != null) {
-                        sql.append("where ");
-                        sql.append(BeetlTool.renderBeetl(mojo, whereEle.getTextContent()) + " ");
+                        String tmp = BeetlTool.renderBeetl(mojo, whereEle.getTextContent());
+                        if (Texts.hasText(tmp)) {
+                            sql.append("where ");
+                            sql.append(tmp + " ");
+                        }
                     }
                     logger.debug("解析other");
                     Element otherEle = mojo.getParser().getSubElement(element, "lk:other");

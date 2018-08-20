@@ -85,7 +85,11 @@ public class DbUpdate implements AbstractExecutionFactory {
                         }
                     }
                     sql.deleteCharAt(sql.length() - 1);
-                    final String updateSql = sql.toString() + " where " + BeetlTool.renderBeetl(mojo, where);
+                    String tmpWhere = BeetlTool.renderBeetl(mojo, where);
+                    if (Texts.hasText(tmpWhere)) {
+                        sql.append(" where " + tmpWhere);
+                    }
+                    final String updateSql = sql.toString();
                     logger.debug("解析事务配置");
                     String transaction = element.getAttribute("transaction");
                     logger.info("更新SQL语句: {}", updateSql);
