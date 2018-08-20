@@ -745,8 +745,28 @@
         <xs:sequence>
             <xs:choice minOccurs="0" maxOccurs="unbounded">
                 <xs:element name="param" type="lk:outputParamType"/>
-                <xs:element name="map" type="lk:outputCollectionType"/>
-                <xs:element name="list" type="lk:outputCollectionType"/>
+                <xs:element name="map">
+                    <xs:complexType>
+                        <xs:complexContent>
+                            <xs:extension base="lk:outputCollectionType"/>
+                        </xs:complexContent>
+                    </xs:complexType>
+                    <xs:unique name="nestMapParamNameUnique">
+                        <xs:selector xpath="lk:param"/>
+                        <xs:field xpath="@name"/>
+                    </xs:unique>
+                </xs:element>
+                <xs:element name="list">
+                    <xs:complexType>
+                        <xs:complexContent>
+                            <xs:extension base="lk:outputCollectionType"/>
+                        </xs:complexContent>
+                    </xs:complexType>
+                    <xs:unique name="nestListParamNameUnique">
+                        <xs:selector xpath="lk:param"/>
+                        <xs:field xpath="@name"/>
+                    </xs:unique>
+                </xs:element>
             </xs:choice>
         </xs:sequence>
         <xs:attribute name="name" type="lk:needTextType" use="required"/>
