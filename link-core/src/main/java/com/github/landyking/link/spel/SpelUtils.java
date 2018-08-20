@@ -8,6 +8,7 @@ import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -25,6 +26,7 @@ public class SpelUtils {
         try {
             ctx.registerFunction("newList", SpelTool.class.getDeclaredMethod("newList", Integer.class));
             ctx.registerFunction("toInt", SpelTool.class.getDeclaredMethod("toInt", String.class));
+            ctx.registerFunction("plusDays", SpelTool.class.getDeclaredMethod("plusDays", Date.class, int.class));
             ctx.registerFunction("hasText", Texts.class.getDeclaredMethod("hasText", Object.class));
             ctx.registerFunction("notNull", Texts.class.getDeclaredMethod("notNull", Object.class));
             ctx.registerFunction("isNull", Texts.class.getDeclaredMethod("isNull", Object.class));
