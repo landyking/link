@@ -22,7 +22,7 @@ public class DirectiveServlet extends AbstractServlet {
         if (StringUtils.hasText(directive)) {
             DirectiveManager directiveManager = getContext().getBean(DirectiveManager.class);
             try {
-                directiveManager.callDirective(directive, new WebInputPot(req, resp));
+                directiveManager.callDirective(directive, new WebInputPot(req, resp,getServletContext()));
             } catch (DirectiveNotFoundException e) {
                 String msg = "Can't found directive: " + directive;
                 LOG.info(msg);

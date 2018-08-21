@@ -2,6 +2,7 @@ package com.github.landyking.link.pot;
 
 import com.github.landyking.link.InputPot;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -11,10 +12,12 @@ import javax.servlet.http.HttpServletResponse;
 public class WebInputPot implements InputPot {
     private final HttpServletRequest request;
     private final HttpServletResponse response;
+    private final ServletContext servletContext;
 
-    public WebInputPot(HttpServletRequest request, HttpServletResponse response) {
+    public WebInputPot(HttpServletRequest request, HttpServletResponse response,ServletContext servletContext) {
         this.request = request;
         this.response = response;
+        this.servletContext = servletContext;
     }
 
     @Override
@@ -28,5 +31,9 @@ public class WebInputPot implements InputPot {
 
     public HttpServletResponse getResponse() {
         return response;
+    }
+
+    public ServletContext getServletContext() {
+        return servletContext;
     }
 }
