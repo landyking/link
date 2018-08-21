@@ -107,16 +107,7 @@ public class DirectiveMojo {
     }
 
     public LocalDictItem localDictItem(String name) throws LinkException {
-        String[] arr = name.split("@");
-        Assert.isTrue(arr.length == 2, "表达式需要使用@号分隔");
-        LocalDict localDict = localDictManager.getLocalDict(arr[0]);
-        Assert.notNull(localDict, "本地字典" + arr[0] + "不存在");
-        for (LocalDictItem item : localDict.getItems().values()) {
-            if (arr[1].equals(item.getMarker())) {
-                return item;
-            }
-        }
-        throw new LinkException("字典[" + localDict.getName() + ":" + localDict.getDesc() + "]不包含marker为[" + arr[1] + "]的字典项");
+        return localDictManager.getItemByCondition(name);
     }
 
     public ApplicationContext getApplicationContext() {
