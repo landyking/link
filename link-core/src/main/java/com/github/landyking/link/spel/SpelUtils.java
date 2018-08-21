@@ -4,6 +4,7 @@ import com.github.landyking.link.DirectiveMojo;
 import com.github.landyking.link.exception.LinkException;
 import com.github.landyking.link.util.Texts;
 import com.google.common.collect.Maps;
+import org.springframework.context.expression.BeanFactoryResolver;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
@@ -23,6 +24,7 @@ public class SpelUtils {
         expRoot.put("exec", mojo.getExecuteResultMap());
         expRoot.put("end", mojo.getEndingData());
         StandardEvaluationContext ctx = new StandardEvaluationContext(expRoot);
+        ctx.setBeanResolver(new BeanFactoryResolver(mojo.getApplicationContext()));
         try {
             ctx.registerFunction("newList", SpelTool.class.getDeclaredMethod("newList", Integer.class));
             ctx.registerFunction("toInt", SpelTool.class.getDeclaredMethod("toInt", String.class));
