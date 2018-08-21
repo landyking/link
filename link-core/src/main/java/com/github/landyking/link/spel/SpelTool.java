@@ -28,6 +28,10 @@ public class SpelTool {
         return objects;
     }
 
+    public static Date now() {
+        return new Date();
+    }
+
     public static Object getValueFromExpress(Object root, String express) {
         ExpressionParser exp = new SpelExpressionParser();
         return exp.parseExpression(express).getValue(root);
