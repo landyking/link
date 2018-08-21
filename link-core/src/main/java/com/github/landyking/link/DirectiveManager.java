@@ -30,8 +30,7 @@ public class DirectiveManager implements ApplicationContextAware {
     public DirectiveMojo callDirective(String code, InputPot pot) throws LinkException {
         logger.info("调用指令: {}", code);
         DirectiveParser parser = loadDirectiveXml(code);
-        LocalDictManager localDictManager = applicationContext.getBean(LocalDictManager.class);
-        DirectiveMojo mojo = new DirectiveMojo(code, pot, parser, localDictManager);
+        DirectiveMojo mojo = new DirectiveMojo(code, pot, parser, applicationContext);
         exec.execute(mojo);
         return mojo;
     }
@@ -44,7 +43,7 @@ public class DirectiveManager implements ApplicationContextAware {
         if (resource.exists()) {
             if (resource.isReadable()) {
                 try {
-                    return new DirectiveParser(resource,this);
+                    return new DirectiveParser(resource, this);
                 } catch (Exception e) {
                     throw new DirectiveParseException(resource.toString() + "指令解析异常", e);
                 }

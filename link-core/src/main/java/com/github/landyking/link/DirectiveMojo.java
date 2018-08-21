@@ -2,6 +2,7 @@ package com.github.landyking.link;
 
 import com.github.landyking.link.exception.LinkException;
 import com.google.common.collect.Maps;
+import org.springframework.context.ApplicationContext;
 import org.springframework.util.Assert;
 import org.w3c.dom.Element;
 
@@ -32,13 +33,15 @@ public class DirectiveMojo {
      * 经过output节点处理之后的数据
      */
     private Object afterOutput;
+    private final ApplicationContext applicationContext;
 
-    public DirectiveMojo(String code, InputPot pot, DirectiveParser parser, LocalDictManager localDictManager) {
+    public DirectiveMojo(String code, InputPot pot, DirectiveParser parser, ApplicationContext applicationContext) {
         this.code = code;
         this.pot = pot;
         this.parser = parser;
         this.parser.setDirectiveMojo(this);
-        this.localDictManager = localDictManager;
+        this.applicationContext = applicationContext;
+        this.localDictManager = applicationContext.getBean(LocalDictManager.class);
     }
 
     public DirectiveParser getParser() {
@@ -114,6 +117,14 @@ public class DirectiveMojo {
             }
         }
         throw new LinkException("字典[" + localDict.getName() + ":" + localDict.getDesc() + "]不包含marker为[" + arr[1] + "]的字典项");
+    }
+
+    public ApplicationContext getApplicationContext() {
+        return applicationContext;
+    }
+
+    public void publishEvent(String name) {
+        applicationContext.publishEvent(new MojoSpringEvent(name));
     }
 
     public String localDictItemCode(String name) throws LinkException {
