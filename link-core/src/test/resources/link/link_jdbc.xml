@@ -8,4 +8,5 @@
         <property name="username" value=""/>
         <property name="password" value=""/>
     </bean>
+    <bean name="tool" class="com.github.landyking.link.spel.Tool"/>
 </beans>

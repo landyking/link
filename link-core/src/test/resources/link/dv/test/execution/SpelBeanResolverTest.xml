@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<directive xmlns="http://www.github.com/landyking/link"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.github.com/landyking/link http://www.github.com/landyking/link/link-1.0.xsd">
+    <description>表达式测试</description>
+    <input>
+    </input>
+    <execution>
+        <generate id="var1">
+            <var name="first" from="@tool.hello()"/>
+        </generate>
+    </execution>
+    <executionEnding/>
+    <output>
+        <map name="root">
+            <param name="rst1" from="[end][var1].map[first]"/>
+        </map>
+    </output>
+    <resultRender/>
+    <dependencys></dependencys>
+</directive>
