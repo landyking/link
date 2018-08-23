@@ -25,9 +25,13 @@ import java.util.Map;
 /**
  * Created by landy on 2018/7/12.
  */
-public class DbUpdate extends DbExecute {
+public class DbExecute implements AbstractExecutionFactory {
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+    @Resource
+    private DataSourceManager dataSourceManager;
+
     public String tag() {
-        return "dbUpdate";
+        return "dbExecute";
     }
 
     public AbstractExecution generate(Element element) {

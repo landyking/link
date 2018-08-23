@@ -202,7 +202,8 @@
                     </xs:unique>
                 </xs:element>
                 <xs:element name="script" type="lk:executionScriptType"/>
-                <xs:element name="dbSql" type="lk:dbSqlType"/>
+                <xs:element name="dbQuery" type="lk:dbQueryType"/>
+                <xs:element name="dbExecute" type="lk:dbExecuteType"/>
                 <xs:element name="assertTrue" type="lk:assertTrueType"/>
                 <xs:element name="dbDelete" type="lk:dbDeleteType"/>
                 <xs:element name="dbInsert" type="lk:dbInsertType">
@@ -281,7 +282,7 @@
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
-    <xs:complexType name="dbQueryFieldType">
+    <xs:complexType name="dbSelectFieldType">
         <xs:complexContent>
             <xs:extension base="lk:dbFieldType">
                 <xs:attribute name="tableAlias" type="lk:needTextType"/>
@@ -326,6 +327,15 @@
                         </xs:annotation>
                     </xs:element>
                 </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="dbExecuteType">
+        <xs:annotation>
+            <xs:documentation><![CDATA[自定义数据库执行语句]]></xs:documentation>
+        </xs:annotation>
+        <xs:complexContent mixed="true">
+            <xs:extension base="lk:abstractDbExecutionType">
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -385,7 +395,7 @@
         <xs:complexContent>
             <xs:extension base="lk:abstractDbExecutionType">
                 <xs:sequence>
-                    <xs:element name="field" maxOccurs="unbounded" type="lk:dbQueryFieldType"/>
+                    <xs:element name="field" maxOccurs="unbounded" type="lk:dbSelectFieldType"/>
                     <xs:element name="from" type="lk:dbSelectFromType"/>
                     <xs:element name="where" type="lk:lineContentType" minOccurs="0" maxOccurs="1">
                         <xs:annotation>
@@ -398,9 +408,9 @@
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
-    <xs:complexType name="dbSqlType" mixed="true">
+    <xs:complexType name="dbQueryType" mixed="true">
         <xs:annotation>
-            <xs:documentation><![CDATA[数据库操作。使用自定义sql。]]></xs:documentation>
+            <xs:documentation><![CDATA[数据库查询操作。使用自定义sql。]]></xs:documentation>
         </xs:annotation>
         <xs:complexContent>
             <xs:extension base="lk:abstractDbExecutionType">

@@ -9,18 +9,18 @@
         <param name="deptName"/>
     </input>
     <execution>
-        <dbSql id="queryPage" dataSource="dataSource" pagination="true" limitDefaultSize="11">
+        <dbQuery id="queryPage" dataSource="dataSource" pagination="true" limitDefaultSize="11">
             select dept_no from departments
-        </dbSql>
-        <dbSql id="queryOne" dataSource="dataSource" pagination="false">
+        </dbQuery>
+        <dbQuery id="queryOne" dataSource="dataSource" pagination="false">
             select dept_no from departments where dept_no = :queryNo
-        </dbSql>
-        <dbSql id="insertOne" dataSource="dataSource" pagination="false">
+        </dbQuery>
+        <dbExecute id="insertOne" dataSource="dataSource">
             insert into departments (dept_no,dept_name) values (:deptNo,:deptName)
-        </dbSql>
-        <dbSql id="deleteOne" dataSource="dataSource" pagination="false">
+        </dbExecute>
+        <dbExecute id="deleteOne" dataSource="dataSource">
             delete departments where dept_no = :deptNo
-        </dbSql>
+        </dbExecute>
     </execution>
     <executionEnding/>
     <output>
