@@ -6,7 +6,8 @@
     <bean class="com.github.landyking.link.execution.DbUpdate"/>
     <bean class="com.github.landyking.link.execution.DbDelete"/>
     <bean class="com.github.landyking.link.execution.DbSelect"/>
-    <bean class="com.github.landyking.link.execution.DbSql"/>
+    <bean class="com.github.landyking.link.execution.DbQuery"/>
+    <bean class="com.github.landyking.link.execution.DbExecute"/>
     <bean class="com.github.landyking.link.execution.Generate"/>
     <bean class="com.github.landyking.link.execution.AssertTrue"/>
     <bean class="com.github.landyking.link.execution.CustomExecution"/>

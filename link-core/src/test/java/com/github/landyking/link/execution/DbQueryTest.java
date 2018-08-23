@@ -11,17 +11,15 @@ import org.junit.Test;
 /**
  * Created by landy on 2018/8/8.
  */
-public class DbSqlTest extends TestH2Database {
+public class DbQueryTest extends TestH2Database {
 
     @Test
     public void testSuccess() throws Exception {
         EmptyInputPot pot = new EmptyInputPot();
-        pot.put("queryNo", "d10");
-        pot.put("deptNo", "x99x");
-        String uuidDeptName = Texts.uuid();
-        pot.put("deptName", uuidDeptName);
-        DirectiveMojo mojo = getDm().callDirective("test.execution.dbSql", pot);
-//        Assert.assertEquals(null, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst1].finalValue"));
+        pot.put("queryNo", "d001");
+        DirectiveMojo mojo = getDm().callDirective("test.execution.dbQuery", pot);
+        Assert.assertEquals(11, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[count].finalValue"));
+        Assert.assertEquals("Marketing", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[name].finalValue"));
     }
 
 }

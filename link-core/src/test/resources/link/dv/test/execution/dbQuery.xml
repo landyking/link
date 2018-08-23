@@ -5,27 +5,20 @@
     <description>自定义sql</description>
     <input>
         <param name="queryNo"/>
-        <param name="deptNo"/>
-        <param name="deptName"/>
     </input>
     <execution>
-        <dbQuery id="queryPage" dataSource="dataSource" pagination="true" limitDefaultSize="11">
+        <dbQuery id="queryPage" dataSource="test" pagination="true" limitDefaultSize="11">
             select dept_no from departments
         </dbQuery>
-        <dbQuery id="queryOne" dataSource="dataSource" pagination="false">
-            select dept_no from departments where dept_no = :queryNo
+        <dbQuery id="queryOne" dataSource="test" pagination="false">
+            select dept_name from departments where dept_no = :queryNo
         </dbQuery>
-        <dbExecute id="insertOne" dataSource="dataSource">
-            insert into departments (dept_no,dept_name) values (:deptNo,:deptName)
-        </dbExecute>
-        <dbExecute id="deleteOne" dataSource="dataSource">
-            delete departments where dept_no = :deptNo
-        </dbExecute>
     </execution>
     <executionEnding/>
     <output>
         <map name="root">
-            <param name="success" from="true"/>
+            <param name="count" from="#root[end][queryPage].totalCount"/>
+            <param name="name" from="#root[end][queryOne].first"/>
         </map>
     </output>
     <resultRender/>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<directive xmlns="http://www.github.com/landyking/link"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.github.com/landyking/link http://www.github.com/landyking/link/link-1.0.xsd">
+    <description>自定义sql</description>
+    <input>
+        <param name="deptNo"/>
+        <param name="deptName"/>
+    </input>
+    <execution>
+
+        <dbExecute id="insertOne" dataSource="test">
+            insert into departments (dept_no,dept_name) values (:deptNo,:deptName)
+        </dbExecute>
+        <dbExecute id="deleteOne" dataSource="test">
+            delete departments where dept_no = :deptNo
+        </dbExecute>
+    </execution>
+    <executionEnding/>
+    <output>
+        <map name="root">
+            <param name="insert" from="#root[end][insertOne].effectCount==1"/>
+            <param name="delete" from="#root[end][deleteOne].effectCount==1"/>
+        </map>
+    </output>
+    <resultRender/>
+    <dependencys></dependencys>
+</directive>

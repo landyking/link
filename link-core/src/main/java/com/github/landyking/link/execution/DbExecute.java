@@ -4,7 +4,6 @@ import com.github.landyking.link.*;
 import com.github.landyking.link.beetl.BeetlTool;
 import com.github.landyking.link.exception.LinkException;
 import com.github.landyking.link.spel.SpelMapSqlParameterSource;
-import com.github.landyking.link.spel.SpelPair;
 import com.github.landyking.link.spel.SpelUtils;
 import com.github.landyking.link.util.LkTools;
 import com.github.landyking.link.util.Texts;
@@ -19,14 +18,13 @@ import org.springframework.transaction.support.TransactionTemplate;
 import org.w3c.dom.Element;
 
 import javax.annotation.Resource;
-import java.util.List;
 import java.util.Map;
 
 /**
  * Created by landy on 2018/7/12.
  */
 public class DbExecute implements AbstractExecutionFactory {
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+    protected final Logger logger = LoggerFactory.getLogger(getClass());
     @Resource
     private DataSourceManager dataSourceManager;
 
@@ -75,53 +73,15 @@ public class DbExecute implements AbstractExecutionFactory {
     }
 
     protected String buildExecuteSqlAndParam(DirectiveMojo mojo, Element element, Map<String, Object> paramMap) throws LinkException {
-        logger.debug("解析要更新的表");
-        String table = mojo.getParser().getSubElement(element, "lk:table").getTextContent();
-        logger.debug("解析更新过滤条件");
-        String where = mojo.getParser().getSubElement(element, "lk:where").getTextContent();
-        logger.debug("解析要更新的字段");
-        List<Element> fields = mojo.getParser().getSubElementList(element, "lk:field");
-        StringBuilder sql = new StringBuilder("update ");
-        sql.append(table);
-        sql.append(" set ");
-        SpelPair sp = SpelUtils.getSpelPair(mojo);
-        for (Element f : fields) {
-            String column = f.getAttribute("column");
-            String from = f.getAttribute("from");
-            if (!Texts.hasText(from)) {
-                //默认from与column相同
-                from = "#root[input][" + column + "]";
-            }
-            try {
-                String desc = f.getAttribute("desc");
-                String ignoreNull = f.getAttribute("ignoreNull");
-                String subSql = mojo.getParser().getParamText(f, "subSql");
-
-                if (!Texts.hasText(subSql)) {
-                    Object value = sp.getExp().parseExpression(from).getValue(sp.getCtx());
-                    if (value == null && LkTools.isTrue(ignoreNull)) {
-                        continue;
-                    }
-                    paramMap.put(column, value);
-                }
-                sql.append(column);
-                sql.append("=");
-                if (Texts.hasText(subSql)) {
-                    sql.append('(' + subSql + ')');
-                } else {
-                    sql.append(":" + column);
-                }
-                sql.append(",");
-            } catch (Exception e) {
-                throw new LinkException("节点" + mojo.getParser().getFullPath(f, true, "column") + "处理异常，表达式为" + from, e);
-            }
+        logger.debug("解析要执行的sql语句");
+        String sql = element.getTextContent();
+        if (Texts.hasText(sql)) {
+            sql = BeetlTool.renderBeetl(mojo, sql);
         }
-        sql.deleteCharAt(sql.length() - 1);
-        String tmpWhere = BeetlTool.renderBeetl(mojo, where);
-        if (Texts.hasText(tmpWhere)) {
-            sql.append(" where " + tmpWhere);
+        if (!Texts.hasText(sql)) {
+            throw new LinkException("要执行的SQL语句为空");
         }
-        return sql.toString();
+        return sql;
     }
 
     private void doUpdate(String executionId, String dataSourceId, DirectiveMojo mojo, String updateSql, Map<String, Object> pm) throws LinkException {

@@ -334,10 +334,15 @@
         <xs:annotation>
             <xs:documentation><![CDATA[自定义数据库执行语句]]></xs:documentation>
         </xs:annotation>
-        <xs:complexContent mixed="true">
-            <xs:extension base="lk:abstractDbExecutionType">
+        <xs:simpleContent>
+            <xs:extension base="lk:lineContentType">
+                <xs:attribute name="dataSource" type="lk:needTextType" use="required"/>
+                <xs:attribute name="transaction" type="xs:boolean" default="false"/>
+                <xs:attribute name="test" type="lk:lineContentType"/>
+                <xs:attribute name="id" type="lk:needTextType" use="required"/>
             </xs:extension>
-        </xs:complexContent>
+        </xs:simpleContent>
+
     </xs:complexType>
     <xs:complexType name="assertTrueType">
         <xs:complexContent>
@@ -412,11 +417,15 @@
         <xs:annotation>
             <xs:documentation><![CDATA[数据库查询操作。使用自定义sql。]]></xs:documentation>
         </xs:annotation>
-        <xs:complexContent>
-            <xs:extension base="lk:abstractDbExecutionType">
+        <xs:simpleContent>
+            <xs:extension base="lk:lineContentType">
                 <xs:attributeGroup ref="lk:pageAttributeGroup"/>
+                <xs:attribute name="dataSource" type="lk:needTextType" use="required"/>
+                <xs:attribute name="transaction" type="xs:boolean" default="false"/>
+                <xs:attribute name="test" type="lk:lineContentType"/>
+                <xs:attribute name="id" type="lk:needTextType" use="required"/>
             </xs:extension>
-        </xs:complexContent>
+        </xs:simpleContent>
     </xs:complexType>
     <xs:complexType name="executionCustomClassType">
         <xs:annotation>

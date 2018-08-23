@@ -15,7 +15,7 @@ import java.util.List;
 public class DbSelect extends DbQuery {
 
     public String tag() {
-        return "dbQuery";
+        return "dbSelect";
     }
 
     protected String buildQuerySql(DirectiveMojo mojo, Element element) throws LinkException {
