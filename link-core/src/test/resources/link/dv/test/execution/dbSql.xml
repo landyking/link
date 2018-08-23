@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<directive xmlns="http://www.github.com/landyking/link"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.github.com/landyking/link http://www.github.com/landyking/link/link-1.0.xsd">
+    <description>自定义sql</description>
+    <input>
+        <param name="queryNo"/>
+        <param name="deptNo"/>
+        <param name="deptName"/>
+    </input>
+    <execution>
+        <dbSql id="queryPage" dataSource="dataSource" pagination="true" limitDefaultSize="11">
+            select dept_no from departments
+        </dbSql>
+        <dbSql id="queryOne" dataSource="dataSource" pagination="false">
+            select dept_no from departments where dept_no = :queryNo
+        </dbSql>
+        <dbSql id="insertOne" dataSource="dataSource" pagination="false">
+            insert into departments (dept_no,dept_name) values (:deptNo,:deptName)
+        </dbSql>
+        <dbSql id="deleteOne" dataSource="dataSource" pagination="false">
+            delete departments where dept_no = :deptNo
+        </dbSql>
+    </execution>
+    <executionEnding/>
+    <output>
+        <map name="root">
+            <param name="success" from="true"/>
+        </map>
+    </output>
+    <resultRender/>
+    <dependencys></dependencys>
+</directive>
