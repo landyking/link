@@ -17,7 +17,7 @@
     <executionEnding/>
     <output>
         <map name="root">
-            <param name="count" from="#root[end][queryPage].totalCount"/>
+            <param name="count" from="#root[end][queryPage].data.size()"/>
             <param name="name" from="#root[end][queryOne].first"/>
         </map>
     </output>
