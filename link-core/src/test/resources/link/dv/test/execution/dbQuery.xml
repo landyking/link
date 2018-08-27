@@ -21,6 +21,6 @@
             <param name="name" from="#root[end][queryOne].first"/>
         </map>
     </output>
-    <resultRender/>
+    <resultRender type="com.github.landyking.link.resultRender.LoggerResultRender"/>
     <dependencys></dependencys>
 </directive>

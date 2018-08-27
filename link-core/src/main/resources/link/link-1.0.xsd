@@ -84,7 +84,7 @@
                 <xs:element name="resultRender">
                     <xs:complexType>
                         <xs:attribute name="type" type="lk:needTextType"
-                                      default="com.github.landyking.link.resultRender.DefaultResultRender"/>
+                                      default="com.github.landyking.link.resultRender.EmptyResultRender"/>
                     </xs:complexType>
                 </xs:element>
                 <xs:element name="dependencys">

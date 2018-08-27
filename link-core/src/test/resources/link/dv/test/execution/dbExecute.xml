@@ -8,7 +8,6 @@
         <param name="deptName"/>
     </input>
     <execution>
-
         <dbExecute id="insertOne" dataSource="test">
             insert into departments (dept_no,dept_name) values (:deptNo,:deptName)
         </dbExecute>
@@ -23,6 +22,6 @@
             <param name="delete" from="#root[end][deleteOne].effectCount==1"/>
         </map>
     </output>
-    <resultRender/>
+    <resultRender type="com.github.landyking.link.resultRender.LoggerResultRender"/>
     <dependencys></dependencys>
 </directive>

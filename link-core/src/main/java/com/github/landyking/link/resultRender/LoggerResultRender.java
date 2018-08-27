@@ -13,7 +13,7 @@ import java.util.Map;
 /**
  * Created by landy on 2018/7/19.
  */
-public class DefaultResultRender implements ResultRender {
+public class LoggerResultRender implements ResultRender {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Override
