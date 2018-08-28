@@ -12,6 +12,18 @@
         <module>link-demo</module>
     </modules>
     <packaging>pom</packaging>
+    <distributionManagement>
+        <repository>
+            <id>nexus-release</id>
+            <name>Nexus Releases Repository</name>
+            <url>http://192.168.30.172:8081/nexus/content/repositories/releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>nexus-snapshot</id>
+            <name>Nexus Snapshot Repository</name>
+            <url>http://192.168.30.172:8081/nexus/content/repositories/snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
     <dependencyManagement>
         <dependencies>
             <dependency>

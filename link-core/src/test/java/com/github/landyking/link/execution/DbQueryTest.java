@@ -20,6 +20,7 @@ public class DbQueryTest extends TestH2Database {
         DirectiveMojo mojo = getDm().callDirective("test.execution.dbQuery", pot);
         Assert.assertEquals(11, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[count].finalValue"));
         Assert.assertEquals("Marketing", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[name].finalValue"));
+        Assert.assertEquals(3, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[size].finalValue"));
     }
 
 }

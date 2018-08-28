@@ -25,6 +25,7 @@ public class BeetlTool {
             cfg.setStrict(true);
             GroupTemplate gt = new GroupTemplate(resourceLoader, cfg);
             gt.registerTag("param", ParamTag.class);
+            gt.registerTag("where", WhereTag.class);
             gt.registerTag("trim", TrimTag.class);
             gt.registerTag("if", IfTag.class);
             gt.registerTag("val", ValTag.class);

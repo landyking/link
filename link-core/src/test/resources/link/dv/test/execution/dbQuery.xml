@@ -13,12 +13,23 @@
         <dbQuery id="queryOne" dataSource="test" pagination="false">
             select dept_name from departments where dept_no = :queryNo
         </dbQuery>
+        <dbQuery id="queryList" dataSource="test" limitDefaultSize="3">
+            <![CDATA[
+            select dept_name from departments
+            <#where>
+                <#param attr="dept_no">
+                dept_no = :dept_no
+                </#param>
+            </#where>
+            ]]>
+        </dbQuery>
     </execution>
     <executionEnding/>
     <output>
         <map name="root">
             <param name="count" from="#root[end][queryPage].data.size()"/>
             <param name="name" from="#root[end][queryOne].first"/>
+            <param name="size" from="#root[end][queryList].data.size()"/>
         </map>
     </output>
     <resultRender type="com.github.landyking.link.resultRender.LoggerResultRender"/>

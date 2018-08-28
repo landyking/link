@@ -42,6 +42,12 @@ public class Generate implements AbstractExecutionFactory, ApplicationContextAwa
                 String id = element.getAttribute("id");
                 List<Element> varList = mojo.getParser().getSubElementList(element, "lk:var");
                 Map<String, Object> rst = Maps.newHashMap();
+
+                //提前将结果放入mojo. 这样generate在内部计算时也可以引用前面的值
+                ExecuteResult er = new ExecuteResult();
+                er.setData(Collections.singletonList(rst));
+                mojo.setExecuteResult(id, er);
+
                 for (Element one : varList) {
                     String name = one.getAttribute("name");
                     String from = one.getAttribute("from");
@@ -67,9 +73,7 @@ public class Generate implements AbstractExecutionFactory, ApplicationContextAwa
                         }
                     }
                 }
-                ExecuteResult er = new ExecuteResult();
-                er.setData(Collections.singletonList(rst));
-                mojo.setExecuteResult(id, er);
+
             }
         };
     }

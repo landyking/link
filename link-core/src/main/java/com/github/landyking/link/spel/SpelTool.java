@@ -17,6 +17,10 @@ import java.util.List;
  * Created by landy on 2018/8/6.
  */
 public class SpelTool {
+    public static boolean maybeEl(String name) {
+        return name.startsWith("#") || name.startsWith("@");
+    }
+
     public static List<Object> newList(Integer size) {
         if (size == null) {
             size = 0;

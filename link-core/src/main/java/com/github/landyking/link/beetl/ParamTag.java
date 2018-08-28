@@ -2,6 +2,7 @@ package com.github.landyking.link.beetl;
 
 import com.github.landyking.link.DirectiveMojo;
 import com.github.landyking.link.spel.SpelPair;
+import com.github.landyking.link.spel.SpelTool;
 import com.github.landyking.link.spel.SpelUtils;
 import com.github.landyking.link.util.Texts;
 import com.google.common.base.Throwables;
@@ -20,7 +21,7 @@ public class ParamTag extends GeneralVarTagBinding {
         Assert.notNull(dc, "DirectiveContext can't null");
         String attrName = Texts.toStr(name);
         boolean doRender = false;
-        if (attrName.startsWith("#root")) {
+        if (SpelTool.maybeEl(attrName)) {
             try {
                 SpelPair sp = SpelUtils.getSpelPair(dc);
                 Object value = sp.getExp().parseExpression(attrName).getValue(sp.getCtx());
