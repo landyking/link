@@ -1,6 +1,7 @@
 package com.github.landyking.link.pot;
 
 import com.github.landyking.link.InputPot;
+import com.github.landyking.link.util.Texts;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -14,7 +15,7 @@ public class WebInputPot implements InputPot {
     private final HttpServletResponse response;
     private final ServletContext servletContext;
 
-    public WebInputPot(HttpServletRequest request, HttpServletResponse response,ServletContext servletContext) {
+    public WebInputPot(HttpServletRequest request, HttpServletResponse response, ServletContext servletContext) {
         this.request = request;
         this.response = response;
         this.servletContext = servletContext;
@@ -22,6 +23,10 @@ public class WebInputPot implements InputPot {
 
     @Override
     public String getInputParamText(String name) {
+        String attribute = Texts.toStr(request.getAttribute(name));
+        if (Texts.hasText(attribute)) {
+            return attribute;
+        }
         return request.getParameter(name);
     }
 
