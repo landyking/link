@@ -109,7 +109,7 @@
                 <xs:documentation><![CDATA[参数名，非空，唯一。]]></xs:documentation>
             </xs:annotation>
         </xs:attribute>
-        <xs:attribute name="desc" type="lk:needTextType">
+        <xs:attribute name="desc" type="lk:lineContentType">
             <xs:annotation>
                 <xs:documentation><![CDATA[描述信息]]></xs:documentation>
             </xs:annotation>

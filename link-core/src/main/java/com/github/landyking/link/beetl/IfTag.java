@@ -1,5 +1,10 @@
 package com.github.landyking.link.beetl;
 
+import com.github.landyking.link.DirectiveMojo;
+import com.github.landyking.link.spel.SpelPair;
+import com.github.landyking.link.spel.SpelTool;
+import com.github.landyking.link.spel.SpelUtils;
+import com.github.landyking.link.util.Texts;
 import org.beetl.core.GeneralVarTagBinding;
 import org.springframework.util.Assert;
 
@@ -11,10 +16,17 @@ public class IfTag extends GeneralVarTagBinding {
     public void render() {
         Object name = getAttributeValue("attr");
         Assert.notNull(name, "attr can't null");
-        if ((Boolean) name) {
-            doBodyRender();
-        } else {
-
+        DirectiveMojo dc = (DirectiveMojo) ctx.getGlobal("ctx");
+        Assert.notNull(dc, "DirectiveContext can't null");
+        String attrName = Texts.toStr(name);
+        try {
+            SpelPair sp = SpelUtils.getSpelPair(dc);
+            Boolean value = sp.getExp().parseExpression(attrName).getValue(sp.getCtx(), Boolean.class);
+            if (value) {
+                doBodyRender();
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("IfTag处理属性" + attrName + "异常", e);
         }
     }
 }
