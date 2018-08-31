@@ -18,9 +18,9 @@ public class DbQueryTest extends TestH2Database {
         EmptyInputPot pot = new EmptyInputPot();
         pot.put("queryNo", "d001");
         DirectiveMojo mojo = getDm().callDirective("test.execution.dbQuery", pot);
-        Assert.assertEquals(11, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[count].finalValue"));
-        Assert.assertEquals("Marketing", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[name].finalValue"));
-        Assert.assertEquals(3, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[size].finalValue"));
+        Assert.assertEquals(11, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[count]"));
+        Assert.assertEquals("Marketing", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[name]"));
+        Assert.assertEquals(3, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[size]"));
     }
 
 }

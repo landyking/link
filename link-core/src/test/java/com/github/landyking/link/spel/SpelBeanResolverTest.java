@@ -15,6 +15,6 @@ public class SpelBeanResolverTest extends TestH2Database {
     public void test() throws Exception {
         EmptyInputPot pot = new EmptyInputPot();
         DirectiveMojo mojo = getDm().callDirective("test.execution.SpelBeanResolverTest", pot);
-        Assert.assertEquals("hello", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst1].finalValue"));
+        Assert.assertEquals("hello", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst1]"));
     }
 }

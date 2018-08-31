@@ -5,30 +5,15 @@
     <description>dict check test</description>
     <input>
         <param name="like">
-            <processors>
-                <LikeParamGenerator/>
-            </processors>
         </param>
         <param name="like2"/>
         <param name="likeEmpty" notEmpty="false">
-            <processors>
-                <LikeParamGenerator/>
-            </processors>
         </param>
         <param name="likeLeft">
-            <processors>
-                <LikeParamGenerator position="left"/>
-            </processors>
         </param>
         <param name="likeRight">
-            <processors>
-                <LikeParamGenerator position="right"/>
-            </processors>
         </param>
         <param name="likeBoth">
-            <processors>
-                <LikeParamGenerator position="both"/>
-            </processors>
         </param>
     </input>
     <execution>

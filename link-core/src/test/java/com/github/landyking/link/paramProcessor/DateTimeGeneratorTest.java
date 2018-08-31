@@ -25,8 +25,8 @@ public class DateTimeGeneratorTest extends TestH2Database {
         pot.put("time2", "empty");
         DirectiveMojo mojo = getDm().callDirective("test.param.DateTimeGenerator", pot);
         Date after = new Date();
-        Assert.assertEquals(value, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[time1].finalValue"));
-        Date gen = (Date) SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[time2].finalValue.toDate()");
+        Assert.assertEquals(value, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[time1]"));
+        Date gen = (Date) SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[time2].toDate()");
         Assert.assertTrue(gen.getTime() >= before.getTime() && gen.getTime() <= after.getTime());
     }
 }

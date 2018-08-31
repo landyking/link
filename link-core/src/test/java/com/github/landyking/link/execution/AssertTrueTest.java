@@ -26,6 +26,6 @@ public class AssertTrueTest extends TestH2Database {
         pot.put("first", "hello");
         pot.put("second", "hello");
         DirectiveMojo mojo = getDm().callDirective("test.execution.assert1", pot);
-        Assert.assertEquals(true, SpelTool.getValueFromExpress(mojo.getAfterOutput(),"[success].finalValue"));
+        Assert.assertEquals(true, SpelTool.getValueFromExpress(mojo.getAfterOutput(),"[success]"));
     }
 }

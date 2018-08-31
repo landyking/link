@@ -19,17 +19,17 @@ public class DbUpdateTest extends TestH2Database {
         EmptyInputPot pot = new EmptyInputPot();
         pot.put("deptNo", "d005");
         DirectiveMojo mojo = getDm().callDirective("test.execution.dbSelect", pot);
-        Assert.assertEquals("Development", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst1].finalValue"));
+        Assert.assertEquals("Development", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst1]"));
         pot.put("deptName", "MamaMiya");
         mojo = getDm().callDirective("test.execution.dbUpdate", pot);
-        Assert.assertEquals(true, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[success].finalValue"));
+        Assert.assertEquals(true, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[success]"));
         mojo = getDm().callDirective("test.execution.dbSelect", pot);
-        Assert.assertEquals("MamaMiya", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst1].finalValue"));
+        Assert.assertEquals("MamaMiya", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst1]"));
 
         pot.put("deptNo", "d005");
         pot.put("deptName", "Development");
         mojo = getDm().callDirective("test.execution.dbUpdate2", pot);
-        Assert.assertEquals(true, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[success].finalValue"));
+        Assert.assertEquals(true, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[success]"));
     }
 
     @Test
@@ -38,7 +38,7 @@ public class DbUpdateTest extends TestH2Database {
         pot.put("deptNo", "d0051");
         pot.put("deptName", "MamaMiya");
         DirectiveMojo mojo = getDm().callDirective("test.execution.dbUpdate", pot);
-        Assert.assertEquals(false, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[success].finalValue"));
+        Assert.assertEquals(false, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[success]"));
     }
 
     @Test
@@ -46,21 +46,21 @@ public class DbUpdateTest extends TestH2Database {
         EmptyInputPot pot = new EmptyInputPot();
         pot.put("deptNo", "d005");
         DirectiveMojo mojo = getDm().callDirective("test.execution.dbSelect", pot);
-        Assert.assertEquals("Development", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst1].finalValue"));
+        Assert.assertEquals("Development", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst1]"));
         pot.put("deptNo", "d005");
         pot.put("deptName", "MamaMiya");
         mojo = getDm().callDirective("test.execution.dbUpdate2", pot);
-        Assert.assertEquals(true, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[success].finalValue"));
+        Assert.assertEquals(true, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[success]"));
 
         pot.put("deptNo", "d005");
         mojo = getDm().callDirective("test.execution.dbSelect", pot);
-        Assert.assertEquals("MamaMiya", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst1].finalValue"));
+        Assert.assertEquals("MamaMiya", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst1]"));
 
 
         pot.put("deptNo", "d005");
         pot.put("deptName", "Development");
         mojo = getDm().callDirective("test.execution.dbUpdate2", pot);
-        Assert.assertEquals(true, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[success].finalValue"));
+        Assert.assertEquals(true, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[success]"));
     }
 
     @Test
@@ -68,28 +68,28 @@ public class DbUpdateTest extends TestH2Database {
         EmptyInputPot pot = new EmptyInputPot();
         pot.put("deptNo", "d005");
         DirectiveMojo mojo = getDm().callDirective("test.execution.dbSelect", pot);
-        Assert.assertEquals("Development", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst1].finalValue"));
+        Assert.assertEquals("Development", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst1]"));
         pot.put("deptNo", "d004");
         mojo = getDm().callDirective("test.execution.dbSelect", pot);
-        Assert.assertEquals("Production", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst1].finalValue"));
+        Assert.assertEquals("Production", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst1]"));
         pot.put("deptNo", "d005#d004");
         pot.put("deptName", "MamaMiya");
         pot.put("notIn", "d005");
         mojo = getDm().callDirective("test.execution.dbUpdate2", pot);
-        Assert.assertEquals(true, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[success].finalValue"));
+        Assert.assertEquals(true, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[success]"));
 
         pot.put("deptNo", "d005");
         mojo = getDm().callDirective("test.execution.dbSelect", pot);
-        Assert.assertEquals("Development", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst1].finalValue"));
+        Assert.assertEquals("Development", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst1]"));
         pot.put("deptNo", "d004");
         mojo = getDm().callDirective("test.execution.dbSelect", pot);
-        Assert.assertEquals("MamaMiya", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst1].finalValue"));
+        Assert.assertEquals("MamaMiya", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst1]"));
 
 
         pot.put("deptNo", "d004");
         pot.put("deptName", "Production");
         mojo = getDm().callDirective("test.execution.dbUpdate2", pot);
-        Assert.assertEquals(true, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[success].finalValue"));
+        Assert.assertEquals(true, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[success]"));
     }
 
     @Test
@@ -97,16 +97,16 @@ public class DbUpdateTest extends TestH2Database {
         EmptyInputPot pot = new EmptyInputPot();
         pot.put("deptNo", "d005");
         DirectiveMojo mojo = getDm().callDirective("test.execution.dbSelect", pot);
-        Assert.assertEquals("Development", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst1].finalValue"));
+        Assert.assertEquals("Development", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst1]"));
         pot.put("deptNo", "d005");
         pot.put("deptName", "MamaMiya");
         pot.put("notIn", "d005");
         mojo = getDm().callDirective("test.execution.dbUpdate2", pot);
-        Assert.assertEquals(false, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[success].finalValue"));
+        Assert.assertEquals(false, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[success]"));
 
         pot.put("deptNo", "d005");
         mojo = getDm().callDirective("test.execution.dbSelect", pot);
-        Assert.assertEquals("Development", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst1].finalValue"));
+        Assert.assertEquals("Development", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst1]"));
 
     }
 }

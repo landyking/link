@@ -18,30 +18,30 @@ public class QueryTranslatorTest extends TestH2Database {
         EmptyInputPot pot = new EmptyInputPot();
         pot.put("deptNo", "d002");
         DirectiveMojo mojo = getDm().callDirective("test.param.QueryTranslator", pot);
-        Assert.assertEquals("Finance", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[deptName]?.finalValue"));
+        Assert.assertEquals("Finance", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[deptName]"));
         pot.put("deptNo", "d003");
         mojo = getDm().callDirective("test.param.QueryTranslator", pot);
-        Assert.assertEquals("Human Resources", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[deptName]?.finalValue"));
+        Assert.assertEquals("Human Resources", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[deptName]"));
     }
     @Test
     public void testFailure() throws Exception {
         EmptyInputPot pot = new EmptyInputPot();
         pot.put("deptNo", "d0021");
         DirectiveMojo mojo = getDm().callDirective("test.param.QueryTranslator", pot);
-        Assert.assertEquals("d0021", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[deptName]?.finalValue"));
+        Assert.assertEquals("d0021", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[deptName]"));
         pot.put("deptNo", "d0031");
         mojo = getDm().callDirective("test.param.QueryTranslator", pot);
-        Assert.assertEquals("d0031", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[deptName]?.finalValue"));
+        Assert.assertEquals("d0031", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[deptName]"));
     }
     @Test
     public void testSuccessWithCondition() throws Exception {
         EmptyInputPot pot = new EmptyInputPot();
         pot.put("deptNo", "d002");
         DirectiveMojo mojo = getDm().callDirective("test.param.QueryTranslator", pot);
-        Assert.assertEquals("Finance", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[deptName]?.finalValue"));
+        Assert.assertEquals("Finance", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[deptName]"));
         pot.put("notName", "Finance");
         pot.put("deptNo", "d002");
         mojo = getDm().callDirective("test.param.QueryTranslator", pot);
-        Assert.assertEquals("d002", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[deptName]?.finalValue"));
+        Assert.assertEquals("d002", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[deptName]"));
     }
 }

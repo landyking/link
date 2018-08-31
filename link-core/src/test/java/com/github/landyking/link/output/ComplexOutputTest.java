@@ -31,11 +31,11 @@ public class ComplexOutputTest {
         pot.put("hello", "world,big");
         DirectiveMojo mojo = dm.callDirective("test.output.complexOutputList", pot);
         Object afterOutput = mojo.getAfterOutput();
-        Assert.assertEquals("刘二", SpelTool.getValueFromExpress(afterOutput, "#root[0][name].finalValue"));
-        Assert.assertEquals("22", SpelTool.getValueFromExpress(afterOutput, "#root[0][age].finalValue"));
-        Assert.assertEquals("东大街18号", SpelTool.getValueFromExpress(afterOutput, "#root[0][address].finalValue"));
-        Assert.assertEquals("world", SpelTool.getValueFromExpress(afterOutput, "#root[0][hello].finalValue[0]"));
-        Assert.assertEquals("big", SpelTool.getValueFromExpress(afterOutput, "#root[0][hello2].finalValue[1]"));
+        Assert.assertEquals("刘二", SpelTool.getValueFromExpress(afterOutput, "#root[0][name]"));
+        Assert.assertEquals("22", SpelTool.getValueFromExpress(afterOutput, "#root[0][age]"));
+        Assert.assertEquals("东大街18号", SpelTool.getValueFromExpress(afterOutput, "#root[0][address]"));
+        Assert.assertEquals("world", SpelTool.getValueFromExpress(afterOutput, "#root[0][hello][0]"));
+        Assert.assertEquals("big", SpelTool.getValueFromExpress(afterOutput, "#root[0][hello2][1]"));
     }
 
     @Test

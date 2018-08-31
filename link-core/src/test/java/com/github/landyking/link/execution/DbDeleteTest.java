@@ -19,17 +19,17 @@ public class DbDeleteTest extends TestH2Database {
         EmptyInputPot pot = new EmptyInputPot();
         pot.put("deptNo", "x999");
         DirectiveMojo mojo = getDm().callDirective("test.execution.dbSelect", pot);
-        Assert.assertEquals(null, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst1].finalValue"));
+        Assert.assertEquals(null, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst1]"));
         pot.put("deptName", "DevelopmentMama");
         mojo = getDm().callDirective("test.execution.dbInsert", pot);
-        Assert.assertEquals(true, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[success].finalValue"));
+        Assert.assertEquals(true, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[success]"));
 
         mojo = getDm().callDirective("test.execution.dbSelect", pot);
-        Assert.assertEquals("DevelopmentMama", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst1].finalValue"));
+        Assert.assertEquals("DevelopmentMama", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst1]"));
         mojo = getDm().callDirective("test.execution.dbDelete", pot);
-        Assert.assertEquals(true, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[success].finalValue"));
+        Assert.assertEquals(true, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[success]"));
         mojo = getDm().callDirective("test.execution.dbSelect", pot);
-        Assert.assertEquals(null, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst1].finalValue"));
+        Assert.assertEquals(null, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst1]"));
     }
 
     @Test
@@ -37,7 +37,7 @@ public class DbDeleteTest extends TestH2Database {
         EmptyInputPot pot = new EmptyInputPot();
         pot.put("deptNo", "x999");
         DirectiveMojo mojo = getDm().callDirective("test.execution.dbDelete", pot);
-        Assert.assertEquals(false, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[success].finalValue"));
+        Assert.assertEquals(false, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[success]"));
     }
 
     @Test
@@ -51,10 +51,10 @@ public class DbDeleteTest extends TestH2Database {
         pot.put("birthDate", "1978-01-22");
         pot.put("hireDate", "1978-01-22");
         DirectiveMojo mojo = getDm().callDirective("test.execution.addEmployee", pot);
-        Assert.assertEquals(true, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst1].finalValue"));
+        Assert.assertEquals(true, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst1]"));
         pot = new EmptyInputPot();
         pot.put("firstName", firstName + ",unknown111");
         mojo = getDm().callDirective("test.execution.deleteEmployeeByName", pot);
-        Assert.assertEquals(true, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[success].finalValue"));
+        Assert.assertEquals(true, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[success]"));
     }
 }

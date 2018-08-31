@@ -19,13 +19,13 @@ public class DictTranslatorTest extends TestH2Database {
         pot.put("dict1", "21");
         pot.put("dict2", "a");
         DirectiveMojo mojo = getDm().callDirective("test.param.DictTranslator", pot);
-        Assert.assertEquals("我也好", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[dict1]?.finalValue"));
-        Assert.assertEquals("大写A", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[dict2]?.finalValue"));
+        Assert.assertEquals("我也好", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[dict1]"));
+        Assert.assertEquals("大写A", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[dict2]"));
         pot.put("dict1", "22");
         pot.put("dict2", "b");
         mojo = getDm().callDirective("test.param.DictTranslator", pot);
-        Assert.assertEquals("我也好2", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[dict1]?.finalValue"));
-        Assert.assertEquals("大写B", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[dict2]?.finalValue"));
+        Assert.assertEquals("我也好2", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[dict1]"));
+        Assert.assertEquals("大写B", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[dict2]"));
     }
 
     @Test
@@ -34,8 +34,8 @@ public class DictTranslatorTest extends TestH2Database {
         pot.put("dict1", "212");
         pot.put("dict2", "a");
         DirectiveMojo mojo = getDm().callDirective("test.param.DictTranslator", pot);
-        Assert.assertEquals("212", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[dict1]?.finalValue"));
-        Assert.assertEquals("大写A", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[dict2]?.finalValue"));
+        Assert.assertEquals("212", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[dict1]"));
+        Assert.assertEquals("大写A", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[dict2]"));
     }
 
 }

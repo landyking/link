@@ -18,6 +18,6 @@ public class CustomExecutionTest extends TestH2Database {
         EmptyInputPot pot = new EmptyInputPot();
         pot.put("time", "2018-02-11");
         DirectiveMojo mojo = getDm().callDirective("test.execution.custom", pot);
-        Assert.assertEquals("2018年02月11日", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[result].finalValue"));
+        Assert.assertEquals("2018年02月11日", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[result]"));
     }
 }

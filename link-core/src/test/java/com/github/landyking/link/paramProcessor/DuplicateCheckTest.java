@@ -20,7 +20,7 @@ public class DuplicateCheckTest extends TestH2Database{
         pot.put("no", "1000311");
         pot.put("firstName", "10122");
         DirectiveMojo mojo = getDm().callDirective("test.param.DuplicateCheck", pot);
-        Assert.assertEquals("1000311", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[0][no].finalValue"));
+        Assert.assertEquals("1000311", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[0][no]"));
     }
 
     @Test

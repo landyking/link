@@ -20,10 +20,10 @@ public class ExistCheckTest extends TestH2Database{
         pot.put("no", "10121");
         pot.put("firstName", "10121");
         DirectiveMojo mojo = getDm().callDirective("test.param.ExistCheck", pot);
-        Assert.assertEquals("21", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[0][type]?.finalValue"));
+        Assert.assertEquals("21", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[0][type]"));
         pot.put("type", "22");
         mojo = getDm().callDirective("test.param.ExistCheck", pot);
-        Assert.assertEquals("22", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[0][type]?.finalValue"));
+        Assert.assertEquals("22", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[0][type]"));
     }
     @Test
     public void testExistCheckError() throws Exception {

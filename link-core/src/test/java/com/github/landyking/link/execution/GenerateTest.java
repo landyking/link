@@ -17,7 +17,7 @@ public class GenerateTest extends TestH2Database {
         pot.put("name", "d005,d1112");
         pot.put("now", "2018-01-02");
         DirectiveMojo mojo = getDm().callDirective("test.execution.generate", pot);
-        Assert.assertEquals("2018-01-02 00:00:00",SpelTool.getValueFromExpress(mojo.getAfterOutput(),"#root[now].finalValue"));
-        Assert.assertEquals("d1112",SpelTool.getValueFromExpress(mojo.getAfterOutput(),"#root[name][1].finalValue"));
+        Assert.assertEquals("2018-01-02 00:00:00",SpelTool.getValueFromExpress(mojo.getAfterOutput(),"#root[now]"));
+        Assert.assertEquals("d1112",SpelTool.getValueFromExpress(mojo.getAfterOutput(),"#root[name][1]"));
     }
 }

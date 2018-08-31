@@ -19,12 +19,12 @@ public class DbInsertTest extends TestH2Database {
         EmptyInputPot pot = new EmptyInputPot();
         pot.put("deptNo", "d555");
         DirectiveMojo mojo = getDm().callDirective("test.execution.dbSelect", pot);
-        Assert.assertEquals(null, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst1].finalValue"));
+        Assert.assertEquals(null, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst1]"));
         pot.put("deptName", "helloworld");
         mojo = getDm().callDirective("test.execution.dbInsert", pot);
-        Assert.assertEquals(true, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[success].finalValue"));
+        Assert.assertEquals(true, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[success]"));
         mojo = getDm().callDirective("test.execution.dbSelect", pot);
-        Assert.assertEquals("helloworld", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst1].finalValue"));
+        Assert.assertEquals("helloworld", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst1]"));
     }
 
     @Test
@@ -33,9 +33,9 @@ public class DbInsertTest extends TestH2Database {
         pot.put("deptNo", "x987");
         pot.put("deptName", "helloworld");
         DirectiveMojo mojo = getDm().callDirective("test.execution.dbInsert", pot);
-        Assert.assertEquals(true, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[success].finalValue"));
+        Assert.assertEquals(true, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[success]"));
         mojo = getDm().callDirective("test.execution.deleteDepart", pot);
-        Assert.assertEquals(true, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[success].finalValue"));
+        Assert.assertEquals(true, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[success]"));
     }
 
     @Test
@@ -44,12 +44,12 @@ public class DbInsertTest extends TestH2Database {
         pot.put("deptNo", "x987");
         pot.put("deptName", "helloworld");
         DirectiveMojo mojo = getDm().callDirective("test.execution.dbInsertWithSubSql", pot);
-        Assert.assertEquals(true, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[success].finalValue"));
+        Assert.assertEquals(true, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[success]"));
         mojo = getDm().callDirective("test.execution.dbSelect", pot);
-        String s = Texts.toStr(SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst1].finalValue"));
+        String s = Texts.toStr(SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst1]"));
         Assert.assertTrue(s.startsWith("name"));
         mojo = getDm().callDirective("test.execution.deleteDepart", pot);
-        Assert.assertEquals(true, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[success].finalValue"));
+        Assert.assertEquals(true, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[success]"));
     }
 
     @Test
@@ -62,8 +62,8 @@ public class DbInsertTest extends TestH2Database {
         pot.put("birthDate","1978-01-22" );
         pot.put("hireDate", "1978-01-22");
         DirectiveMojo mojo = getDm().callDirective("test.execution.addEmployee", pot);
-        Assert.assertEquals(true, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst1].finalValue"));
+        Assert.assertEquals(true, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst1]"));
         mojo = getDm().callDirective("test.execution.deleteEmployee", pot);
-        Assert.assertEquals(true, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst2].finalValue"));
+        Assert.assertEquals(true, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst2]"));
     }
 }

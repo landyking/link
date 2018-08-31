@@ -16,10 +16,10 @@ public class LocalDictTest extends TestH2Database {
     public void testSuccess() throws Exception {
         EmptyInputPot pot = new EmptyInputPot();
         DirectiveMojo mojo = getDm().callDirective("test.execution.localDictTest", pot);
-        Assert.assertEquals(1, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst1].finalValue"));
-        Assert.assertEquals("1", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst11].finalValue"));
-        Assert.assertEquals(2, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst2].finalValue"));
-        Assert.assertEquals("2", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst21].finalValue"));
+        Assert.assertEquals(1, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst1]"));
+        Assert.assertEquals("1", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst11]"));
+        Assert.assertEquals(2, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst2]"));
+        Assert.assertEquals("2", SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[rst21]"));
     }
 
 }

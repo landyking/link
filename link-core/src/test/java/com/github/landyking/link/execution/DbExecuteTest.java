@@ -20,8 +20,8 @@ public class DbExecuteTest extends TestH2Database {
         String uuidDeptName = Texts.uuid();
         pot.put("deptName", uuidDeptName);
         DirectiveMojo mojo = getDm().callDirective("test.execution.dbExecute", pot);
-        Assert.assertEquals(true, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[insert].finalValue"));
-        Assert.assertEquals(true, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[delete].finalValue"));
+        Assert.assertEquals(true, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[insert]"));
+        Assert.assertEquals(true, SpelTool.getValueFromExpress(mojo.getAfterOutput(), "#root[delete]"));
     }
 
 }
