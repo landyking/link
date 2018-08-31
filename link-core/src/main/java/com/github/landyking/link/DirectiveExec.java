@@ -174,9 +174,9 @@ public class DirectiveExec implements ApplicationContextAware {
     private ValueBag fillValueBag(Object o) {
         ValueBag bag;
         if (o != null) {
-            bag = new ValueBag(false).setOriginValue(o);
+            bag = new ValueBag().setOriginValue(o);
         } else {
-            bag = new ValueBag(false).setOriginValue(null);
+            bag = new ValueBag().setOriginValue(null);
         }
         return bag;
     }

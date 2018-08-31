@@ -77,7 +77,7 @@ public class DictTranslator extends AbstractParamProcessor {
     public Object processInput(Element config, Element param, DirectiveMojo mojo, Object in) throws Exception {
         String name = param.getAttribute("name");
         Map<String, ValueBag> vals = Maps.newHashMap();
-        ValueBag bag = new ValueBag(true).setOriginValue(in);
+        ValueBag bag = new ValueBag().setOriginValue(in);
         vals.put(name, bag);
         processOutput(config, param, mojo, name, Arrays.asList(vals));
         return bag.getFinalValue();
