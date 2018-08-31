@@ -80,7 +80,7 @@ public class DirectiveExec implements ApplicationContextAware {
                 for (Element e : list) {
                     Object subVal = processOutputSubNode(mojo, e, spelPair);
                     String name = e.getAttribute("name");
-                    if (subVal instanceof ValueBag && ((ValueBag) subVal).getFinalValue() == null) {
+                    if (subVal == null) {
                         childs.put(name, Collections.emptyList());
                     } else if (subVal instanceof Collection) {
                         childs.put(name, (Collection<Object>) subVal);
@@ -125,7 +125,7 @@ public class DirectiveExec implements ApplicationContextAware {
                 from = "[exec][default].data[0][" + name + "]";
             }
         }
-        List<Map<String, ValueBag>> valueBagList = Lists.newArrayList();
+        List<Map<String, Object>> valueBagList = Lists.newArrayList();
         Object value = null;
         try {
             value = spelPair.getExp().parseExpression(from).getValue(spelPair.getCtx());
@@ -137,14 +137,14 @@ public class DirectiveExec implements ApplicationContextAware {
         if (value instanceof Collection) {
             single = false;
             for (Object o : ((Collection) value)) {
-                HashMap<String, ValueBag> map = Maps.newHashMap();
-                map.put(name, fillValueBag(o));
+                HashMap<String, Object> map = Maps.newHashMap();
+                map.put(name, o);
                 valueBagList.add(map);
             }
         } else {
             single = true;
-            HashMap<String, ValueBag> map = Maps.newHashMap();
-            map.put(name, fillValueBag(value));
+            HashMap<String, Object> map = Maps.newHashMap();
+            map.put(name, value);
             valueBagList.add(map);
         }
 
@@ -163,22 +163,12 @@ public class DirectiveExec implements ApplicationContextAware {
         if (single) {
             return valueBagList.iterator().next().get(name);
         } else {
-            List<ValueBag> list = Lists.newArrayListWithCapacity(valueBagList.size());
-            for (Map<String, ValueBag> one : valueBagList) {
+            List<Object> list = Lists.newArrayListWithCapacity(valueBagList.size());
+            for (Map<String, Object> one : valueBagList) {
                 list.add(one.get(name));
             }
             return list;
         }
-    }
-
-    private ValueBag fillValueBag(Object o) {
-        ValueBag bag;
-        if (o != null) {
-            bag = new ValueBag().setOriginValue(o);
-        } else {
-            bag = new ValueBag().setOriginValue(null);
-        }
-        return bag;
     }
 
     /**

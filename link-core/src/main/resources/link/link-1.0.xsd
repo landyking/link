@@ -158,7 +158,6 @@
                 <xs:element name="DictTranslator" type="lk:DictTranslatorType"/>
                 <xs:element name="TextToList" type="lk:TextToListType"/>
                 <xs:element name="ListToText" type="lk:ListToTextType"/>
-                <xs:element name="LikeParamGenerator" type="lk:LikeParamGeneratorType"/>
                 <xs:element name="InputScriptProcessor" type="lk:InputScriptProcessorType"/>
                 <xs:element name="OutputScriptProcessor" type="lk:OutputScriptProcessorType"/>
                 <xs:element name="DateTimeConverter" type="lk:DateTimeConverterType"/>
@@ -683,21 +682,7 @@
             <xs:extension base="lk:abstractParamProcessorType"></xs:extension>
         </xs:complexContent>
     </xs:complexType>
-    <xs:complexType name="LikeParamGeneratorType">
-        <xs:complexContent>
-            <xs:extension base="lk:abstractParamProcessorType">
-                <xs:attribute name="position" default="both">
-                    <xs:simpleType>
-                        <xs:restriction base="xs:string">
-                            <xs:enumeration value="left"/>
-                            <xs:enumeration value="right"/>
-                            <xs:enumeration value="both"/>
-                        </xs:restriction>
-                    </xs:simpleType>
-                </xs:attribute>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
+
     <xs:complexType name="InputScriptProcessorType">
         <xs:complexContent>
             <xs:extension base="lk:abstractParamProcessorType"></xs:extension>

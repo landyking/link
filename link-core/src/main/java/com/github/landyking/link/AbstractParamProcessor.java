@@ -16,7 +16,7 @@ public abstract class AbstractParamProcessor {
      * @param name    所属参数名称
      * @param outList 用于存放当前以及最终输出内容的列表
      */
-    public abstract void processOutput(Element config, Element param, DirectiveMojo mojo, String name, List<Map<String, ValueBag>> outList)throws Exception;
+    public abstract void processOutput(Element config, Element param, DirectiveMojo mojo, String name, List<Map<String, Object>> outList)throws Exception;
 
     public String tag() {
         return getClass().getSimpleName();

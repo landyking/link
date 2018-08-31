@@ -2,7 +2,6 @@ package com.github.landyking.link.paramProcessor;
 
 import com.github.landyking.link.AbstractParamProcessor;
 import com.github.landyking.link.DirectiveMojo;
-import com.github.landyking.link.ValueBag;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -19,7 +18,7 @@ public class CustomParamProcessor extends AbstractParamProcessor implements Appl
     private ApplicationContext application;
 
     @Override
-    public void processOutput(Element config, Element param, DirectiveMojo mojo, String name, List<Map<String, ValueBag>> outList) throws Exception {
+    public void processOutput(Element config, Element param, DirectiveMojo mojo, String name, List<Map<String, Object>> outList) throws Exception {
         AbstractParamProcessor pps = getAbstractParamProcessor(config);
         pps.processOutput(config, param, mojo, name, outList);
     }

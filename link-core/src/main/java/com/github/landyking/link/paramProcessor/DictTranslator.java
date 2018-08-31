@@ -3,10 +3,8 @@ package com.github.landyking.link.paramProcessor;
 import com.github.landyking.link.AbstractParamProcessor;
 import com.github.landyking.link.DirectiveMojo;
 import com.github.landyking.link.LocalDictManager;
-import com.github.landyking.link.ValueBag;
 import com.github.landyking.link.exception.LinkException;
 import com.github.landyking.link.util.LkTools;
-import com.github.landyking.link.util.Texts;
 import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +24,7 @@ public class DictTranslator extends AbstractParamProcessor {
 
 
     @Override
-    public void processOutput(Element config, Element param, DirectiveMojo ctx, String name, List<Map<String, ValueBag>> outList) throws Exception {
+    public void processOutput(Element config, Element param, DirectiveMojo ctx, String name, List<Map<String, Object>> outList) throws Exception {
         String dictName = getDictName(ctx, config);
         String srcFieldName = getSrcFieldName(ctx, config);
 //        if (!Texts.hasText(srcFieldName)) {
@@ -36,19 +34,17 @@ public class DictTranslator extends AbstractParamProcessor {
         Boolean failUseOriginal = getFailUseOriginal(ctx, config);
 
         //使用最终的map进行翻译
-        for (Map<String, ValueBag> one : outList) {
-            ValueBag srcItem = one.get(srcFieldName);
-            ValueBag outItem = one.get(name);
-            Object ov = srcItem.getFinalValue();
+        for (Map<String, Object> one : outList) {
+            Object ov = one.get(srcFieldName);
             if (ov != null) {
                 Object out = localDictManager.translate(dictName, ov.toString());
                 if (out != null) {
-                    outItem.setModifyValue(out);
+                    one.put(name, out);
                 } else {
                     if (failUseOriginal) {
-                        outItem.setModifyValue(ov);
+                        one.put(name, ov);
                     } else {
-                        outItem.setModifyValue("");
+                        one.put(name, "");
                     }
                 }
             }
@@ -76,11 +72,10 @@ public class DictTranslator extends AbstractParamProcessor {
     @Override
     public Object processInput(Element config, Element param, DirectiveMojo mojo, Object in) throws Exception {
         String name = param.getAttribute("name");
-        Map<String, ValueBag> vals = Maps.newHashMap();
-        ValueBag bag = new ValueBag().setOriginValue(in);
-        vals.put(name, bag);
+        Map<String, Object> vals = Maps.newHashMap();
+        vals.put(name, in);
         processOutput(config, param, mojo, name, Arrays.asList(vals));
-        return bag.getFinalValue();
+        return vals.get(name);
     }
 
     public void setLocalDictManager(LocalDictManager localDictManager) {

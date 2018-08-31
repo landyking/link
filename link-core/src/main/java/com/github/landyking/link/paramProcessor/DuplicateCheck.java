@@ -3,7 +3,6 @@ package com.github.landyking.link.paramProcessor;
 import com.github.landyking.link.AbstractParamProcessor;
 import com.github.landyking.link.DataSourceManager;
 import com.github.landyking.link.DirectiveMojo;
-import com.github.landyking.link.ValueBag;
 import com.github.landyking.link.beetl.BeetlTool;
 import com.github.landyking.link.exception.LinkException;
 import com.github.landyking.link.spel.SpelMapSqlParameterSource;
@@ -27,8 +26,7 @@ public class DuplicateCheck extends AbstractParamProcessor {
 
 
     @Override
-    public void processOutput(Element config, Element param, DirectiveMojo mojo, String name, List<Map<String, ValueBag>> outList) throws Exception {
-
+    public void processOutput(Element config, Element param, DirectiveMojo mojo, String name, List<Map<String, Object>> outList) throws Exception {
     }
 
     @Override

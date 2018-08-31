@@ -1,7 +1,6 @@
 package com.github.landyking.link.paramProcessor;
 
 import com.github.landyking.link.DirectiveMojo;
-import com.github.landyking.link.ValueBag;
 import com.github.landyking.link.exception.LinkException;
 import com.github.landyking.link.util.Texts;
 import com.google.common.base.Splitter;
@@ -20,9 +19,9 @@ import java.util.Map;
 public class TextToList extends OutputOneByOneProcessor {
 
     @Override
-    protected void processOutputOne(DirectiveMojo mojo, Element param, Element config, Map<String, ValueBag> one, String name, ValueBag item) throws LinkException {
-        Object o = doWork(config, mojo, item.getFinalValue());
-        item.setModifyValue(o);
+    protected Object processOutputOne(DirectiveMojo mojo, Element param, Element config, Map<String, Object> one, String name, Object item) throws LinkException {
+        Object o = doWork(config, mojo, item);
+        return o;
     }
 
     @Override

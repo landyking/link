@@ -1,19 +1,12 @@
 package com.github.landyking.link.paramProcessor;
 
-import com.github.landyking.link.AbstractParamProcessor;
 import com.github.landyking.link.DirectiveMojo;
-import com.github.landyking.link.ValueBag;
 import com.github.landyking.link.converter.DatePack;
 import com.github.landyking.link.exception.LinkException;
-import com.github.landyking.link.util.DateTimeTool;
 import com.github.landyking.link.util.Texts;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
 import org.springframework.core.convert.ConversionService;
 import org.w3c.dom.Element;
 
-import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -27,9 +20,9 @@ public class DateTimeConverter extends OutputOneByOneProcessor {
     }
 
     @Override
-    protected void processOutputOne(DirectiveMojo mojo, Element param, Element config, Map<String, ValueBag> one, String name, ValueBag item) throws LinkException {
-        Object val = genValue(config, mojo, item.getFinalValue());
-        item.setModifyValue(val);
+    protected Object processOutputOne(DirectiveMojo mojo, Element param, Element config, Map<String, Object> one, String name, Object item) throws LinkException {
+        Object val = genValue(config, mojo, item);
+        return val;
     }
 
     @Override

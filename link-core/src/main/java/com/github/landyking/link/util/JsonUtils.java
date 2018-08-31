@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.github.landyking.link.ValueBag;
 import com.google.common.base.Throwables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +27,7 @@ public class JsonUtils {
 //        tmp.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false);
         tmp.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         SimpleModule module = new SimpleModule();
-        module.addSerializer(ValueBag.class, new ValueBagSerializer());
+//        module.addSerializer(ValueBag.class, new ValueBagSerializer());
         tmp.registerModule(module);
         return tmp;
     }

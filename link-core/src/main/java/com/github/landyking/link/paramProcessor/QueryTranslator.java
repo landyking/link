@@ -3,7 +3,6 @@ package com.github.landyking.link.paramProcessor;
 import com.github.landyking.link.AbstractParamProcessor;
 import com.github.landyking.link.DataSourceManager;
 import com.github.landyking.link.DirectiveMojo;
-import com.github.landyking.link.ValueBag;
 import com.github.landyking.link.beetl.BeetlTool;
 import com.github.landyking.link.exception.LinkException;
 import com.github.landyking.link.spel.SpelMapSqlParameterSource;
@@ -25,7 +24,10 @@ import org.springframework.util.NumberUtils;
 import org.w3c.dom.Element;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author: landy
@@ -46,7 +48,7 @@ public class QueryTranslator extends AbstractParamProcessor {
     }
 
     @Override
-    public void processOutput(Element config, Element param, DirectiveMojo ctx, String name, List<Map<String, ValueBag>> outList) throws Exception {
+    public void processOutput(Element config, Element param, DirectiveMojo ctx, String name, List<Map<String, Object>> outList) throws Exception {
         String tableName = getTableName(ctx, config);
         String srcFieldName = getSrcFieldName(ctx, config);
 //        if (!Texts.hasText(srcFieldName)) {
@@ -66,9 +68,8 @@ public class QueryTranslator extends AbstractParamProcessor {
             Cache cache = cacheManager.getCache(cacheName);
             transMap = Maps.newHashMap();
             //检查要翻译的项是否都能匹配
-            for (Map<String, ValueBag> one : outList) {
-                ValueBag srcItem = one.get(srcFieldName);
-                Object ov = srcItem.getFinalValue();
+            for (Map<String, Object> one : outList) {
+                Object ov = one.get(srcFieldName);
                 if (ov != null) {
                     String key = ov.toString();
                     Cache.ValueWrapper wrapper = cache.get(key);
@@ -100,19 +101,17 @@ public class QueryTranslator extends AbstractParamProcessor {
             }
         }
         //使用最终的map进行翻译
-        for (Map<String, ValueBag> one : outList) {
-            ValueBag srcItem = one.get(srcFieldName);
-            ValueBag outItem = one.get(name);
-            Object ov = srcItem.getFinalValue();
+        for (Map<String, Object> one : outList) {
+            Object ov = one.get(srcFieldName);
             if (ov != null) {
                 Object out = transMap.get(ov.toString());
                 if (out != null) {
-                    outItem.setModifyValue(out);
+                    one.put(name, out);
                 } else {
                     if (failUseOriginal) {
-                        outItem.setModifyValue(ov);
+                        one.put(name, ov);
                     } else {
-                        outItem.setModifyValue("");
+                        one.put(name, "");
                     }
                 }
             }
@@ -131,16 +130,16 @@ public class QueryTranslator extends AbstractParamProcessor {
         return name;
     }
 
-    protected Map<String, Object> makeTransMap(DirectiveMojo ctx, Element config, List<Map<String, ValueBag>> rstList, String tableName, String srcFieldName, String destFieldName, String whereCondition, String displayFieldName) throws LinkException {
+    protected Map<String, Object> makeTransMap(DirectiveMojo ctx, Element config, List<Map<String, Object>> rstList, String tableName, String srcFieldName, String destFieldName, String whereCondition, String displayFieldName) throws LinkException {
         Set<Object> inSet = Sets.newHashSet();
         Set<String> inSetString = Sets.newHashSet();
         for (int i = 0; i < rstList.size(); i++) {
-            Map<String, ValueBag> one = rstList.get(i);
-            ValueBag item = one.get(srcFieldName);
+            Map<String, Object> one = rstList.get(i);
+            Object item = one.get(srcFieldName);
             Assert.notNull(item, "参数" + srcFieldName + "对应结果项为空");
-            if (item.getFinalValue() != null) {
-                inSet.add(item.getFinalValue());
-                inSetString.add(Texts.toStr(item.getFinalValue()));
+            if (item != null) {
+                inSet.add(item);
+                inSetString.add(Texts.toStr(item));
             }
         }
 
@@ -245,10 +244,9 @@ public class QueryTranslator extends AbstractParamProcessor {
     @Override
     public Object processInput(Element config, Element param, DirectiveMojo mojo, Object in) throws Exception {
         String name = param.getAttribute("name");
-        Map<String, ValueBag> vals = Maps.newHashMap();
-        ValueBag bag = new ValueBag().setOriginValue(in);
-        vals.put(name, bag);
+        Map<String, Object> vals = Maps.newHashMap();
+        vals.put(name, in);
         processOutput(config, param, mojo, name, Arrays.asList(vals));
-        return bag.getFinalValue();
+        return vals.get(name);
     }
 }

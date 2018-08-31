@@ -1,7 +1,6 @@
 package com.github.landyking.link.paramProcessor;
 
 import com.github.landyking.link.DirectiveMojo;
-import com.github.landyking.link.ValueBag;
 import com.github.landyking.link.exception.LinkException;
 import com.github.landyking.link.util.GUIDUtil;
 import com.github.landyking.link.util.Texts;
@@ -17,9 +16,9 @@ public class GUIDGenerator extends OutputOneByOneProcessor {
     public static final String UUID = "uuid";
 
     @Override
-    protected void processOutputOne(DirectiveMojo mojo, Element param, Element config, Map<String, ValueBag> one, String name, ValueBag item) throws LinkException {
+    protected Object processOutputOne(DirectiveMojo mojo, Element param, Element config, Map<String, Object> one, String name, Object item) throws LinkException {
         Object val = genValue(config, mojo);
-        item.setModifyValue(val);
+        return val;
     }
 
     @Override

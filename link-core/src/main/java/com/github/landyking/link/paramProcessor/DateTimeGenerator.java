@@ -1,8 +1,6 @@
 package com.github.landyking.link.paramProcessor;
 
 import com.github.landyking.link.DirectiveMojo;
-import com.github.landyking.link.ValueBag;
-import com.github.landyking.link.util.Texts;
 import org.joda.time.DateTime;
 import org.w3c.dom.Element;
 
@@ -14,9 +12,9 @@ import java.util.Map;
  */
 public class DateTimeGenerator extends OutputOneByOneProcessor {
     @Override
-    protected void processOutputOne(DirectiveMojo mojo, Element param, Element config, Map<String, ValueBag> one, String name, ValueBag item) {
+    protected Object processOutputOne(DirectiveMojo mojo, Element param, Element config, Map<String, Object> one, String name, Object item) {
         Object val = process(mojo, config);
-        item.setModifyValue(val);
+        return val;
     }
 
     @Override

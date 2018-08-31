@@ -30,7 +30,7 @@ public class ExistCheck extends AbstractParamProcessor {
     }
 
     @Override
-    public void processOutput(Element config, Element param, DirectiveMojo mojo, String name, List<Map<String, ValueBag>> outList) throws Exception {
+    public void processOutput(Element config, Element param, DirectiveMojo mojo, String name, List<Map<String, Object>> outList) throws Exception {
 
     }
 
