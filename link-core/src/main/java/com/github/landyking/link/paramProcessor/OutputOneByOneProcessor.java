@@ -18,7 +18,7 @@ public abstract class OutputOneByOneProcessor extends AbstractParamProcessor {
     public void processOutput(Element config, Element param, DirectiveMojo mojo, String name, List<Map<String, Object>> outList) throws LinkException {
         for (Map<String, Object> one : outList) {
             Object item = one.get(name);
-            Assert.notNull(item, "输出参数" + name + "没有对应的结果项");
+//            Assert.notNull(item, "输出参数" + name + "没有对应的结果项");
             Object rst = processOutputOne(mojo, param, config, one, name, item);
             one.put(name,rst);
         }
