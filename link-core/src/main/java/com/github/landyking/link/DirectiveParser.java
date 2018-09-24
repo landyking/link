@@ -9,6 +9,8 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.ListableBeanFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.Resource;
 import org.springframework.util.LinkedCaseInsensitiveMap;
 import org.w3c.dom.Document;
@@ -49,8 +51,8 @@ public class DirectiveParser {
     public static final String XSD_LOCATION = "/link/link-1.0.xsd";
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private final XPath xPath = initXPath();
+    private final ApplicationContext application;
     private transient DirectiveMojo directiveMojo;
-    private final DirectiveManager directiveManager;
 
     public void setDirectiveMojo(DirectiveMojo directiveMojo) {
         this.directiveMojo = directiveMojo;
@@ -83,8 +85,8 @@ public class DirectiveParser {
     private final Document document;
     private final List<Element> outputParamList;
 
-    public DirectiveParser(Resource resource, DirectiveManager directiveManager) throws Exception {
-        this.directiveManager = directiveManager;
+    public DirectiveParser(Resource resource, ApplicationContext application) throws Exception {
+        this.application=application;
         logger.debug("开始解析文件: {}", resource.getURL().toString());
 //        DefaultDocumentLoader documentLoader = new DefaultDocumentLoader();
         DefaultHandler errorHandler = new DefaultHandler();
@@ -259,7 +261,7 @@ public class DirectiveParser {
     public List<AbstractExecution> getExecutionList(Element execution) throws LinkException {
         List<AbstractExecution> rst = Lists.newLinkedList();
         List<Element> list = getSubElementList(execution, "./*");
-        Map<String, AbstractExecutionFactory> tmpList = this.directiveManager.getApplicationContext().getBeansOfType(AbstractExecutionFactory.class);
+        Map<String, AbstractExecutionFactory> tmpList = getApplicationContext().getBeansOfType(AbstractExecutionFactory.class);
         LinkedCaseInsensitiveMap<AbstractExecutionFactory> map = new LinkedCaseInsensitiveMap<AbstractExecutionFactory>();
         for (AbstractExecutionFactory a : tmpList.values()) {
             map.put(a.tag(), a);
@@ -273,6 +275,10 @@ public class DirectiveParser {
             }
         }
         return rst;
+    }
+
+    private ApplicationContext getApplicationContext() {
+        return application;
     }
 
     public Element getExecutionEnding() throws LinkException {
